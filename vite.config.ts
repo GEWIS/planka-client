@@ -7,10 +7,10 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'planka-client/index.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'planka-client',
       fileName: 'planka-client',
     },
   },
-  plugins: [dts()],
+  plugins: [dts({ rollupTypes: true })]
 });

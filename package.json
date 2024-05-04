@@ -4,13 +4,13 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "vite build",
-    "release": "release-it --ci major --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish"
+    "release-major": "release-it --ci major --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
+    "release": "release-it --ci minor --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish"
   },
-  "main": "./dist/planka-client.umd.cjs",
-  "module": "./dist/planka-client.js",
+  "main": "dist/planka-client.umd.cjs",
+  "module": "dist/planka-client.js",
+  "types": "dist/planka-client.d.ts",
   "type": "module",
-  "types": "./dist/planka-client.d.ts",
-  "typings": "./dist/planka-client.d.ts",
   "exports": {
     ".": {
       "import": "./dist/planka-client.js",
