@@ -34,12 +34,36 @@ export type User = {
   deletedAt?: Date
 }
 
+export type Project = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  name: string
+  // TODO update type
+  background?: string
+  // TODO update type
+  backgroundImage?: string
+}
+
 export type SingleResponse<T> = {
   item: T
+  included?: Partial<Included>
 }
 
 export type ArrayResponse<T> = {
   items: T[]
+  // TODO update type
+  included?: Partial<Included>
+}
+
+export type Included = {
+  users: User[]
+  // TODO update type
+  projectManagers: void
+  // TODO update type
+  boards: void
+  // TODO update type
+  boardMemberships: void
 }
 
 export type BadRequestError = {
@@ -49,6 +73,11 @@ export type BadRequestError = {
 }
 
 export type UnauthorizedError = {
+  code: string
+  message: string
+}
+
+export type ConflictError = {
   code: string
   message: string
 }
@@ -121,13 +150,14 @@ export type $OpenApiTs = {
         200: SingleResponse<User>
         400: BadRequestError
         401: UnauthorizedError
+        409: ConflictError
       }
     }
   }
 
-  // 'GET /api/users/:id': 'users/show',
-  // 'PATCH /api/users/:id': 'users/update',
-  // 'DELETE /api/users/:id': 'users/delete',
+  // 'GET /api/users/:id': 'users/show'
+  // 'PATCH /api/users/:id': 'users/update'
+  // 'DELETE /api/users/:id': 'users/delete'
   '/users/{userId}': {
     get: {
       req: {
@@ -164,31 +194,79 @@ export type $OpenApiTs = {
     }
   }
 
-  // 'PATCH /api/users/:id/email': 'users/update-email',
-  '/users/{id}/email': {
+  // 'PATCH /api/users/:id/email': 'users/update-email'
+  '/users/{userId}/email': {
     patch: {
-
+      req: {
+        userId: string
+        requestBody: {
+          email: string
+        }
+      }
+      res: {
+        200: SingleResponse<User>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+        409: ConflictError
+      }
     }
   }
 
-  // 'PATCH /api/users/:id/password': 'users/update-password',
-  '/users/{id}/password': {
+  // 'PATCH /api/users/:id/password': 'users/update-password'
+  '/users/{userId}/password': {
     patch: {
-
+      req: {
+        userId: string
+        requestBody: {
+          password: string
+        }
+      }
+      res: {
+        200: SingleResponse<User>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+        409: ConflictError
+      }
     }
   }
 
-  // 'PATCH /api/users/:id/username': 'users/update-username',
-  '/users/{id}/username': {
+  // 'PATCH /api/users/:id/username': 'users/update-username'
+  '/users/{userId}/username': {
     patch: {
-
+      req: {
+        userId: string
+        requestBody: {
+          username: string
+        }
+      }
+      res: {
+        200: SingleResponse<User>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+        409: ConflictError
+      }
     }
   }
 
-  // 'POST /api/users/:id/avatar': 'users/update-avatar',
-  '/users/{id}/avatar': {
+  // TODO implement
+  // 'POST /api/users/:id/avatar': 'users/update-avatar'
+  '/users/{userId}/avatar': {
     post: {
-
+      req: {
+        userId: string
+        requestBody: {
+          username: string
+        }
+      }
+      res: {
+        200: SingleResponse<User>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
@@ -196,25 +274,63 @@ export type $OpenApiTs = {
   // 'POST /api/projects': 'projects/create',
   '/projects': {
     get: {
-
+      res: {
+        200: ArrayResponse<Project>
+        401: UnauthorizedError
+      }
     }
     post: {
-
+      req: {
+        requestBody: {
+          name: string
+        }
+      }
+      res: {
+        200: ArrayResponse<Project>
+        400: BadRequestError
+        401: UnauthorizedError
+      }
     }
   }
 
   // 'GET /api/projects/:id': 'projects/show',
   // 'PATCH /api/projects/:id': 'projects/update',
   // 'DELETE /api/projects/:id': 'projects/delete',
-  '/projects/{id}': {
+  '/projects/{projectId}': {
     get: {
-
+      req: {
+        projectId: string
+        requestBody: {
+          name: string
+        }
+      }
+      res: {
+        200: SingleResponse<Project>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
     patch: {
-
+      req: {
+        projectId: string
+        requestBody: Project
+      }
+      res: {
+        200: SingleResponse<Project>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
     delete: {
-
+      req: {
+        projectId: string
+      }
+      res: {
+        200: SingleResponse<Project>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 

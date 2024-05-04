@@ -52,6 +52,7 @@ export declare type $OpenApiTs = {
                 200: SingleResponse<User>;
                 400: BadRequestError;
                 401: UnauthorizedError;
+                409: ConflictError;
             };
         };
     };
@@ -90,26 +91,129 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/users/{id}/email': {
-        patch: {};
+    '/users/{userId}/email': {
+        patch: {
+            req: {
+                userId: string;
+                requestBody: {
+                    email: string;
+                };
+            };
+            res: {
+                200: SingleResponse<User>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+                409: ConflictError;
+            };
+        };
     };
-    '/users/{id}/password': {
-        patch: {};
+    '/users/{userId}/password': {
+        patch: {
+            req: {
+                userId: string;
+                requestBody: {
+                    password: string;
+                };
+            };
+            res: {
+                200: SingleResponse<User>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+                409: ConflictError;
+            };
+        };
     };
-    '/users/{id}/username': {
-        patch: {};
+    '/users/{userId}/username': {
+        patch: {
+            req: {
+                userId: string;
+                requestBody: {
+                    username: string;
+                };
+            };
+            res: {
+                200: SingleResponse<User>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+                409: ConflictError;
+            };
+        };
     };
-    '/users/{id}/avatar': {
-        post: {};
+    '/users/{userId}/avatar': {
+        post: {
+            req: {
+                userId: string;
+                requestBody: {
+                    username: string;
+                };
+            };
+            res: {
+                200: SingleResponse<User>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
     '/projects': {
-        get: {};
-        post: {};
+        get: {
+            res: {
+                200: ArrayResponse<Project>;
+                401: UnauthorizedError;
+            };
+        };
+        post: {
+            req: {
+                requestBody: {
+                    name: string;
+                };
+            };
+            res: {
+                200: ArrayResponse<Project>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+            };
+        };
     };
-    '/projects/{id}': {
-        get: {};
-        patch: {};
-        delete: {};
+    '/projects/{projectId}': {
+        get: {
+            req: {
+                projectId: string;
+                requestBody: {
+                    name: string;
+                };
+            };
+            res: {
+                200: SingleResponse<Project>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        patch: {
+            req: {
+                projectId: string;
+                requestBody: Project;
+            };
+            res: {
+                200: SingleResponse<Project>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                projectId: string;
+            };
+            res: {
+                200: SingleResponse<Project>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
     '/projects/{id}/background-image': {
         post: {};
@@ -255,6 +359,7 @@ declare type ApiResult<TData = any> = {
 
 export declare type ArrayResponse<T> = {
     items: T[];
+    included?: Partial<Included>;
 };
 
 export declare type BadRequestError = {
@@ -285,7 +390,19 @@ export declare class CancelError extends Error {
     get isCancelled(): boolean;
 }
 
+export declare type ConflictError = {
+    code: string;
+    message: string;
+};
+
 declare type Headers_2 = Record<string, string>;
+
+export declare type Included = {
+    users: User[];
+    projectManagers: void;
+    boards: void;
+    boardMemberships: void;
+};
 
 declare class Interceptors<T> {
     _fns: Middleware<T>[];
@@ -387,10 +504,20 @@ export declare class PlankaService {
     deleteUser(data: $OpenApiTs['/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/users/{userId}']['delete']['res'][200]>;
 }
 
+export declare type Project = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    name: string;
+    background?: string;
+    backgroundImage?: string;
+};
+
 declare type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 
 export declare type SingleResponse<T> = {
     item: T;
+    included?: Partial<Included>;
 };
 
 export declare type UnauthorizedError = {
