@@ -1,0 +1,42 @@
+{
+  "name": "planka-client",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "vite build",
+    "release": "release-it --ci major --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish"
+  },
+  "main": "./dist/planka-client.umd.cjs",
+  "module": "./dist/planka-client.js",
+  "type": "module",
+  "types": "./dist/planka-client.d.ts",
+  "typings": "./dist/planka-client.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/planka-client.js",
+      "require": "./dist/planka-client.umd.cjs",
+      "types": "./dist/planka-client.d.ts"
+    }
+  },
+  "files": [
+    "./",
+    "dist/"
+  ],
+  "author": "Gijs de Man",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GEWIS/planka-client.git"
+  },
+  "private": false,
+  "bugs": {
+    "url": "https://github.com/GEWIS/planka-client/issues"
+  },
+  "homepage": "https://github.com/GEWIS/planka-client#readme",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "release-it": "^17.2.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10",
+    "vite-plugin-dts": "^3.9.0"
+  }
+}
