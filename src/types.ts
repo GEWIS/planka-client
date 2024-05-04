@@ -82,7 +82,7 @@ export type $OpenApiTs = {
 
   // 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
   '/access-tokens/exchange-using-oidc': {
-    get: {
+    post: {
       req: {
         requestBody: AccessTokenOidcRequest
       }
@@ -96,9 +96,11 @@ export type $OpenApiTs = {
 
   // 'DELETE /api/access-tokens/me': 'access-tokens/delete'
   '/access-tokens/me': {
-    res: {
-      200: SingleResponse<string>
-      401: UnauthorizedError
+    delete: {
+      res: {
+        200: SingleResponse<string>
+        401: UnauthorizedError
+      }
     }
   }
 
