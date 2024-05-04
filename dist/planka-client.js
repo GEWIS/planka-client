@@ -17,18 +17,18 @@ class C {
       this._resolve = r, this._reject = n;
       const s = (a) => {
         this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(a));
-      }, i = (a) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(a));
       }, o = (a) => {
+        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(a));
+      }, i = (a) => {
         this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(a);
       };
-      return Object.defineProperty(o, "isResolved", {
+      return Object.defineProperty(i, "isResolved", {
         get: () => this._isResolved
-      }), Object.defineProperty(o, "isRejected", {
+      }), Object.defineProperty(i, "isRejected", {
         get: () => this._isRejected
-      }), Object.defineProperty(o, "isCancelled", {
+      }), Object.defineProperty(i, "isCancelled", {
         get: () => this._isCancelled
-      }), e(s, i, o);
+      }), e(s, o, i);
     });
   }
   get [Symbol.toStringTag]() {
@@ -73,7 +73,7 @@ class m {
   }
 }
 const l = {
-  BASE: process.env.PLANKA_URL,
+  BASE: process.env.PLANKA_URL || "http://localhost:3000/api",
   CREDENTIALS: "include",
   ENCODE_PATH: void 0,
   HEADERS: void 0,
@@ -92,55 +92,52 @@ const l = {
   } catch {
     return Buffer.from(t).toString("base64");
   }
-}, A = (t) => {
-  const e = [], r = (s, i) => {
-    e.push(`${encodeURIComponent(s)}=${encodeURIComponent(String(i))}`);
-  }, n = (s, i) => {
-    i != null && (i instanceof Date ? r(s, i.toISOString()) : Array.isArray(i) ? i.forEach((o) => n(s, o)) : typeof i == "object" ? Object.entries(i).forEach(([o, a]) => n(`${s}[${o}]`, a)) : r(s, i));
+}, j = (t) => {
+  const e = [], r = (s, o) => {
+    e.push(`${encodeURIComponent(s)}=${encodeURIComponent(String(o))}`);
+  }, n = (s, o) => {
+    o != null && (o instanceof Date ? r(s, o.toISOString()) : Array.isArray(o) ? o.forEach((i) => n(s, i)) : typeof o == "object" ? Object.entries(o).forEach(([i, a]) => n(`${s}[${i}]`, a)) : r(s, o));
   };
-  return Object.entries(t).forEach(([s, i]) => n(s, i)), e.length ? `?${e.join("&")}` : "";
-}, j = (t, e) => {
-  const r = t.ENCODE_PATH || encodeURI, n = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (i, o) => {
-    var a;
-    return (a = e.path) != null && a.hasOwnProperty(o) ? r(String(e.path[o])) : i;
-  }), s = t.BASE + n;
-  return e.query ? s + A(e.query) : s;
+  return Object.entries(t).forEach(([s, o]) => n(s, o)), e.length ? `?${e.join("&")}` : "";
+}, A = (t, e) => {
+  const r = t.ENCODE_PATH || encodeURI, n = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (o, i) => Object.prototype.hasOwnProperty.call(e.path, i) ? r(String(e.path[i])) : o), s = t.BASE + n;
+  return e.query ? s + j(e.query) : s;
 }, I = (t) => {
   if (t.formData) {
     const e = new FormData(), r = (n, s) => {
       h(s) || p(s) ? e.append(n, s) : e.append(n, JSON.stringify(s));
     };
     return Object.entries(t.formData).filter(([, n]) => n != null).forEach(([n, s]) => {
-      Array.isArray(s) ? s.forEach((i) => r(n, i)) : r(n, s);
+      Array.isArray(s) ? s.forEach((o) => r(n, o)) : r(n, s);
     }), e;
   }
 }, f = async (t, e) => typeof e == "function" ? e(t) : e, U = async (t, e) => {
-  const [r, n, s, i] = await Promise.all([
+  const [r, n, s, o] = await Promise.all([
     f(e, t.TOKEN),
     f(e, t.USERNAME),
     f(e, t.PASSWORD),
     f(e, t.HEADERS)
-  ]), o = Object.entries({
+  ]), i = Object.entries({
     Accept: "application/json",
-    ...i,
+    ...o,
     ...e.headers
   }).filter(([, a]) => a != null).reduce((a, [d, c]) => ({
     ...a,
     [d]: String(c)
   }), {});
-  if (y(r) && (o.Authorization = `Bearer ${r}`), y(n) && y(s)) {
+  if (y(r) && (i.Authorization = `Bearer ${r}`), y(n) && y(s)) {
     const a = w(`${n}:${s}`);
-    o.Authorization = `Basic ${a}`;
+    i.Authorization = `Basic ${a}`;
   }
-  return e.body !== void 0 && (e.mediaType ? o["Content-Type"] = e.mediaType : p(e.body) ? o["Content-Type"] = e.body.type || "application/octet-stream" : h(e.body) ? o["Content-Type"] = "text/plain" : E(e.body) || (o["Content-Type"] = "application/json")), new Headers(o);
+  return e.body !== void 0 && (e.mediaType ? i["Content-Type"] = e.mediaType : p(e.body) ? i["Content-Type"] = e.body.type || "application/octet-stream" : h(e.body) ? i["Content-Type"] = "text/plain" : E(e.body) || (i["Content-Type"] = "application/json")), new Headers(i);
 }, N = (t) => {
   var e, r;
   if (t.body !== void 0)
     return (e = t.mediaType) != null && e.includes("application/json") || (r = t.mediaType) != null && r.includes("+json") ? JSON.stringify(t.body) : h(t.body) || p(t.body) || E(t.body) ? t.body : JSON.stringify(t.body);
-}, q = async (t, e, r, n, s, i, o) => {
+}, q = async (t, e, r, n, s, o, i) => {
   const a = new AbortController();
   let d = {
-    headers: i,
+    headers: o,
     body: n ?? s,
     method: e.method,
     signal: a.signal
@@ -148,7 +145,7 @@ const l = {
   t.WITH_CREDENTIALS && (d.credentials = t.CREDENTIALS);
   for (const c of t.interceptors.request._fns)
     d = await c(d);
-  return o(() => a.abort()), await fetch(r, d);
+  return i(() => a.abort()), await fetch(r, d);
 }, O = (t, e) => {
   if (e) {
     const r = t.headers.get(e);
@@ -220,7 +217,7 @@ const l = {
   if (n)
     throw new b(t, e, n);
   if (!e.ok) {
-    const s = e.status ?? "unknown", i = e.statusText ?? "unknown", o = (() => {
+    const s = e.status ?? "unknown", o = e.statusText ?? "unknown", i = (() => {
       try {
         return JSON.stringify(e.body, null, 2);
       } catch {
@@ -230,18 +227,18 @@ const l = {
     throw new b(
       t,
       e,
-      `Generic Error: status: ${s}; status text: ${i}; body: ${o}`
+      `Generic Error: status: ${s}; status text: ${o}; body: ${i}`
     );
   }
 }, u = (t, e) => new C(async (r, n, s) => {
   try {
-    const i = j(t, e), o = I(e), a = N(e), d = await U(t, e);
+    const o = A(t, e), i = I(e), a = N(e), d = await U(t, e);
     if (!s.isCancelled) {
-      let c = await q(t, e, i, a, o, d, s);
+      let c = await q(t, e, o, a, i, d, s);
       for (const S of t.interceptors.response._fns)
         c = await S(c);
       const _ = await P(c), T = O(c, e.responseHeader), R = {
-        url: i,
+        url: o,
         ok: c.ok,
         status: c.status,
         statusText: c.statusText,
@@ -249,46 +246,48 @@ const l = {
       };
       D(e, R), r(R.body);
     }
-  } catch (i) {
-    n(i);
+  } catch (o) {
+    n(o);
   }
 });
 class v {
   /**
-   * @returns User Ok
-   * @throws ApiError
-   */
+     * @returns User Ok
+     * @throws ApiError
+     */
   static getUsers() {
     return u(l, {
       method: "GET",
       url: "/users",
       errors: {
+        401: "Unauthorized",
         404: "User not found"
       }
     });
   }
   /**
-   * @param data The data for the request.
-   * @param data.requestBody
-   * @returns User Ok
-   * @throws ApiError
-   */
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns User Ok
+     * @throws ApiError
+     */
   static createUser(e) {
     return u(l, {
       method: "GET",
       url: "/users",
       body: e.requestBody,
       errors: {
+        401: "Unauthorized",
         404: "User not found"
       }
     });
   }
   /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @returns User Ok
-   * @throws ApiError
-   */
+     * @param data The data for the request.
+     * @param data.userId
+     * @returns User Ok
+     * @throws ApiError
+     */
   static getUser(e) {
     return u(l, {
       method: "GET",
@@ -303,12 +302,12 @@ class v {
     });
   }
   /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns User Ok
-   * @throws ApiError
-   */
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns User Ok
+     * @throws ApiError
+     */
   static updateUser(e) {
     return u(l, {
       method: "POST",
@@ -325,12 +324,12 @@ class v {
     });
   }
   /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns User Ok
-   * @throws ApiError
-   */
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns User Ok
+     * @throws ApiError
+     */
   static deleteUser(e) {
     return u(l, {
       method: "GET",

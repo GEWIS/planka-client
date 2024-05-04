@@ -13,6 +13,7 @@ export class PlankaService {
       method: 'GET',
       url: '/users',
       errors: {
+        401: 'Unauthorized',
         404: 'User not found',
       },
     })
@@ -30,6 +31,7 @@ export class PlankaService {
       url: '/users',
       body: data.requestBody,
       errors: {
+        401: 'Unauthorized',
         404: 'User not found',
       },
     })
