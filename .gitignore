@@ -2,3 +2,5 @@ swagger.json
 node_modules
 dist
 trello-client
+.idea
+.env.example
