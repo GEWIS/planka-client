@@ -5,7 +5,9 @@
   "scripts": {
     "build": "vite build",
     "release-major": "release-it --ci major --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
-    "release": "release-it --ci minor --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish"
+    "release": "release-it --ci minor --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
+    "lint": "eslint src",
+    "lint-fix": "eslint src --fix"
   },
   "main": "dist/planka-client.umd.cjs",
   "module": "dist/planka-client.js",
@@ -33,9 +35,14 @@
   },
   "homepage": "https://github.com/GEWIS/planka-client#readme",
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.8.0",
+    "@eslint/js": "^9.2.0",
     "@types/node": "^20.12.7",
+    "eslint": "^8.57.0",
+    "globals": "^15.1.0",
     "release-it": "^17.2.1",
     "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0",
     "vite": "^5.2.10",
     "vite-plugin-dts": "^3.9.0"
   },
