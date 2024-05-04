@@ -45,6 +45,51 @@ export type Project = {
   backgroundImage?: string
 }
 
+export type Board = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  position: number
+  name: string
+  projectId: string
+  included: {
+    boardMemberships: BoardMembership[]
+  }
+}
+
+export type BoardMembership = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  role: Roles
+  canComment?: boolean
+  boardId: string
+  userId: string
+}
+
+export type Roles = 'editor' | 'viewer'
+
+export type Label = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  position: number
+  name: string
+  color: Colors
+  boardId: string
+}
+
+export type Colors = 'berry-red' | 'pumpkin-orange' | 'lagoon-blue' | 'pink-tulip' | 'light-mud' | 'orange-peel' | 'bright-moss' | 'antique-blue' | 'dark-granite' | 'lagune-blue' | 'sunny-grass' | 'morning-sky' | 'light-orange' | 'midnight-blue' | 'tank-green' | 'gun-metal' | 'wet-moss' | 'red-burgundy' | 'light-concrete' | 'apricot-red' | 'desert-sand' | 'navy-blue' | 'egg-yellow' | 'coral-green' | 'light-cocoa'
+
+export type List = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  position: number
+  name: string
+  boardId: string
+}
+
 export type SingleResponse<T> = {
   item: T
   included?: Partial<Included>
@@ -64,6 +109,7 @@ export type Included = {
   boards: void
   // TODO update type
   boardMemberships: void
+
 }
 
 export type BadRequestError = {
@@ -172,7 +218,7 @@ export type $OpenApiTs = {
     patch: {
       req: {
         userId: string
-        requestBody: User
+        requestBody: Partial<User>
       }
       res: {
         200: SingleResponse<User>
@@ -314,7 +360,7 @@ export type $OpenApiTs = {
     patch: {
       req: {
         projectId: string
-        requestBody: Project
+        requestBody: Partial<Project>
       }
       res: {
         200: SingleResponse<Project>
@@ -334,6 +380,7 @@ export type $OpenApiTs = {
     }
   }
 
+  // TODO
   // 'POST /api/projects/:id/background-image': 'projects/update-background-image',
   '/projects/{id}/background-image': {
     post: {
@@ -342,9 +389,13 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/projects/:projectId/managers': 'project-managers/create',
-  '/projects/{id}/manager': {
+  '/projects/{projectId}/manager': {
     post: {
-
+      req: {
+        projectId: string
+      }
+      res: {
+      }
     }
   }
 
@@ -356,67 +407,171 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/projects/:projectId/boards': 'boards/create',
-  '/projects/{id}/boards': {
+  '/projects/{projectId}/boards': {
     post: {
-
+      req: {
+        projectId: string
+        requestBody: {
+          position: number
+          name: string
+        }
+      }
+      res: {
+        200: SingleResponse<Board>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
   // 'GET /api/boards/:id': 'boards/show',
   // 'PATCH /api/boards/:id': 'boards/update',
   // 'DELETE /api/boards/:id': 'boards/delete',
-  '/boards/{id}': {
+  '/boards/{boardId}': {
     get: {
-
+      req: {
+        boardId: string
+      }
+      res: {
+        200: SingleResponse<Board>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
     patch: {
-
+      req: {
+        boardId: string
+        requestBody: Partial<Board>
+      }
+      res: {
+        200: SingleResponse<Board>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
     delete: {
-
+      req: {
+        boardId: string
+      }
+      res: {
+        200: SingleResponse<Board>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
   // 'POST /api/boards/:boardId/memberships': 'board-memberships/create',
-  '/boards/{id}/memberships': {
+  '/boards/{boardId}/memberships': {
     post: {
-
+      req: {
+        boardId: string
+        requestBody: {
+          userId: string
+          role: Roles
+        }
+      }
+      res: {
+        200: SingleResponse<Board>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+        409: ConflictError
+      }
     }
   }
 
   // 'PATCH /api/board-memberships/:id': 'board-memberships/update',
   // 'DELETE /api/board-memberships/:id': 'board-memberships/delete',
-  '/board-memberships/{id}': {
+  '/board-memberships/{membershipId}': {
     update: {
-
+      req: {
+        membershipId: string
+        requestBody: {
+          role: Roles
+          canComment: boolean
+        }
+      }
+      res: {
+        200: SingleResponse<BoardMembership>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
     delete: {
-
+      req: {
+        membershipId: string
+      }
+      res: {
+        200: SingleResponse<BoardMembership>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
   // 'POST /api/boards/:boardId/labels': 'labels/create',
-  '/boards/{id}/labels': {
+  '/boards/{boardId}/labels': {
     post: {
-
+      req: {
+        boardId: string
+        requestBody: {
+          position: number
+          color: Colors
+        }
+      }
+      res: {
+        200: SingleResponse<Label>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
   // 'PATCH /api/labels/:id': 'labels/update',
   // 'DELETE /api/labels/:id': 'labels/delete',
-  '/labels/{id}': {
+  '/labels/{labelId}': {
     patch: {
-
+      req: {
+        labelId: string
+        requestBody: Partial<Label>
+      }
+      res: {
+        200: SingleResponse<Label>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
     delete: {
-
+      req: {
+        labelId: string
+      }
+      res: {
+        200: SingleResponse<Label>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
   // 'POST /api/boards/:boardId/lists': 'lists/create',
-  '/boards/{id}/lists': {
+  '/boards/{boardId}/lists': {
     post: {
-
+      req: {
+        boardId: string
+        requestBody: {
+          position: number
+          name: string
+        }
+      }
+      res: {
+        200: SingleResponse<List>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
