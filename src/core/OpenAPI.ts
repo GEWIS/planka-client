@@ -40,7 +40,7 @@ export type OpenAPIConfig = {
 }
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: process.env.PLANKA_URL || 'http://localhost:3000/api',
+  BASE: process.env.PLANKA_URL || 'http://localhost:3000',
   CREDENTIALS: 'include',
   ENCODE_PATH: undefined,
   HEADERS: undefined,

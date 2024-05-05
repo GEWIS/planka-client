@@ -73,7 +73,7 @@ class m {
   }
 }
 const d = {
-  BASE: process.env.PLANKA_URL || "http://localhost:3000/api",
+  BASE: process.env.PLANKA_URL || "http://localhost:3000",
   CREDENTIALS: "include",
   ENCODE_PATH: void 0,
   HEADERS: void 0,
@@ -260,7 +260,7 @@ class D {
   getConfig() {
     return u(d, {
       method: "GET",
-      url: "/config"
+      url: "/api/config"
     });
   }
   /**
@@ -270,7 +270,7 @@ class D {
   async authorize(e) {
     const r = await u(d, {
       method: "POST",
-      url: "/access-tokens",
+      url: "/api/access-tokens",
       body: e.requestBody,
       errors: {
         400: "Invalid request body"
@@ -285,7 +285,7 @@ class D {
   async authorizeOidc(e) {
     const r = await u(d, {
       method: "POST",
-      url: "/access-tokens/exchange-using-oidc",
+      url: "/api/access-tokens/exchange-using-oidc",
       body: e.requestBody,
       errors: {
         400: "Invalid request body"
@@ -300,7 +300,7 @@ class D {
   async unauthorize() {
     await u(d, {
       method: "DELETE",
-      url: "/access-tokens/me",
+      url: "/api/access-tokens/me",
       headers: {
         Authorization: `Bearer ${this.accessToken}`
       },
@@ -316,7 +316,7 @@ class D {
   getUsers() {
     return u(d, {
       method: "GET",
-      url: "/users",
+      url: "/api/users",
       headers: {
         Authorization: `Bearer ${this.accessToken}`
       },
@@ -335,7 +335,7 @@ class D {
   createUser(e) {
     return u(d, {
       method: "GET",
-      url: "/users",
+      url: "/api/users",
       headers: {
         Authorization: `Bearer ${this.accessToken}`
       },
@@ -355,7 +355,7 @@ class D {
   getUser(e) {
     return u(d, {
       method: "GET",
-      url: "/users/{userId}",
+      url: "/api/users/{userId}",
       path: {
         userId: e.userId
       },
@@ -378,7 +378,7 @@ class D {
   updateUser(e) {
     return u(d, {
       method: "POST",
-      url: "/users/{userId}",
+      url: "/api/users/{userId}",
       path: {
         userId: e.userId
       },
@@ -403,7 +403,7 @@ class D {
   deleteUser(e) {
     return u(d, {
       method: "GET",
-      url: "/users/{userId}",
+      url: "/api/users/{userId}",
       path: {
         userId: e.userId
       },

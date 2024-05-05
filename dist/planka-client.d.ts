@@ -1,12 +1,12 @@
 export declare type $OpenApiTs = {
-    '/config': {
+    '/api/config': {
         get: {
             res: {
                 200: SingleResponse<Oidc>;
             };
         };
     };
-    '/access-tokens': {
+    '/api/access-tokens': {
         post: {
             req: {
                 requestBody: AccessTokenRequest;
@@ -17,7 +17,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/access-tokens/exchange-using-oidc': {
+    '/api/access-tokens/exchange-using-oidc': {
         post: {
             req: {
                 requestBody: AccessTokenOidcRequest;
@@ -29,7 +29,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/access-tokens/me': {
+    '/api/access-tokens/me': {
         delete: {
             res: {
                 200: SingleResponse<string>;
@@ -37,7 +37,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/users': {
+    '/api/users': {
         get: {
             res: {
                 200: ArrayResponse<User>;
@@ -56,7 +56,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/users/{userId}': {
+    '/api/users/{userId}': {
         get: {
             req: {
                 userId: string;
@@ -70,7 +70,7 @@ export declare type $OpenApiTs = {
         patch: {
             req: {
                 userId: string;
-                requestBody: User;
+                requestBody: Partial<User>;
             };
             res: {
                 200: SingleResponse<User>;
@@ -91,7 +91,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/users/{userId}/email': {
+    '/api/users/{userId}/email': {
         patch: {
             req: {
                 userId: string;
@@ -108,7 +108,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/users/{userId}/password': {
+    '/api/users/{userId}/password': {
         patch: {
             req: {
                 userId: string;
@@ -125,7 +125,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/users/{userId}/username': {
+    '/api/users/{userId}/username': {
         patch: {
             req: {
                 userId: string;
@@ -142,12 +142,12 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/users/{userId}/avatar': {
+    '/api/users/{userId}/avatar': {
         post: {
             req: {
                 userId: string;
                 requestBody: {
-                    username: string;
+                    file: File;
                 };
             };
             res: {
@@ -155,10 +155,11 @@ export declare type $OpenApiTs = {
                 400: BadRequestError;
                 401: UnauthorizedError;
                 404: NotFoundError;
+                422: UnprocessableError;
             };
         };
     };
-    '/projects': {
+    '/api/projects': {
         get: {
             res: {
                 200: ArrayResponse<Project>;
@@ -178,7 +179,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/projects/{projectId}': {
+    '/api/projects/{projectId}': {
         get: {
             req: {
                 projectId: string;
@@ -196,7 +197,7 @@ export declare type $OpenApiTs = {
         patch: {
             req: {
                 projectId: string;
-                requestBody: Project;
+                requestBody: Partial<Project>;
             };
             res: {
                 200: SingleResponse<Project>;
@@ -215,104 +216,552 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/projects/{id}/background-image': {
-        post: {};
+    '/api/projects/{projectId}/background-image': {
+        post: {
+            req: {
+                projectId: string;
+                requestBody: {
+                    file: File;
+                };
+            };
+            res: {
+                200: SingleResponse<Project>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+                422: UnprocessableError;
+            };
+        };
     };
-    '/projects/{id}/manager': {
-        post: {};
+    '/api/projects/{projectId}/manager': {
+        post: {
+            req: {
+                projectId: string;
+                requestBody: {
+                    userId: string;
+                };
+            };
+            res: {
+                200: SingleResponse<ProjectManager>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/project-managers/{id}': {
-        delete: {};
+    '/api/project-managers/{managerId}': {
+        delete: {
+            req: {
+                managerId: string;
+            };
+            res: {
+                200: SingleResponse<ProjectManager>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/projects/{id}/boards': {
-        post: {};
+    '/api/projects/{projectId}/boards': {
+        post: {
+            req: {
+                projectId: string;
+                requestBody: {
+                    position: number;
+                    name: string;
+                };
+            };
+            res: {
+                200: SingleResponse<Board>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/boards/{id}': {
-        get: {};
-        patch: {};
-        delete: {};
+    '/api/boards/{boardId}': {
+        get: {
+            req: {
+                boardId: string;
+            };
+            res: {
+                200: SingleResponse<Board>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        patch: {
+            req: {
+                boardId: string;
+                requestBody: Partial<Board>;
+            };
+            res: {
+                200: SingleResponse<Board>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                boardId: string;
+            };
+            res: {
+                200: SingleResponse<Board>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/boards/{id}/memberships': {
-        post: {};
+    '/api/boards/{boardId}/memberships': {
+        post: {
+            req: {
+                boardId: string;
+                requestBody: {
+                    userId: string;
+                    role: Role;
+                };
+            };
+            res: {
+                200: SingleResponse<Board>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+                409: ConflictError;
+            };
+        };
     };
-    '/board-memberships/{id}': {
-        update: {};
-        delete: {};
+    '/api/board-memberships/{membershipId}': {
+        update: {
+            req: {
+                membershipId: string;
+                requestBody: {
+                    role: Role;
+                    canComment: boolean;
+                };
+            };
+            res: {
+                200: SingleResponse<BoardMembership>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                membershipId: string;
+            };
+            res: {
+                200: SingleResponse<BoardMembership>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/boards/{id}/labels': {
-        post: {};
+    '/api/boards/{boardId}/labels': {
+        post: {
+            req: {
+                boardId: string;
+                requestBody: {
+                    position: number;
+                    color: LabelColor;
+                };
+            };
+            res: {
+                200: SingleResponse<Label>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/labels/{id}': {
-        patch: {};
-        delete: {};
+    '/api/labels/{labelId}': {
+        patch: {
+            req: {
+                labelId: string;
+                requestBody: Partial<Label>;
+            };
+            res: {
+                200: SingleResponse<Label>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                labelId: string;
+            };
+            res: {
+                200: SingleResponse<Label>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/boards/{id}/lists': {
-        post: {};
+    '/api/boards/{boardId}/lists': {
+        post: {
+            req: {
+                boardId: string;
+                requestBody: {
+                    position: number;
+                    name: string;
+                };
+            };
+            res: {
+                200: SingleResponse<List>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/lists/{id}': {
-        patch: {};
-        delete: {};
+    '/api/lists/{listId}': {
+        patch: {
+            req: {
+                listId: string;
+                requestBody: Partial<List>;
+            };
+            res: {
+                200: SingleResponse<List>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                listId: string;
+            };
+            res: {
+                200: SingleResponse<Label>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/lists/{id}/sort': {
-        post: {};
+    '/api/lists/{listId}/sort': {
+        post: {
+            req: {
+                listId: number;
+            };
+            res: {
+                200: SingleResponse<List>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/lists/{id}/cards': {
-        post: {};
+    '/api/lists/{listId}/cards': {
+        post: {
+            req: {
+                listId: number;
+                requestBody: {
+                    name: string;
+                    position: number;
+                };
+            };
+            res: {
+                200: SingleResponse<List>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+                422: UnprocessableError;
+            };
+        };
     };
-    '/cards/{id}': {
-        get: {};
-        patch: {};
-        delete: {};
+    '/api/cards/{cardId}': {
+        get: {
+            req: {
+                cardId: string;
+            };
+            res: {
+                200: SingleResponse<Card>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        patch: {
+            req: {
+                cardId: string;
+                requestBody: Partial<Card>;
+            };
+            res: {
+                200: SingleResponse<Card>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                cardId: string;
+            };
+            res: {
+                200: SingleResponse<Card>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/duplicate': {
-        post: {};
+    '/api/cards/{cardId}/duplicate': {
+        post: {
+            req: {
+                cardId: string;
+                requestBody: {
+                    position: number;
+                };
+            };
+            res: {
+                200: SingleResponse<Card>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/memberships': {
-        post: {};
-        delete: {};
+    '/api/cards/{cardId}/memberships': {
+        post: {
+            req: {
+                cardId: string;
+                requestBody: {
+                    userId: string;
+                };
+            };
+            res: {
+                200: SingleResponse<CardMembership>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                cardId: string;
+                requestBody: {
+                    userId: string;
+                };
+            };
+            res: {
+                200: SingleResponse<CardMembership>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/labels': {
-        post: {};
+    '/api/cards/{cardId}/labels': {
+        post: {
+            req: {
+                cardId: string;
+                requestBody: {
+                    labelId: string;
+                };
+            };
+            res: {
+                200: SingleResponse<CardLabel>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/labels/{labelId}': {
-        delete: {};
+    '/api/cards/{cardId}/labels/{labelId}': {
+        delete: {
+            req: {
+                cardId: string;
+                labelId: string;
+            };
+            res: {
+                200: SingleResponse<CardLabel>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/tasks': {
-        post: {};
+    '/api/cards/{cardId}/tasks': {
+        post: {
+            req: {
+                cardId: string;
+                requestBody: {
+                    position: number;
+                    name: string;
+                };
+            };
+            res: {
+                200: SingleResponse<Task>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/tasks/{id}': {
-        patch: {};
-        delete: {};
+    '/api/tasks/{taskId}': {
+        patch: {
+            req: {
+                taskId: string;
+                requestBody: Partial<Task>;
+            };
+            res: {
+                200: SingleResponse<Task>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                taskId: string;
+            };
+            res: {
+                200: SingleResponse<Task>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/attachments': {
-        post: {};
+    '/api/cards/{cardId}/attachments': {
+        post: {
+            req: {
+                cardId: string;
+                requestBody: {
+                    file: File;
+                };
+            };
+            res: {
+                200: SingleResponse<Attachment>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+                422: UnprocessableError;
+            };
+        };
     };
-    '/attachments/{id}': {
-        patch: {};
-        delete: {};
+    '/api/attachments/{attachmentId}': {
+        patch: {
+            req: {
+                attachmentId: string;
+                requestBody: Partial<Attachment>;
+            };
+            res: {
+                200: SingleResponse<Attachment>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+        delete: {
+            req: {
+                attachmentId: string;
+            };
+            res: {
+                200: SingleResponse<Attachment>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/actions': {
-        get: {};
+    '/api/cards/{cardId}/actions': {
+        get: {
+            req: {
+                cardId: string;
+            };
+            res: {
+                200: ArrayResponse<Action>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/cards/{id}/comment-actions': {
-        get: {};
+    '/api/cards/{cardId}/comment-actions': {
+        post: {
+            req: {
+                cardId: string;
+                requestBody: {
+                    text: string;
+                };
+            };
+            res: {
+                200: SingleResponse<Comment_2>;
+                400: BadRequestError;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
     };
-    '/comment-actions/{id}': {
-        patch: {};
-        delete: {};
-    };
-    '/notifications': {
-        get: {};
-    };
-    '/notifications/{id}': {
-        get: {};
-        patch: {};
-    };
-    '/attachments/{id}/download/{filename}': {
-        get: {};
-    };
-    '/attachments/{id}/download/thumbnails/cover-256.{extension}': {
-        get: {};
+    '/api/comment-actions/{actionId}': {
+        'patch': {
+            req: {
+                actionId: string;
+                requestBody: {
+                    text: string;
+                };
+                res: {
+                    200: SingleResponse<Comment_2>;
+                    401: UnauthorizedError;
+                    404: NotFoundError;
+                };
+            };
+            delete: {
+                req: {
+                    actionId: string;
+                };
+                res: {
+                    200: SingleResponse<Comment_2>;
+                    401: UnauthorizedError;
+                    404: NotFoundError;
+                };
+            };
+        };
+        '/api/notifications': {
+            get: {
+                res: {
+                    200: ArrayResponse<Notification_2>;
+                    401: UnauthorizedError;
+                    404: NotFoundError;
+                };
+            };
+        };
+        '/api/notifications/{notificationId}': {
+            get: {
+                req: {
+                    notificationId: string;
+                };
+                res: {
+                    200: ArrayResponse<Notification_2>;
+                    401: UnauthorizedError;
+                    404: NotFoundError;
+                };
+            };
+            patch: {
+                req: {
+                    notificationId: string;
+                    requestBody: Partial<Notification_2>;
+                };
+                res: {
+                    200: ArrayResponse<Notification_2>;
+                    401: UnauthorizedError;
+                    404: NotFoundError;
+                };
+            };
+        };
+        '/attachments/{attachmentId}/download/{filename}': {
+            get: {
+                req: {
+                    attachmentId: string;
+                    filename: string;
+                };
+                res: {
+                    200: File;
+                    401: UnauthorizedError;
+                    404: NotFoundError;
+                };
+            };
+        };
+        '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
+            get: {
+                req: {
+                    attachmentId: string;
+                    extension: string;
+                };
+                res: {
+                    200: File;
+                    401: UnauthorizedError;
+                    404: NotFoundError;
+                };
+            };
+        };
     };
 };
 
@@ -324,6 +773,20 @@ export declare type AccessTokenOidcRequest = {
 export declare type AccessTokenRequest = {
     emailOrUsername: string;
     password: string;
+};
+
+export declare type Action = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    type: CommentType;
+    data: ActionText;
+    cardId: string;
+    userId: string;
+};
+
+export declare type ActionText = {
+    text: string;
 };
 
 export declare class ApiError extends Error {
@@ -359,13 +822,61 @@ declare type ApiResult<TData = any> = {
 
 export declare type ArrayResponse<T> = {
     items: T[];
-    included?: Partial<Included>;
+    included?: Partial<Include>;
 };
 
-export declare type BadRequestError = {
-    code: string;
+export declare type Attachment = {
+    id: string;
+    name: string;
+    cardId: string;
+    url: string;
+    createUserId: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    coverUrl?: string;
+    image?: Image_2;
+};
+
+export declare type Background = {
+    type: BackgroundType;
+    name?: BackgroundGradient;
+};
+
+export declare type BackgroundGradient = 'old-lime' | 'ocean-dive' | 'tzepesch-style' | 'jungle-mesh' | 'strawberry-dust' | 'purple-rose' | 'sun-scream' | 'warm-rust' | 'sky-change' | 'green-eyes' | 'blue-xchange' | 'blood-orange' | 'sour-peel' | 'green-ninja' | 'algae-green' | 'coral-reef' | 'steel-grey' | 'heat-waves' | 'velvet-lounge' | 'purple-rain' | 'blue-steel' | 'blueish-curve' | 'prism-light' | 'green-mist' | 'red-curtain';
+
+export declare type BackgroundImage = {
+    url?: string;
+    coverUrl?: string;
+};
+
+export declare type BackgroundType = 'gradient' | 'image';
+
+export declare type BadRequestError = BaseError & {
     problems: string[];
+};
+
+export declare type BaseError = {
+    code: string;
     message: string;
+};
+
+export declare type Board = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    position: number;
+    name: string;
+    projectId: string;
+};
+
+export declare type BoardMembership = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    role: Role;
+    canComment?: boolean;
+    boardId: string;
+    userId: string;
 };
 
 export declare class CancelablePromise<T> implements Promise<T> {
@@ -390,18 +901,70 @@ export declare class CancelError extends Error {
     get isCancelled(): boolean;
 }
 
-export declare type ConflictError = {
-    code: string;
-    message: string;
+export declare type Card = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    creatorUserId: string;
+    position: number;
+    name: string;
+    description?: string;
+    dueDate?: Date;
+    stopWatch?: StopWatch;
+    boardId: string;
+    listId: string;
+    coverAttachmentId?: string;
+    isSubscribed: boolean;
 };
+
+export declare type CardLabel = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    cardId: string;
+    labelId?: string;
+};
+
+export declare type CardMembership = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    cardId: string;
+    userId: string;
+};
+
+declare type Comment_2 = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    cardId: string;
+    userId: string;
+    data: ActionText;
+    type: CommentType;
+};
+export { Comment_2 as Comment }
+
+export declare type CommentType = 'commentCard';
+
+export declare type ConflictError = BaseError;
 
 declare type Headers_2 = Record<string, string>;
 
-export declare type Included = {
+declare type Image_2 = {
+    width: number;
+    height: number;
+};
+export { Image_2 as Image }
+
+export declare type Include = {
     users: User[];
-    projectManagers: void;
-    boards: void;
-    boardMemberships: void;
+    projectManagers: ProjectManager[];
+    boards: Board[];
+    boardMemberships: BoardMembership[];
+    cardMemberships: Card[];
+    cardLabels: Label[];
+    actions: Action[];
+    tasks: Action[];
 };
 
 declare class Interceptors<T> {
@@ -411,11 +974,41 @@ declare class Interceptors<T> {
     use(fn: Middleware<T>): void;
 }
 
+export declare type Label = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    position: number;
+    name: string;
+    color: LabelColor;
+    boardId: string;
+};
+
+export declare type LabelColor = 'berry-red' | 'pumpkin-orange' | 'lagoon-blue' | 'pink-tulip' | 'light-mud' | 'orange-peel' | 'bright-moss' | 'antique-blue' | 'dark-granite' | 'lagune-blue' | 'sunny-grass' | 'morning-sky' | 'light-orange' | 'midnight-blue' | 'tank-green' | 'gun-metal' | 'wet-moss' | 'red-burgundy' | 'light-concrete' | 'apricot-red' | 'desert-sand' | 'navy-blue' | 'egg-yellow' | 'coral-green' | 'light-cocoa';
+
+export declare type List = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    position: number;
+    name: string;
+    boardId: string;
+};
+
 declare type Middleware<T> = (value: T) => T | Promise<T>;
 
-export declare type NotFoundError = {
-    code: string;
+export declare type NotFoundError = Omit<BaseError, 'message'>;
+
+declare type Notification_2 = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    isRead: boolean;
+    userId: string;
+    cardId: string;
+    actionId: string;
 };
+export { Notification_2 as Notification }
 
 export declare type Oidc = {
     oidc: string;
@@ -451,17 +1044,17 @@ export declare class PlankaService {
     /**
      * @returns SingleResponse<Oidc> Ok
      */
-    getConfig(): CancelablePromise<$OpenApiTs['/config']['get']['res'][200]>;
+    getConfig(): CancelablePromise<$OpenApiTs['/api/config']['get']['res'][200]>;
     /**
      * @returns none Ok
      * @throws ApiError
      */
-    authorize(data: $OpenApiTs['/access-tokens']['post']['req']): Promise<void>;
+    authorize(data: $OpenApiTs['/api/access-tokens']['post']['req']): Promise<void>;
     /**
      * @returns none Ok
      * @throws ApiError
      */
-    authorizeOidc(data: $OpenApiTs['/access-tokens/exchange-using-oidc']['post']['req']): Promise<void>;
+    authorizeOidc(data: $OpenApiTs['/api/access-tokens/exchange-using-oidc']['post']['req']): Promise<void>;
     /**
      * @returns none Ok
      * @throws ApiError
@@ -471,29 +1064,21 @@ export declare class PlankaService {
      * @returns ArrayResponse<User> Ok
      * @throws ApiError
      */
-    getUsers(): CancelablePromise<$OpenApiTs['/users']['get']['res'][200]>;
+    getUsers(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.requestBody
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    createUser(data: $OpenApiTs['/users']['post']['req']): CancelablePromise<$OpenApiTs['/users']['post']['res'][200]>;
+    createUser(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.userId
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    getUser(data: $OpenApiTs['/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/users/{userId}']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    updateUser(data: $OpenApiTs['/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/users/{userId}']['patch']['res'][200]>;
+    getUser(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.userId
@@ -501,7 +1086,15 @@ export declare class PlankaService {
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    deleteUser(data: $OpenApiTs['/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/users/{userId}']['delete']['res'][200]>;
+    updateUser(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    deleteUser(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]>;
 }
 
 export declare type Project = {
@@ -509,21 +1102,45 @@ export declare type Project = {
     createdAt: Date;
     updatedAt?: Date;
     name: string;
-    background?: string;
-    backgroundImage?: string;
+    background?: Background;
+    backgroundImage?: BackgroundImage;
+};
+
+export declare type ProjectManager = {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    projectId: string;
+    userId: string;
 };
 
 declare type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 
+export declare type Role = 'editor' | 'viewer';
+
 export declare type SingleResponse<T> = {
     item: T;
-    included?: Partial<Included>;
+    included?: Partial<Include>;
 };
 
-export declare type UnauthorizedError = {
-    code: string;
-    message: string;
+export declare type StopWatch = {
+    startedAt?: Date;
+    total: number;
 };
+
+export declare type Task = {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    position: number;
+    name: string;
+    isCompleted: boolean;
+    cardId: string;
+};
+
+export declare type UnauthorizedError = BaseError;
+
+export declare type UnprocessableError = BaseError;
 
 export declare type User = {
     id: string;
@@ -535,6 +1152,7 @@ export declare type User = {
     organization?: string;
     language?: string;
     subscribeToOwnCards: boolean;
+    avatarUrl?: string;
     createdAt: Date;
     updatedAt?: Date;
     deletedAt?: Date;
