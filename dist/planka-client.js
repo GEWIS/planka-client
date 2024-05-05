@@ -1,9 +1,9 @@
-class A extends Error {
-  constructor(e, r, n) {
-    super(n), this.name = "ApiError", this.url = r.url, this.status = r.status, this.statusText = r.statusText, this.body = r.body, this.request = e;
+class k extends Error {
+  constructor(e, o, i) {
+    super(i), this.name = "ApiError", this.url = o.url, this.status = o.status, this.statusText = o.statusText, this.body = o.body, this.request = e;
   }
 }
-class S extends Error {
+class E extends Error {
   constructor(e) {
     super(e), this.name = "CancelError";
   }
@@ -11,31 +11,31 @@ class S extends Error {
     return !0;
   }
 }
-class w {
+class S {
   constructor(e) {
-    this._isResolved = !1, this._isRejected = !1, this._isCancelled = !1, this.cancelHandlers = [], this.promise = new Promise((r, n) => {
-      this._resolve = r, this._reject = n;
-      const s = (c) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(c));
-      }, a = (c) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(c));
-      }, o = (c) => {
-        this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(c);
+    this._isResolved = !1, this._isRejected = !1, this._isCancelled = !1, this.cancelHandlers = [], this.promise = new Promise((o, i) => {
+      this._resolve = o, this._reject = i;
+      const n = (h) => {
+        this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(h));
+      }, d = (h) => {
+        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(h));
+      }, c = (h) => {
+        this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(h);
       };
-      return Object.defineProperty(o, "isResolved", {
+      return Object.defineProperty(c, "isResolved", {
         get: () => this._isResolved
-      }), Object.defineProperty(o, "isRejected", {
+      }), Object.defineProperty(c, "isRejected", {
         get: () => this._isRejected
-      }), Object.defineProperty(o, "isCancelled", {
+      }), Object.defineProperty(c, "isCancelled", {
         get: () => this._isCancelled
-      }), e(s, a, o);
+      }), e(n, d, c);
     });
   }
   get [Symbol.toStringTag]() {
     return "Cancellable Promise";
   }
-  then(e, r) {
-    return this.promise.then(e, r);
+  then(e, o) {
+    return this.promise.then(e, o);
   }
   catch(e) {
     return this.promise.catch(e);
@@ -53,26 +53,26 @@ class w {
           console.warn("Cancellation threw an error", e);
           return;
         }
-      this.cancelHandlers.length = 0, this._reject && this._reject(new S("Request aborted"));
+      this.cancelHandlers.length = 0, this._reject && this._reject(new E("Request aborted"));
     }
   }
   get isCancelled() {
     return this._isCancelled;
   }
 }
-class b {
+class y {
   constructor() {
     this._fns = [];
   }
   eject(e) {
-    const r = this._fns.indexOf(e);
-    r !== -1 && (this._fns = [...this._fns.slice(0, r), ...this._fns.slice(r + 1)]);
+    const o = this._fns.indexOf(e);
+    o !== -1 && (this._fns = [...this._fns.slice(0, o), ...this._fns.slice(o + 1)]);
   }
   use(e) {
     this._fns = [...this._fns, e];
   }
 }
-const l = {
+const s = {
   BASE: process.env.PLANKA_URL || "http://localhost:3000",
   CREDENTIALS: "include",
   ENCODE_PATH: void 0,
@@ -83,86 +83,86 @@ const l = {
   VERSION: "1.0.0",
   WITH_CREDENTIALS: !1,
   interceptors: {
-    request: new b(),
-    response: new b()
+    request: new y(),
+    response: new y()
   }
 };
-var i = /* @__PURE__ */ ((t) => (t.s400 = "Bad request", t.s401 = "Unauthorized", t.s404 = "Not found", t.s409 = "Conflict", t.s422 = "Bad request (unprocessable)", t))(i || {});
-const f = (t) => typeof t == "string", y = (t) => f(t) && t !== "", T = (t) => t instanceof Blob, R = (t) => t instanceof FormData, k = (t) => {
+var r = /* @__PURE__ */ ((t) => (t.s400 = "Bad request", t.s401 = "Unauthorized", t.s404 = "Not found", t.s409 = "Conflict", t.s422 = "Bad request (unprocessable)", t))(r || {});
+const p = (t) => typeof t == "string", A = (t) => p(t) && t !== "", I = (t) => t instanceof Blob, b = (t) => t instanceof FormData, $ = (t) => {
   try {
     return btoa(t);
   } catch {
     return Buffer.from(t).toString("base64");
   }
-}, C = (t) => {
-  const e = [], r = (s, a) => {
-    e.push(`${encodeURIComponent(s)}=${encodeURIComponent(String(a))}`);
-  }, n = (s, a) => {
-    a != null && (a instanceof Date ? r(s, a.toISOString()) : Array.isArray(a) ? a.forEach((o) => n(s, o)) : typeof a == "object" ? Object.entries(a).forEach(([o, c]) => n(`${s}[${o}]`, c)) : r(s, a));
-  };
-  return Object.entries(t).forEach(([s, a]) => n(s, a)), e.length ? `?${e.join("&")}` : "";
-}, I = (t, e) => {
-  const r = t.ENCODE_PATH || encodeURI, n = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (a, o) => Object.prototype.hasOwnProperty.call(e.path, o) ? r(String(e.path[o])) : a), s = t.BASE + n;
-  return e.query ? s + C(e.query) : s;
 }, j = (t) => {
+  const e = [], o = (n, d) => {
+    e.push(`${encodeURIComponent(n)}=${encodeURIComponent(String(d))}`);
+  }, i = (n, d) => {
+    d != null && (d instanceof Date ? o(n, d.toISOString()) : Array.isArray(d) ? d.forEach((c) => i(n, c)) : typeof d == "object" ? Object.entries(d).forEach(([c, h]) => i(`${n}[${c}]`, h)) : o(n, d));
+  };
+  return Object.entries(t).forEach(([n, d]) => i(n, d)), e.length ? `?${e.join("&")}` : "";
+}, z = (t, e) => {
+  const o = t.ENCODE_PATH || encodeURI, i = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (d, c) => Object.prototype.hasOwnProperty.call(e.path, c) ? o(String(e.path[c])) : d), n = t.BASE + i;
+  return e.query ? n + j(e.query) : n;
+}, q = (t) => {
   if (t.formData) {
-    const e = new FormData(), r = (n, s) => {
-      f(s) || T(s) ? e.append(n, s) : e.append(n, JSON.stringify(s));
+    const e = new FormData(), o = (i, n) => {
+      p(n) || I(n) ? e.append(i, n) : e.append(i, JSON.stringify(n));
     };
-    return Object.entries(t.formData).filter(([, n]) => n != null).forEach(([n, s]) => {
-      Array.isArray(s) ? s.forEach((a) => r(n, a)) : r(n, s);
+    return Object.entries(t.formData).filter(([, i]) => i != null).forEach(([i, n]) => {
+      Array.isArray(n) ? n.forEach((d) => o(i, d)) : o(i, n);
     }), e;
   }
-}, p = async (t, e) => typeof e == "function" ? e(t) : e, q = async (t, e) => {
-  const [r, n, s, a] = await Promise.all([
-    p(e, t.TOKEN),
-    p(e, t.USERNAME),
-    p(e, t.PASSWORD),
-    p(e, t.HEADERS)
-  ]), o = Object.entries({
+}, m = async (t, e) => typeof e == "function" ? e(t) : e, P = async (t, e) => {
+  const [o, i, n, d] = await Promise.all([
+    m(e, t.TOKEN),
+    m(e, t.USERNAME),
+    m(e, t.PASSWORD),
+    m(e, t.HEADERS)
+  ]), c = Object.entries({
     Accept: "application/json",
-    ...a,
+    ...d,
     ...e.headers
-  }).filter(([, c]) => c != null).reduce((c, [h, d]) => ({
-    ...c,
-    [h]: String(d)
+  }).filter(([, h]) => h != null).reduce((h, [l, u]) => ({
+    ...h,
+    [l]: String(u)
   }), {});
-  if (y(r) && (o.Authorization = `Bearer ${r}`), y(n) && y(s)) {
-    const c = k(`${n}:${s}`);
-    o.Authorization = `Basic ${c}`;
+  if (A(o) && (c.Authorization = `Bearer ${o}`), A(i) && A(n)) {
+    const h = $(`${i}:${n}`);
+    c.Authorization = `Basic ${h}`;
   }
-  return e.body !== void 0 && (e.mediaType ? o["Content-Type"] = e.mediaType : T(e.body) ? o["Content-Type"] = e.body.type || "application/octet-stream" : f(e.body) ? o["Content-Type"] = "text/plain" : R(e.body) || (o["Content-Type"] = "application/json")), new Headers(o);
-}, B = (t) => {
-  var e, r;
+  return e.body !== void 0 && (e.mediaType ? c["Content-Type"] = e.mediaType : I(e.body) ? c["Content-Type"] = e.body.type || "application/octet-stream" : p(e.body) ? c["Content-Type"] = "text/plain" : b(e.body) || (c["Content-Type"] = "application/json")), new Headers(c);
+}, v = (t) => {
+  var e, o;
   if (t.body !== void 0)
-    return (e = t.mediaType) != null && e.includes("application/json") || (r = t.mediaType) != null && r.includes("+json") ? JSON.stringify(t.body) : f(t.body) || T(t.body) || R(t.body) ? t.body : JSON.stringify(t.body);
-}, P = async (t, e, r, n, s, a, o) => {
-  const c = new AbortController();
-  let h = {
-    headers: a,
-    body: n ?? s,
+    return (e = t.mediaType) != null && e.includes("application/json") || (o = t.mediaType) != null && o.includes("+json") ? JSON.stringify(t.body) : p(t.body) || I(t.body) || b(t.body) ? t.body : JSON.stringify(t.body);
+}, R = async (t, e, o, i, n, d, c) => {
+  const h = new AbortController();
+  let l = {
+    headers: d,
+    body: i ?? n,
     method: e.method,
-    signal: c.signal
+    signal: h.signal
   };
-  t.WITH_CREDENTIALS && (h.credentials = t.CREDENTIALS);
-  for (const d of t.interceptors.request._fns)
-    h = await d(h);
-  return o(() => c.abort()), await fetch(r, h);
-}, O = (t, e) => {
+  t.WITH_CREDENTIALS && (l.credentials = t.CREDENTIALS);
+  for (const u of t.interceptors.request._fns)
+    l = await u(l);
+  return c(() => h.abort()), await fetch(o, l);
+}, w = (t, e) => {
   if (e) {
-    const r = t.headers.get(e);
-    if (f(r))
-      return r;
+    const o = t.headers.get(e);
+    if (p(o))
+      return o;
   }
-}, N = async (t) => {
+}, C = async (t) => {
   if (t.status !== 204)
     try {
       const e = t.headers.get("Content-Type");
       if (e) {
-        const r = ["application/octet-stream", "application/pdf", "application/zip", "audio/", "image/", "video/"];
+        const o = ["application/octet-stream", "application/pdf", "application/zip", "audio/", "image/", "video/"];
         if (e.includes("application/json") || e.includes("+json"))
           return await t.json();
-        if (r.some((n) => e.includes(n)))
+        if (o.some((i) => e.includes(i)))
           return await t.blob();
         if (e.includes("multipart/form-data"))
           return await t.formData();
@@ -172,8 +172,8 @@ const f = (t) => typeof t == "string", y = (t) => f(t) && t !== "", T = (t) => t
     } catch (e) {
       console.error(e);
     }
-}, D = (t, e) => {
-  const n = {
+}, _ = (t, e) => {
+  const i = {
     400: "Bad Request",
     401: "Unauthorized",
     402: "Payment Required",
@@ -216,43 +216,43 @@ const f = (t) => typeof t == "string", y = (t) => f(t) && t !== "", T = (t) => t
     511: "Network Authentication Required",
     ...t.errors
   }[e.status];
-  if (n)
-    throw new A(t, e, n);
+  if (i)
+    throw new k(t, e, i);
   if (!e.ok) {
-    const s = e.status ?? "unknown", a = e.statusText ?? "unknown", o = (() => {
+    const n = e.status ?? "unknown", d = e.statusText ?? "unknown", c = (() => {
       try {
         return JSON.stringify(e.body, null, 2);
       } catch {
         return;
       }
     })();
-    throw new A(
+    throw new k(
       t,
       e,
-      `Generic Error: status: ${s}; status text: ${a}; body: ${o}`
+      `Generic Error: status: ${n}; status text: ${d}; body: ${c}`
     );
   }
-}, u = (t, e) => new w(async (r, n, s) => {
+}, a = (t, e) => new S(async (o, i, n) => {
   try {
-    const a = I(t, e), o = j(e), c = B(e), h = await q(t, e);
-    if (!s.isCancelled) {
-      let d = await P(t, e, a, c, o, h, s);
-      for (const _ of t.interceptors.response._fns)
-        d = await _(d);
-      const E = await N(d), g = O(d, e.responseHeader), m = {
-        url: a,
-        ok: d.ok,
-        status: d.status,
-        statusText: d.statusText,
-        body: g ?? E
+    const d = z(t, e), c = q(e), h = v(e), l = await P(t, e);
+    if (!n.isCancelled) {
+      let u = await R(t, e, d, h, c, l, n);
+      for (const B of t.interceptors.response._fns)
+        u = await B(u);
+      const g = await C(u), f = w(u, e.responseHeader), T = {
+        url: d,
+        ok: u.ok,
+        status: u.status,
+        statusText: u.statusText,
+        body: f ?? g
       };
-      D(e, m), r(m.body);
+      _(e, T), o(T.body);
     }
-  } catch (a) {
-    n(a);
+  } catch (d) {
+    i(d);
   }
 });
-class U {
+class O {
   constructor(e) {
     this.planka = e;
   }
@@ -260,7 +260,7 @@ class U {
      * @returns SingleResponse<Oidc> Ok
      */
   getConfig() {
-    return u(l, {
+    return a(s, {
       method: "GET",
       url: "/api/config"
     });
@@ -270,49 +270,49 @@ class U {
      * @throws ApiError
      */
   async authorize(e) {
-    const r = await u(l, {
+    const o = await a(s, {
       method: "POST",
       url: "/api/access-tokens",
       body: e.requestBody,
       errors: {
-        400: i.s400
+        400: r.s400
       }
     });
-    this.planka.setAccessToken(r.item);
+    this.planka.setAccessToken(o.item);
   }
   /**
      * @returns none Ok
      * @throws ApiError
      */
   async authorizeOidc(e) {
-    const r = await u(l, {
+    const o = await a(s, {
       method: "POST",
       url: "/api/access-tokens/exchange-using-oidc",
       body: e.requestBody,
       errors: {
-        400: i.s400
+        400: r.s400
       }
     });
-    this.planka.setAccessToken(r.item);
+    this.planka.setAccessToken(o.item);
   }
   /**
      * @returns none Ok
      * @throws ApiError
      */
   async unauthorize() {
-    await u(l, {
+    await a(s, {
       method: "DELETE",
       url: "/api/access-tokens/me",
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       errors: {
-        401: i.s401
+        401: r.s401
       }
     }), this.planka.setAccessToken(null);
   }
 }
-class v {
+class D {
   constructor(e) {
     this.planka = e;
   }
@@ -320,16 +320,16 @@ class v {
    * @returns ArrayResponse<User> Ok
    * @throws ApiError
    */
-  getUsers() {
-    return u(l, {
+  getAll() {
+    return a(s, {
       method: "GET",
       url: "/api/users",
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       errors: {
-        401: i.s401,
-        404: i.s404
+        401: r.s401,
+        404: r.s404
       }
     });
   }
@@ -339,8 +339,8 @@ class v {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  createUser(e) {
-    return u(l, {
+  create(e) {
+    return a(s, {
       method: "POST",
       url: "/api/users",
       headers: {
@@ -348,8 +348,8 @@ class v {
       },
       body: e.requestBody,
       errors: {
-        401: i.s401,
-        404: i.s404
+        401: r.s401,
+        404: r.s404
       }
     });
   }
@@ -359,8 +359,8 @@ class v {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  getUser(e) {
-    return u(l, {
+  get(e) {
+    return a(s, {
       method: "GET",
       url: "/api/users/{userId}",
       path: {
@@ -370,8 +370,8 @@ class v {
         Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       errors: {
-        401: i.s401,
-        404: i.s404
+        401: r.s401,
+        404: r.s404
       }
     });
   }
@@ -382,8 +382,8 @@ class v {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  updateUser(e) {
-    return u(l, {
+  update(e) {
+    return a(s, {
       method: "PATCH",
       url: "/api/users/{userId}",
       path: {
@@ -394,9 +394,9 @@ class v {
       },
       body: e.requestBody,
       errors: {
-        400: i.s400,
-        401: i.s401,
-        404: i.s404
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
       }
     });
   }
@@ -407,8 +407,8 @@ class v {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  deleteUser(e) {
-    return u(l, {
+  remove(e) {
+    return a(s, {
       method: "DELETE",
       url: "/api/users/{userId}",
       path: {
@@ -417,9 +417,10 @@ class v {
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
+      body: e.requestBody,
       errors: {
-        401: i.s401,
-        404: i.s404
+        401: r.s401,
+        404: r.s404
       }
     });
   }
@@ -430,8 +431,8 @@ class v {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  updateUserMail(e) {
-    return u(l, {
+  updateMail(e) {
+    return a(s, {
       method: "PATCH",
       url: "/api/users/{userId}/email",
       path: {
@@ -442,10 +443,10 @@ class v {
       },
       body: e.requestBody,
       errors: {
-        400: i.s400,
-        401: i.s401,
-        404: i.s404,
-        409: i.s409
+        400: r.s400,
+        401: r.s401,
+        404: r.s404,
+        409: r.s409
       }
     });
   }
@@ -456,10 +457,10 @@ class v {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  updateUserPassword(e) {
-    return u(l, {
+  updatePassword(e) {
+    return a(s, {
       method: "PATCH",
-      url: "/api/users/{userId}/email",
+      url: "/api/users/{userId}/password",
       path: {
         userId: e.userId
       },
@@ -468,17 +469,938 @@ class v {
       },
       body: e.requestBody,
       errors: {
-        400: i.s400,
-        401: i.s401,
-        404: i.s404,
-        409: i.s409
+        400: r.s400,
+        401: r.s401,
+        404: r.s404,
+        409: r.s409
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.userId
+   * @param data.requestBody
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
+  updateName(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/users/{userId}/username",
+      path: {
+        userId: e.userId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404,
+        409: r.s409
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.userId
+   * @param data.requestBody
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
+  updateAvatar(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/users/{userId}/avatar",
+      path: {
+        userId: e.userId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404,
+        422: r.s422
+      }
+    });
+  }
+}
+class L {
+  constructor(e) {
+    this.planka = e;
+  }
+  create(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/cards/{cardId}/comment-actions",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/comment-actions/{actionId}",
+      path: {
+        actionId: e.actionId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  remove(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/attachments/{attachmentId}",
+      path: {
+        attachmentId: e.attachmentId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
       }
     });
   }
 }
 class H {
+  constructor(e) {
+    this.planka = e;
+  }
+  create(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/cards/{cardId}/attachments",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404,
+        422: r.s422
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/attachments/{attachmentId}",
+      path: {
+        attachmentId: e.attachmentId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  remove(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/attachments/{attachmentId}",
+      path: {
+        attachmentId: e.attachmentId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  download(e) {
+    return a(s, {
+      method: "GET",
+      url: "/attachments/{attachmentId}/download/{filename}",
+      path: {
+        attachmentId: e.attachmentId,
+        filename: e.filename
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  thumbnail(e) {
+    return a(s, {
+      method: "GET",
+      url: "/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}",
+      path: {
+        attachmentId: e.attachmentId,
+        extension: e.extension
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class N {
+  constructor(e) {
+    this.planka = e;
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Board> Ok
+   * @throws ApiError
+   */
+  create(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/projects/{projectId}/managers",
+      path: {
+        projectId: e.projectId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  get(e) {
+    return a(s, {
+      method: "GET",
+      url: "/api/boards/{projectId}",
+      path: {
+        projectId: e.boardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/boards/{boardId}",
+      path: {
+        projectId: e.boardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  remove(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/boards/{boardId}",
+      path: {
+        boardId: e.boardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  addMember(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/boards/{boardId}/memberships",
+      path: {
+        boardId: e.boardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404,
+        409: r.s409
+      }
+    });
+  }
+  updateMember(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/board-memberships/{membershipId}",
+      path: {
+        membershipId: e.membershipId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  removeMember(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/board-memberships/{membershipId}",
+      path: {
+        membershipId: e.membershipId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class x {
+  constructor(e) {
+    this.planka = e;
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Board> Ok
+   * @throws ApiError
+   */
+  create(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/lists/{listId}/cards",
+      path: {
+        listId: e.listId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404,
+        422: r.s422
+      }
+    });
+  }
+  get(e) {
+    return a(s, {
+      method: "GET",
+      url: "/api/cards/{cardId}",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/cards/{cardId}",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  delete(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/cards/{cardId}",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  duplicate(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/cards/{cardId}/duplicate",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  addMember(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/cards/{cardId}/memberships",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  removeMember(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/cards/{cardId}/memberships",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  addLabel(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/cards/{cardId}/labels",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  removeLabel(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/cards/{cardId}/labels/{labelId}",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class U {
+  constructor(e) {
+    this.planka = e;
+  }
+  create(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/boards/{boardId}/labels",
+      path: {
+        boardId: e.boardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/labels/{labelId}",
+      path: {
+        labelId: e.labelId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  remove(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/labels/{labelId}",
+      path: {
+        labelId: e.labelId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class G {
+  constructor(e) {
+    this.planka = e;
+  }
+  create(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/boards/{boardId}/lists",
+      path: {
+        boardId: e.boardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/lists/{listId}",
+      path: {
+        listId: e.listId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  delete(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/lists/{listId}",
+      path: {
+        listId: e.listId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  sort(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/lists/{listId}/sort",
+      path: {
+        listId: e.listId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class M {
+  constructor(e) {
+    this.planka = e;
+  }
+  getAll() {
+    return a(s, {
+      method: "GET",
+      url: "/api/notifications",
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  get(e) {
+    return a(s, {
+      method: "GET",
+      url: "/api/notifications/{notificationId}",
+      path: {
+        notificationId: e.notificationId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/notifications/{notificationId}",
+      path: {
+        notificationId: e.notificationId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class F {
+  constructor(e) {
+    this.planka = e;
+  }
+  /**
+   * @returns ArrayResponse<Project> Ok
+   * @throws ApiError
+   */
+  getAll() {
+    return a(s, {
+      method: "GET",
+      url: "/api/projects",
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.requestBody
+   * @returns SingleResponse<Project> Ok
+   * @throws ApiError
+   */
+  create(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/projects",
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Project> Ok
+   * @throws ApiError
+   */
+  get(e) {
+    return a(s, {
+      method: "GET",
+      url: "/api/projects/{projectId}",
+      path: {
+        projectId: e.projectId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Project> Ok
+   * @throws ApiError
+   */
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/projects/{projectId}",
+      path: {
+        projectId: e.projectId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Project> Ok
+   * @throws ApiError
+   */
+  remove(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/projects/{projectId}",
+      path: {
+        projectId: e.projectId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Project> Ok
+   * @throws ApiError
+   */
+  setBackgroundImage(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/projects/{projectId}/background-image",
+      path: {
+        projectId: e.projectId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404,
+        422: r.s422
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<ProjectManager> Ok
+   * @throws ApiError
+   */
+  addManager(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/projects/{projectId}/managers",
+      path: {
+        projectId: e.projectId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.managerId
+   * @param data.requestBody
+   * @returns SingleResponse<ProjectManager> Ok
+   * @throws ApiError
+   */
+  removeManager(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/projects/{projectId}/managers",
+      path: {
+        projectId: e.managerId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class V {
+  constructor(e) {
+    this.planka = e;
+  }
+  create(e) {
+    return a(s, {
+      method: "POST",
+      url: "/api/cards/{cardId}/tasks",
+      path: {
+        cardId: e.cardId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: r.s400,
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  update(e) {
+    return a(s, {
+      method: "PATCH",
+      url: "/api/tasks/{taskId}",
+      path: {
+        taskId: e.taskId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+  remove(e) {
+    return a(s, {
+      method: "DELETE",
+      url: "/api/tasks/{taskId}",
+      path: {
+        taskId: e.taskId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      errors: {
+        401: r.s401,
+        404: r.s404
+      }
+    });
+  }
+}
+class W {
   constructor() {
-    this.accessToken = null, this.AuthService = new U(this), this.UserService = new v(this);
+    this.accessToken = null, this.ActionService = new L(this), this.AttachmentService = new H(this), this.AuthService = new O(this), this.BoardService = new N(this), this.CardService = new x(this), this.LabelService = new U(this), this.ListService = new G(this), this.NotificationService = new M(this), this.ProjectService = new F(this), this.TaskService = new V(this), this.UserService = new D(this);
   }
   setAccessToken(e) {
     this.accessToken = e;
@@ -488,10 +1410,10 @@ class H {
   }
 }
 export {
-  A as ApiError,
-  S as CancelError,
-  w as CancelablePromise,
-  l as OpenAPI,
-  H as Planka,
-  i as StatusCode
+  k as ApiError,
+  E as CancelError,
+  S as CancelablePromise,
+  s as OpenAPI,
+  W as Planka,
+  r as StatusCode
 };

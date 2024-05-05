@@ -6,6 +6,7 @@ import { Planka } from '.'
 
 export class UserService {
   private planka: Planka
+
   constructor(planka: Planka) {
     this.planka = planka
   }
@@ -115,6 +116,7 @@ export class UserService {
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
       },
+      body: data.requestBody,
       errors: {
         401: StatusCode.s401,
         404: StatusCode.s404,

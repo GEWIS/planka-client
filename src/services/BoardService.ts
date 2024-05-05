@@ -28,6 +28,7 @@ export class BoardService {
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
       },
+      body: data.requestBody,
       errors: {
         400: StatusCode.s400,
         401: StatusCode.s401,

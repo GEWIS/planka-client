@@ -21,6 +21,7 @@ export class ListService {
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
       },
+      body: data.requestBody,
       errors: {
         400: StatusCode.s400,
         401: StatusCode.s401,
@@ -39,6 +40,7 @@ export class ListService {
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
       },
+      body: data.requestBody,
       errors: {
         401: StatusCode.s401,
         404: StatusCode.s404,

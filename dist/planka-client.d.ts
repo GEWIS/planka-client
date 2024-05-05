@@ -178,7 +178,7 @@ export declare type $OpenApiTs = {
                 };
             };
             res: {
-                200: ArrayResponse<Project>;
+                200: SingleResponse<Project>;
                 400: BadRequestError;
                 401: UnauthorizedError;
             };
@@ -237,7 +237,7 @@ export declare type $OpenApiTs = {
             };
         };
     };
-    '/api/projects/{projectId}/manager': {
+    '/api/projects/{projectId}/managers': {
         post: {
             req: {
                 projectId: string;
@@ -260,6 +260,7 @@ export declare type $OpenApiTs = {
             };
             res: {
                 200: SingleResponse<ProjectManager>;
+                400: NotFoundError;
                 401: UnauthorizedError;
                 404: NotFoundError;
             };
@@ -334,7 +335,7 @@ export declare type $OpenApiTs = {
         };
     };
     '/api/board-memberships/{membershipId}': {
-        update: {
+        patch: {
             req: {
                 membershipId: string;
                 requestBody: {
@@ -686,85 +687,85 @@ export declare type $OpenApiTs = {
         };
     };
     '/api/comment-actions/{actionId}': {
-        'patch': {
+        patch: {
             req: {
                 actionId: string;
                 requestBody: {
                     text: string;
                 };
-                res: {
-                    200: SingleResponse<Comment_2>;
-                    401: UnauthorizedError;
-                    404: NotFoundError;
-                };
             };
-            delete: {
-                req: {
-                    actionId: string;
-                };
-                res: {
-                    200: SingleResponse<Comment_2>;
-                    401: UnauthorizedError;
-                    404: NotFoundError;
-                };
+            res: {
+                200: SingleResponse<Comment_2>;
+                401: UnauthorizedError;
+                404: NotFoundError;
             };
         };
-        '/api/notifications': {
-            get: {
-                res: {
-                    200: ArrayResponse<Notification_2>;
-                    401: UnauthorizedError;
-                    404: NotFoundError;
-                };
+        delete: {
+            req: {
+                actionId: string;
+            };
+            res: {
+                200: SingleResponse<Comment_2>;
+                401: UnauthorizedError;
+                404: NotFoundError;
             };
         };
-        '/api/notifications/{notificationId}': {
-            get: {
-                req: {
-                    notificationId: string;
-                };
-                res: {
-                    200: ArrayResponse<Notification_2>;
-                    401: UnauthorizedError;
-                    404: NotFoundError;
-                };
-            };
-            patch: {
-                req: {
-                    notificationId: string;
-                    requestBody: Partial<Notification_2>;
-                };
-                res: {
-                    200: ArrayResponse<Notification_2>;
-                    401: UnauthorizedError;
-                    404: NotFoundError;
-                };
+    };
+    '/api/notifications': {
+        get: {
+            res: {
+                200: ArrayResponse<Notification_2>;
+                401: UnauthorizedError;
+                404: NotFoundError;
             };
         };
-        '/attachments/{attachmentId}/download/{filename}': {
-            get: {
-                req: {
-                    attachmentId: string;
-                    filename: string;
-                };
-                res: {
-                    200: File;
-                    401: UnauthorizedError;
-                    404: NotFoundError;
-                };
+    };
+    '/api/notifications/{notificationId}': {
+        get: {
+            req: {
+                notificationId: string;
+            };
+            res: {
+                200: ArrayResponse<Notification_2>;
+                401: UnauthorizedError;
+                404: NotFoundError;
             };
         };
-        '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
-            get: {
-                req: {
-                    attachmentId: string;
-                    extension: string;
-                };
-                res: {
-                    200: File;
-                    401: UnauthorizedError;
-                    404: NotFoundError;
-                };
+        patch: {
+            req: {
+                notificationId: string;
+                requestBody: Partial<Notification_2>;
+            };
+            res: {
+                200: ArrayResponse<Notification_2>;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+    };
+    '/attachments/{attachmentId}/download/{filename}': {
+        get: {
+            req: {
+                attachmentId: string;
+                filename: string;
+            };
+            res: {
+                200: File;
+                401: UnauthorizedError;
+                404: NotFoundError;
+            };
+        };
+    };
+    '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
+        get: {
+            req: {
+                attachmentId: string;
+                extension: string;
+            };
+            res: {
+                200: File;
+                401: UnauthorizedError;
+                404: NotFoundError;
             };
         };
     };
@@ -789,6 +790,14 @@ export declare type Action = {
     cardId: string;
     userId: string;
 };
+
+declare class ActionService {
+    private planka;
+    constructor(planka: Planka);
+    create(data: $OpenApiTs['/api/cards/{cardId}/comment-actions']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/comment-actions']['post']['res'][200]>;
+    update(data: $OpenApiTs['/api/comment-actions/{actionId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/comment-actions/{actionId}']['patch']['res'][200]>;
+    remove(data: $OpenApiTs['/api/attachments/{attachmentId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/attachments/{attachmentId}']['delete']['res'][200]>;
+}
 
 export declare type ActionText = {
     text: string;
@@ -841,6 +850,16 @@ export declare type Attachment = {
     coverUrl?: string;
     image?: Image_2;
 };
+
+declare class AttachmentService {
+    private planka;
+    constructor(planka: Planka);
+    create(data: $OpenApiTs['/api/cards/{cardId}/attachments']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/attachments']['post']['res'][200]>;
+    update(data: $OpenApiTs['/api/attachments/{attachmentId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/attachments/{attachmentId}']['patch']['res'][200]>;
+    remove(data: $OpenApiTs['/api/attachments/{attachmentId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/attachments/{attachmentId}']['delete']['res'][200]>;
+    download(data: $OpenApiTs['/attachments/{attachmentId}/download/{filename}']['get']['req']): CancelablePromise<$OpenApiTs['/attachments/{attachmentId}/download/{filename}']['get']['res'][200]>;
+    thumbnail(data: $OpenApiTs['/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}']['get']['req']): CancelablePromise<$OpenApiTs['/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}']['get']['res'][200]>;
+}
 
 declare class AuthService {
     private planka;
@@ -908,6 +927,25 @@ export declare type BoardMembership = {
     userId: string;
 };
 
+declare class BoardService {
+    private planka;
+    constructor(planka: Planka);
+    /**
+     * @param data The data for the request.
+     * @param data.projectId
+     * @param data.requestBody
+     * @returns SingleResponse<Board> Ok
+     * @throws ApiError
+     */
+    create(data: $OpenApiTs['/api/projects/{projectId}/boards']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/boards']['post']['res'][200]>;
+    get(data: $OpenApiTs['/api/boards/{boardId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['get']['res'][200]>;
+    update(data: $OpenApiTs['/api/boards/{boardId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['patch']['res'][200]>;
+    remove(data: $OpenApiTs['/api/boards/{boardId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['delete']['res'][200]>;
+    addMember(data: $OpenApiTs['/api/boards/{boardId}/memberships']['post']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/memberships']['post']['res'][200]>;
+    updateMember(data: $OpenApiTs['/api/board-memberships/{membershipId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['patch']['res'][200]>;
+    removeMember(data: $OpenApiTs['/api/board-memberships/{membershipId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['delete']['res'][200]>;
+}
+
 export declare class CancelablePromise<T> implements Promise<T> {
     private _isResolved;
     private _isRejected;
@@ -962,6 +1000,27 @@ export declare type CardMembership = {
     userId: string;
 };
 
+declare class CardService {
+    private planka;
+    constructor(planka: Planka);
+    /**
+     * @param data The data for the request.
+     * @param data.projectId
+     * @param data.requestBody
+     * @returns SingleResponse<Board> Ok
+     * @throws ApiError
+     */
+    create(data: $OpenApiTs['/api/lists/{listId}/cards']['post']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}/cards']['post']['res'][200]>;
+    get(data: $OpenApiTs['/api/cards/{cardId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}']['get']['res'][200]>;
+    update(data: $OpenApiTs['/api/cards/{cardId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}']['patch']['res'][200]>;
+    delete(data: $OpenApiTs['/api/cards/{cardId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}']['delete']['res'][200]>;
+    duplicate(data: $OpenApiTs['/api/cards/{cardId}/duplicate']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/duplicate']['post']['res'][200]>;
+    addMember(data: $OpenApiTs['/api/cards/{cardId}/memberships']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/memberships']['post']['res'][200]>;
+    removeMember(data: $OpenApiTs['/api/cards/{cardId}/memberships']['delete']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/memberships']['delete']['res'][200]>;
+    addLabel(data: $OpenApiTs['/api/cards/{cardId}/labels']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/labels']['post']['res'][200]>;
+    removeLabel(data: $OpenApiTs['/api/cards/{cardId}/labels/{labelId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/labels/{labelId}']['delete']['res'][200]>;
+}
+
 declare type Comment_2 = {
     id: string;
     createdAt: Date;
@@ -1015,6 +1074,14 @@ export declare type Label = {
 
 export declare type LabelColor = 'berry-red' | 'pumpkin-orange' | 'lagoon-blue' | 'pink-tulip' | 'light-mud' | 'orange-peel' | 'bright-moss' | 'antique-blue' | 'dark-granite' | 'lagune-blue' | 'sunny-grass' | 'morning-sky' | 'light-orange' | 'midnight-blue' | 'tank-green' | 'gun-metal' | 'wet-moss' | 'red-burgundy' | 'light-concrete' | 'apricot-red' | 'desert-sand' | 'navy-blue' | 'egg-yellow' | 'coral-green' | 'light-cocoa';
 
+declare class LabelService {
+    private planka;
+    constructor(planka: Planka);
+    create(data: $OpenApiTs['/api/boards/{boardId}/labels']['post']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/labels']['post']['res'][200]>;
+    update(data: $OpenApiTs['/api/labels/{labelId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/labels/{labelId}']['patch']['res'][200]>;
+    remove(data: $OpenApiTs['/api/labels/{labelId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/labels/{labelId}']['delete']['res'][200]>;
+}
+
 export declare type List = {
     id: string;
     createdAt: Date;
@@ -1023,6 +1090,15 @@ export declare type List = {
     name: string;
     boardId: string;
 };
+
+declare class ListService {
+    private planka;
+    constructor(planka: Planka);
+    create(data: $OpenApiTs['/api/boards/{boardId}/lists']['post']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/lists']['post']['res'][200]>;
+    update(data: $OpenApiTs['/api/lists/{listId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}']['patch']['res'][200]>;
+    delete(data: $OpenApiTs['/api/lists/{listId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}']['delete']['res'][200]>;
+    sort(data: $OpenApiTs['/api/lists/{listId}/sort']['post']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}/sort']['post']['res'][200]>;
+}
 
 declare type Middleware<T> = (value: T) => T | Promise<T>;
 
@@ -1038,6 +1114,14 @@ declare type Notification_2 = {
     actionId: string;
 };
 export { Notification_2 as Notification }
+
+declare class NotificationService {
+    private planka;
+    constructor(planka: Planka);
+    getAll(): CancelablePromise<$OpenApiTs['/api/notifications']['get']['res'][200]>;
+    get(data: $OpenApiTs['/api/notifications/{notificationId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/notifications/{notificationId}']['get']['res'][200]>;
+    update(data: $OpenApiTs['/api/notifications/{notificationId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/notifications/{notificationId}']['patch']['res'][200]>;
+}
 
 export declare type Oidc = {
     oidc: string;
@@ -1070,10 +1154,19 @@ export declare type OpenAPIConfig = {
 
 export declare class Planka {
     private accessToken;
-    AuthService: AuthService;
-    UserService: UserService;
     setAccessToken(accessToken: string): void;
     getAccessToken(): string;
+    ActionService: ActionService;
+    AttachmentService: AttachmentService;
+    AuthService: AuthService;
+    BoardService: BoardService;
+    CardService: CardService;
+    LabelService: LabelService;
+    ListService: ListService;
+    NotificationService: NotificationService;
+    ProjectService: ProjectService;
+    TaskService: TaskService;
+    UserService: UserService;
     constructor();
 }
 
@@ -1093,6 +1186,71 @@ export declare type ProjectManager = {
     projectId: string;
     userId: string;
 };
+
+declare class ProjectService {
+    private planka;
+    constructor(planka: Planka);
+    /**
+     * @returns ArrayResponse<Project> Ok
+     * @throws ApiError
+     */
+    getAll(): CancelablePromise<$OpenApiTs['/api/projects']['get']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns SingleResponse<Project> Ok
+     * @throws ApiError
+     */
+    create(data: $OpenApiTs['/api/projects']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects']['post']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.projectId
+     * @param data.requestBody
+     * @returns SingleResponse<Project> Ok
+     * @throws ApiError
+     */
+    get(data: $OpenApiTs['/api/projects/{projectId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['get']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.projectId
+     * @param data.requestBody
+     * @returns SingleResponse<Project> Ok
+     * @throws ApiError
+     */
+    update(data: $OpenApiTs['/api/projects/{projectId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['patch']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.projectId
+     * @param data.requestBody
+     * @returns SingleResponse<Project> Ok
+     * @throws ApiError
+     */
+    remove(data: $OpenApiTs['/api/projects/{projectId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['delete']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.projectId
+     * @param data.requestBody
+     * @returns SingleResponse<Project> Ok
+     * @throws ApiError
+     */
+    setBackgroundImage(data: $OpenApiTs['/api/projects/{projectId}/background-image']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.projectId
+     * @param data.requestBody
+     * @returns SingleResponse<ProjectManager> Ok
+     * @throws ApiError
+     */
+    addManager(data: $OpenApiTs['/api/projects/{projectId}/managers']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.managerId
+     * @param data.requestBody
+     * @returns SingleResponse<ProjectManager> Ok
+     * @throws ApiError
+     */
+    removeManager(data: $OpenApiTs['/api/project-managers/{managerId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/project-managers/{managerId}']['delete']['res'][200]>;
+}
 
 declare type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 
@@ -1126,6 +1284,14 @@ export declare type Task = {
     cardId: string;
 };
 
+declare class TaskService {
+    private planka;
+    constructor(planka: Planka);
+    create(data: $OpenApiTs['/api/cards/{cardId}/tasks']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/tasks']['post']['res'][200]>;
+    update(data: $OpenApiTs['/api/tasks/{taskId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/tasks/{taskId}']['patch']['res'][200]>;
+    remove(data: $OpenApiTs['/api/tasks/{taskId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/tasks/{taskId}']['delete']['res'][200]>;
+}
+
 export declare type UnauthorizedError = BaseError;
 
 export declare type UnprocessableError = BaseError;
@@ -1153,29 +1319,21 @@ declare class UserService {
      * @returns ArrayResponse<User> Ok
      * @throws ApiError
      */
-    getUsers(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]>;
+    getAll(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.requestBody
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    createUser(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]>;
+    create(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.userId
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    getUser(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    updateUser(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]>;
+    get(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.userId
@@ -1183,7 +1341,7 @@ declare class UserService {
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    deleteUser(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]>;
+    update(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.userId
@@ -1191,7 +1349,7 @@ declare class UserService {
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    updateUserMail(data: $OpenApiTs['/api/users/{userId}/email']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/email']['patch']['res'][200]>;
+    remove(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]>;
     /**
      * @param data The data for the request.
      * @param data.userId
@@ -1199,7 +1357,31 @@ declare class UserService {
      * @returns SingleResponse<User> Ok
      * @throws ApiError
      */
-    updateUserPassword(data: $OpenApiTs['/api/users/{userId}/password']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/password']['patch']['res'][200]>;
+    updateMail(data: $OpenApiTs['/api/users/{userId}/email']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/email']['patch']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    updatePassword(data: $OpenApiTs['/api/users/{userId}/password']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/password']['patch']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    updateName(data: $OpenApiTs['/api/users/{userId}/username']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/username']['patch']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    updateAvatar(data: $OpenApiTs['/api/users/{userId}/avatar']['post']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/avatar']['post']['res'][200]>;
 }
 
 export { }
