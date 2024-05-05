@@ -644,7 +644,7 @@ export type $OpenApiTs = {
   // 'PATCH /api/board-memberships/:id': 'board-memberships/update'
   // 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
   '/api/board-memberships/{membershipId}': {
-    update: {
+    patch: {
       req: {
         membershipId: string
         requestBody: {
@@ -1041,103 +1041,103 @@ export type $OpenApiTs = {
   // 'PATCH /api/comment-actions/:id': 'comment-actions/update'
   // 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
   '/api/comment-actions/{actionId}': {
-    'patch': {
+    patch: {
       req: {
         actionId: string
         requestBody: {
           text: string
         }
-        res: {
-          200: SingleResponse<Comment>
-          401: UnauthorizedError
-          404: NotFoundError
-        }
       }
-      delete: {
-        req: {
-          actionId: string
-        }
-        res: {
-          200: SingleResponse<Comment>
-          401: UnauthorizedError
-          404: NotFoundError
-        }
+      res: {
+        200: SingleResponse<Comment>
+        401: UnauthorizedError
+        404: NotFoundError
       }
     }
-
-    // 'GET /api/notifications': 'notifications/index'
-    '/api/notifications': {
-      get: {
-        res: {
-          200: ArrayResponse<Notification>
-          401: UnauthorizedError
-          404: NotFoundError
-        }
+    delete: {
+      req: {
+        actionId: string
+      }
+      res: {
+        200: SingleResponse<Comment>
+        401: UnauthorizedError
+        404: NotFoundError
       }
     }
+  }
 
-    // TODO check correctness for endpoint
-    // 'GET /api/notifications/:id': 'notifications/show'
-    // 'PATCH /api/notifications/:ids': 'notifications/update'
-    '/api/notifications/{notificationId}': {
-      get: {
-        req: {
-          notificationId: string
-        }
-        res: {
-          200: ArrayResponse<Notification>
-          401: UnauthorizedError
-          404: NotFoundError
-        }
-      }
-      patch: {
-        req: {
-          notificationId: string
-          requestBody: Partial<Notification>
-        }
-        res: {
-          200: ArrayResponse<Notification>
-          401: UnauthorizedError
-          404: NotFoundError
-        }
+  // 'GET /api/notifications': 'notifications/index'
+  '/api/notifications': {
+    get: {
+      res: {
+        200: ArrayResponse<Notification>
+        401: UnauthorizedError
+        404: NotFoundError
       }
     }
+  }
 
-    // 'GET /attachments/:id/download/:filename': {
-    //    action: 'attachments/download',
-    //    skipAssets: false,
-    // },
-    '/attachments/{attachmentId}/download/{filename}': {
-      get: {
-        req: {
-          attachmentId: string
-          filename: string
-        }
-        res: {
-          // TODO check correctness
-          200: File
-          401: UnauthorizedError
-          404: NotFoundError
-        }
+  // TODO check correctness for endpoint
+  // 'GET /api/notifications/:id': 'notifications/show'
+  // 'PATCH /api/notifications/:ids': 'notifications/update'
+  '/api/notifications/{notificationId}': {
+    get: {
+      req: {
+        notificationId: string
+      }
+      res: {
+        200: ArrayResponse<Notification>
+        401: UnauthorizedError
+        404: NotFoundError
       }
     }
+    patch: {
+      req: {
+        notificationId: string
+        requestBody: Partial<Notification>
+      }
+      res: {
+        200: ArrayResponse<Notification>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
+    }
+  }
 
-    // 'GET /attachments/:id/download/thumbnails/cover-256.:extension': {
-    //    action: 'attachments/download-thumbnail',
-    //    skipAssets: false,
-    // },
-    '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
-      get: {
-        req: {
-          attachmentId: string
-          extension: string
-        }
-        res: {
-          // TODO check correctness
-          200: File
-          401: UnauthorizedError
-          404: NotFoundError
-        }
+  // 'GET /attachments/:id/download/:filename': {
+  //    action: 'attachments/download',
+  //    skipAssets: false,
+  // },
+  '/attachments/{attachmentId}/download/{filename}': {
+    get: {
+      req: {
+        attachmentId: string
+        filename: string
+      }
+      res: {
+        // TODO check correctness
+        200: File
+        401: UnauthorizedError
+        404: NotFoundError
+      }
+    }
+  }
+
+  // 'GET /attachments/:id/download/thumbnails/cover-256.:extension': {
+  //    action: 'attachments/download-thumbnail',
+  //    skipAssets: false,
+  // },
+  '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
+    get: {
+      req: {
+        attachmentId: string
+        extension: string
+      }
+      res: {
+        // TODO check correctness
+        200: File
+        401: UnauthorizedError
+        404: NotFoundError
       }
     }
   }

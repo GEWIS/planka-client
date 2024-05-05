@@ -106,7 +106,7 @@ export class ProjectService {
    * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public delete(data: $OpenApiTs['/api/projects/{projectId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['delete']['res'][200]> {
+  public remove(data: $OpenApiTs['/api/projects/{projectId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/projects/{projectId}',
@@ -186,31 +186,6 @@ export class ProjectService {
       url: '/api/projects/{projectId}/managers',
       path: {
         projectId: data.managerId,
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`,
-      },
-      errors: {
-        400: StatusCode.s400,
-        401: StatusCode.s401,
-        404: StatusCode.s404,
-      },
-    })
-  }
-
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<Board> Ok
-   * @throws ApiError
-   */
-  public createBoard(data: $OpenApiTs['/api/projects/{projectId}/boards']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/boards']['post']['res'][200]> {
-    return __request(OpenAPI, {
-      method: 'DELETE',
-      url: '/api/projects/{projectId}/managers',
-      path: {
-        projectId: data.projectId,
       },
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,

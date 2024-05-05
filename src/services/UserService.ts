@@ -14,7 +14,7 @@ export class UserService {
    * @returns ArrayResponse<User> Ok
    * @throws ApiError
    */
-  public getUsers(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]> {
+  public getAll(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/users',
@@ -34,7 +34,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public createUser(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]> {
+  public create(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/users',
@@ -55,7 +55,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public getUser(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]> {
+  public get(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/users/{userId}',
@@ -79,7 +79,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public updateUser(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]> {
+  public update(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/api/users/{userId}',
@@ -105,7 +105,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public deleteUser(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]> {
+  public remove(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/users/{userId}',
@@ -129,7 +129,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public updateUserMail(data: $OpenApiTs['/api/users/{userId}/email']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/email']['patch']['res'][200]> {
+  public updateMail(data: $OpenApiTs['/api/users/{userId}/email']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/email']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/api/users/{userId}/email',
@@ -156,7 +156,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public updateUserPassword(data: $OpenApiTs['/api/users/{userId}/password']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/password']['patch']['res'][200]> {
+  public updatePassword(data: $OpenApiTs['/api/users/{userId}/password']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/password']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/api/users/{userId}/password',
@@ -183,7 +183,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public updateUserName(data: $OpenApiTs['/api/users/{userId}/username']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/username']['patch']['res'][200]> {
+  public updateName(data: $OpenApiTs['/api/users/{userId}/username']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/username']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/api/users/{userId}/username',
@@ -210,7 +210,7 @@ export class UserService {
    * @returns SingleResponse<User> Ok
    * @throws ApiError
    */
-  public updateUserAvatar(data: $OpenApiTs['/api/users/{userId}/avatar']['post']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/avatar']['post']['res'][200]> {
+  public updateAvatar(data: $OpenApiTs['/api/users/{userId}/avatar']['post']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/avatar']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/users/{userId}/avatar',
