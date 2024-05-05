@@ -46,7 +46,12 @@ export declare type $OpenApiTs = {
         };
         post: {
             req: {
-                requestBody: UserCreate;
+                requestBody: {
+                    email: string;
+                    password: string;
+                    name: string;
+                    username?: string;
+                };
             };
             res: {
                 200: SingleResponse<User>;
@@ -837,6 +842,30 @@ export declare type Attachment = {
     image?: Image_2;
 };
 
+declare class AuthService {
+    private planka;
+    constructor(planka: Planka);
+    /**
+     * @returns SingleResponse<Oidc> Ok
+     */
+    getConfig(): CancelablePromise<$OpenApiTs['/api/config']['get']['res'][200]>;
+    /**
+     * @returns none Ok
+     * @throws ApiError
+     */
+    authorize(data: $OpenApiTs['/api/access-tokens']['post']['req']): Promise<void>;
+    /**
+     * @returns none Ok
+     * @throws ApiError
+     */
+    authorizeOidc(data: $OpenApiTs['/api/access-tokens/exchange-using-oidc']['post']['req']): Promise<void>;
+    /**
+     * @returns none Ok
+     * @throws ApiError
+     */
+    unauthorize(): Promise<void>;
+}
+
 export declare type Background = {
     type: BackgroundType;
     name?: BackgroundGradient;
@@ -1039,62 +1068,13 @@ export declare type OpenAPIConfig = {
     };
 };
 
-export declare class PlankaService {
+export declare class Planka {
     private accessToken;
-    /**
-     * @returns SingleResponse<Oidc> Ok
-     */
-    getConfig(): CancelablePromise<$OpenApiTs['/api/config']['get']['res'][200]>;
-    /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-    authorize(data: $OpenApiTs['/api/access-tokens']['post']['req']): Promise<void>;
-    /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-    authorizeOidc(data: $OpenApiTs['/api/access-tokens/exchange-using-oidc']['post']['req']): Promise<void>;
-    /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-    unauthorize(): Promise<void>;
-    /**
-     * @returns ArrayResponse<User> Ok
-     * @throws ApiError
-     */
-    getUsers(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    createUser(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    getUser(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    updateUser(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    deleteUser(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]>;
+    AuthService: AuthService;
+    UserService: UserService;
+    setAccessToken(accessToken: string): void;
+    getAccessToken(): string;
+    constructor();
 }
 
 export declare type Project = {
@@ -1122,6 +1102,14 @@ export declare type SingleResponse<T> = {
     item: T;
     included?: Partial<Include>;
 };
+
+export declare enum StatusCode {
+    s400 = "Bad request",
+    s401 = "Unauthorized",
+    s404 = "Not found",
+    s409 = "Conflict",
+    s422 = "Bad request (unprocessable)"
+}
 
 export declare type StopWatch = {
     startedAt?: Date;
@@ -1158,11 +1146,60 @@ export declare type User = {
     deletedAt?: Date;
 };
 
-export declare type UserCreate = {
-    email: string;
-    password: string;
-    name: string;
-    username?: string;
-};
+declare class UserService {
+    private planka;
+    constructor(planka: Planka);
+    /**
+     * @returns ArrayResponse<User> Ok
+     * @throws ApiError
+     */
+    getUsers(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    createUser(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    getUser(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    updateUser(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    deleteUser(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    updateUserMail(data: $OpenApiTs['/api/users/{userId}/email']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/email']['patch']['res'][200]>;
+    /**
+     * @param data The data for the request.
+     * @param data.userId
+     * @param data.requestBody
+     * @returns SingleResponse<User> Ok
+     * @throws ApiError
+     */
+    updateUserPassword(data: $OpenApiTs['/api/users/{userId}/password']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/password']['patch']['res'][200]>;
+}
 
 export { }

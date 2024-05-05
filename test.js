@@ -1,11 +1,12 @@
-import { PlankaService } from './dist/planka-client.js'
+import { Planka } from './dist/planka-client.js'
 
-let test = new PlankaService()
-await test.authorize({
+let planka = new Planka()
+let test = await planka.AuthService.authorize({
   requestBody: {
     emailOrUsername: 'demo',
     password: 'demo',
   },
 })
+console.log(test)
 
-console.log(await test.getUsers())
+console.log(await planka.UserService.getUsers())

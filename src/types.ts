@@ -248,6 +248,14 @@ export type NotFoundError = Omit<BaseError, 'message'>
 
 export type UnprocessableError = BaseError
 
+export enum StatusCode {
+  s400 = 'Bad request',
+  s401 = 'Unauthorized',
+  s404 = 'Not found',
+  s409 = 'Conflict',
+  s422 = 'Bad request (unprocessable)',
+}
+
 /*
   Routes
  */

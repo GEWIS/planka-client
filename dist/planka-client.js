@@ -1,4 +1,4 @@
-class b extends Error {
+class A extends Error {
   constructor(e, r, n) {
     super(n), this.name = "ApiError", this.url = r.url, this.status = r.status, this.statusText = r.statusText, this.body = r.body, this.request = e;
   }
@@ -11,24 +11,24 @@ class S extends Error {
     return !0;
   }
 }
-class A {
+class w {
   constructor(e) {
     this._isResolved = !1, this._isRejected = !1, this._isCancelled = !1, this.cancelHandlers = [], this.promise = new Promise((r, n) => {
       this._resolve = r, this._reject = n;
-      const s = (a) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(a));
-      }, o = (a) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(a));
-      }, i = (a) => {
-        this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(a);
+      const s = (c) => {
+        this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(c));
+      }, a = (c) => {
+        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(c));
+      }, o = (c) => {
+        this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(c);
       };
-      return Object.defineProperty(i, "isResolved", {
+      return Object.defineProperty(o, "isResolved", {
         get: () => this._isResolved
-      }), Object.defineProperty(i, "isRejected", {
+      }), Object.defineProperty(o, "isRejected", {
         get: () => this._isRejected
-      }), Object.defineProperty(i, "isCancelled", {
+      }), Object.defineProperty(o, "isCancelled", {
         get: () => this._isCancelled
-      }), e(s, o, i);
+      }), e(s, a, o);
     });
   }
   get [Symbol.toStringTag]() {
@@ -60,7 +60,7 @@ class A {
     return this._isCancelled;
   }
 }
-class m {
+class b {
   constructor() {
     this._fns = [];
   }
@@ -72,7 +72,7 @@ class m {
     this._fns = [...this._fns, e];
   }
 }
-const d = {
+const l = {
   BASE: process.env.PLANKA_URL || "http://localhost:3000",
   CREDENTIALS: "include",
   ENCODE_PATH: void 0,
@@ -83,76 +83,78 @@ const d = {
   VERSION: "1.0.0",
   WITH_CREDENTIALS: !1,
   interceptors: {
-    request: new m(),
-    response: new m()
+    request: new b(),
+    response: new b()
   }
-}, h = (t) => typeof t == "string", y = (t) => h(t) && t !== "", p = (t) => t instanceof Blob, R = (t) => t instanceof FormData, w = (t) => {
+};
+var i = /* @__PURE__ */ ((t) => (t.s400 = "Bad request", t.s401 = "Unauthorized", t.s404 = "Not found", t.s409 = "Conflict", t.s422 = "Bad request (unprocessable)", t))(i || {});
+const f = (t) => typeof t == "string", y = (t) => f(t) && t !== "", T = (t) => t instanceof Blob, R = (t) => t instanceof FormData, k = (t) => {
   try {
     return btoa(t);
   } catch {
     return Buffer.from(t).toString("base64");
   }
 }, C = (t) => {
-  const e = [], r = (s, o) => {
-    e.push(`${encodeURIComponent(s)}=${encodeURIComponent(String(o))}`);
-  }, n = (s, o) => {
-    o != null && (o instanceof Date ? r(s, o.toISOString()) : Array.isArray(o) ? o.forEach((i) => n(s, i)) : typeof o == "object" ? Object.entries(o).forEach(([i, a]) => n(`${s}[${i}]`, a)) : r(s, o));
+  const e = [], r = (s, a) => {
+    e.push(`${encodeURIComponent(s)}=${encodeURIComponent(String(a))}`);
+  }, n = (s, a) => {
+    a != null && (a instanceof Date ? r(s, a.toISOString()) : Array.isArray(a) ? a.forEach((o) => n(s, o)) : typeof a == "object" ? Object.entries(a).forEach(([o, c]) => n(`${s}[${o}]`, c)) : r(s, a));
   };
-  return Object.entries(t).forEach(([s, o]) => n(s, o)), e.length ? `?${e.join("&")}` : "";
-}, j = (t, e) => {
-  const r = t.ENCODE_PATH || encodeURI, n = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (o, i) => Object.prototype.hasOwnProperty.call(e.path, i) ? r(String(e.path[i])) : o), s = t.BASE + n;
+  return Object.entries(t).forEach(([s, a]) => n(s, a)), e.length ? `?${e.join("&")}` : "";
+}, I = (t, e) => {
+  const r = t.ENCODE_PATH || encodeURI, n = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (a, o) => Object.prototype.hasOwnProperty.call(e.path, o) ? r(String(e.path[o])) : a), s = t.BASE + n;
   return e.query ? s + C(e.query) : s;
-}, I = (t) => {
+}, j = (t) => {
   if (t.formData) {
     const e = new FormData(), r = (n, s) => {
-      h(s) || p(s) ? e.append(n, s) : e.append(n, JSON.stringify(s));
+      f(s) || T(s) ? e.append(n, s) : e.append(n, JSON.stringify(s));
     };
     return Object.entries(t.formData).filter(([, n]) => n != null).forEach(([n, s]) => {
-      Array.isArray(s) ? s.forEach((o) => r(n, o)) : r(n, s);
+      Array.isArray(s) ? s.forEach((a) => r(n, a)) : r(n, s);
     }), e;
   }
-}, f = async (t, e) => typeof e == "function" ? e(t) : e, U = async (t, e) => {
-  const [r, n, s, o] = await Promise.all([
-    f(e, t.TOKEN),
-    f(e, t.USERNAME),
-    f(e, t.PASSWORD),
-    f(e, t.HEADERS)
-  ]), i = Object.entries({
+}, p = async (t, e) => typeof e == "function" ? e(t) : e, q = async (t, e) => {
+  const [r, n, s, a] = await Promise.all([
+    p(e, t.TOKEN),
+    p(e, t.USERNAME),
+    p(e, t.PASSWORD),
+    p(e, t.HEADERS)
+  ]), o = Object.entries({
     Accept: "application/json",
-    ...o,
-    ...e.headers
-  }).filter(([, a]) => a != null).reduce((a, [l, c]) => ({
     ...a,
-    [l]: String(c)
+    ...e.headers
+  }).filter(([, c]) => c != null).reduce((c, [h, d]) => ({
+    ...c,
+    [h]: String(d)
   }), {});
-  if (y(r) && (i.Authorization = `Bearer ${r}`), y(n) && y(s)) {
-    const a = w(`${n}:${s}`);
-    i.Authorization = `Basic ${a}`;
+  if (y(r) && (o.Authorization = `Bearer ${r}`), y(n) && y(s)) {
+    const c = k(`${n}:${s}`);
+    o.Authorization = `Basic ${c}`;
   }
-  return e.body !== void 0 && (e.mediaType ? i["Content-Type"] = e.mediaType : p(e.body) ? i["Content-Type"] = e.body.type || "application/octet-stream" : h(e.body) ? i["Content-Type"] = "text/plain" : R(e.body) || (i["Content-Type"] = "application/json")), new Headers(i);
-}, q = (t) => {
+  return e.body !== void 0 && (e.mediaType ? o["Content-Type"] = e.mediaType : T(e.body) ? o["Content-Type"] = e.body.type || "application/octet-stream" : f(e.body) ? o["Content-Type"] = "text/plain" : R(e.body) || (o["Content-Type"] = "application/json")), new Headers(o);
+}, B = (t) => {
   var e, r;
   if (t.body !== void 0)
-    return (e = t.mediaType) != null && e.includes("application/json") || (r = t.mediaType) != null && r.includes("+json") ? JSON.stringify(t.body) : h(t.body) || p(t.body) || R(t.body) ? t.body : JSON.stringify(t.body);
-}, O = async (t, e, r, n, s, o, i) => {
-  const a = new AbortController();
-  let l = {
-    headers: o,
+    return (e = t.mediaType) != null && e.includes("application/json") || (r = t.mediaType) != null && r.includes("+json") ? JSON.stringify(t.body) : f(t.body) || T(t.body) || R(t.body) ? t.body : JSON.stringify(t.body);
+}, P = async (t, e, r, n, s, a, o) => {
+  const c = new AbortController();
+  let h = {
+    headers: a,
     body: n ?? s,
     method: e.method,
-    signal: a.signal
+    signal: c.signal
   };
-  t.WITH_CREDENTIALS && (l.credentials = t.CREDENTIALS);
-  for (const c of t.interceptors.request._fns)
-    l = await c(l);
-  return i(() => a.abort()), await fetch(r, l);
-}, N = (t, e) => {
+  t.WITH_CREDENTIALS && (h.credentials = t.CREDENTIALS);
+  for (const d of t.interceptors.request._fns)
+    h = await d(h);
+  return o(() => c.abort()), await fetch(r, h);
+}, O = (t, e) => {
   if (e) {
     const r = t.headers.get(e);
-    if (h(r))
+    if (f(r))
       return r;
   }
-}, P = async (t) => {
+}, N = async (t) => {
   if (t.status !== 204)
     try {
       const e = t.headers.get("Content-Type");
@@ -170,7 +172,7 @@ const d = {
     } catch (e) {
       console.error(e);
     }
-}, B = (t, e) => {
+}, D = (t, e) => {
   const n = {
     400: "Bad Request",
     401: "Unauthorized",
@@ -215,212 +217,281 @@ const d = {
     ...t.errors
   }[e.status];
   if (n)
-    throw new b(t, e, n);
+    throw new A(t, e, n);
   if (!e.ok) {
-    const s = e.status ?? "unknown", o = e.statusText ?? "unknown", i = (() => {
+    const s = e.status ?? "unknown", a = e.statusText ?? "unknown", o = (() => {
       try {
         return JSON.stringify(e.body, null, 2);
       } catch {
         return;
       }
     })();
-    throw new b(
+    throw new A(
       t,
       e,
-      `Generic Error: status: ${s}; status text: ${o}; body: ${i}`
+      `Generic Error: status: ${s}; status text: ${a}; body: ${o}`
     );
   }
-}, u = (t, e) => new A(async (r, n, s) => {
+}, u = (t, e) => new w(async (r, n, s) => {
   try {
-    const o = j(t, e), i = I(e), a = q(e), l = await U(t, e);
+    const a = I(t, e), o = j(e), c = B(e), h = await q(t, e);
     if (!s.isCancelled) {
-      let c = await O(t, e, o, a, i, l, s);
-      for (const g of t.interceptors.response._fns)
-        c = await g(c);
-      const E = await P(c), _ = N(c, e.responseHeader), T = {
-        url: o,
-        ok: c.ok,
-        status: c.status,
-        statusText: c.statusText,
-        body: _ ?? E
+      let d = await P(t, e, a, c, o, h, s);
+      for (const _ of t.interceptors.response._fns)
+        d = await _(d);
+      const E = await N(d), g = O(d, e.responseHeader), m = {
+        url: a,
+        ok: d.ok,
+        status: d.status,
+        statusText: d.statusText,
+        body: g ?? E
       };
-      B(e, T), r(T.body);
+      D(e, m), r(m.body);
     }
-  } catch (o) {
-    n(o);
+  } catch (a) {
+    n(a);
   }
 });
-class D {
-  constructor() {
-    this.accessToken = null;
+class U {
+  constructor(e) {
+    this.planka = e;
   }
   /**
-   * @returns SingleResponse<Oidc> Ok
-   */
+     * @returns SingleResponse<Oidc> Ok
+     */
   getConfig() {
-    return u(d, {
+    return u(l, {
       method: "GET",
       url: "/api/config"
     });
   }
   /**
-   * @returns none Ok
-   * @throws ApiError
-   */
+     * @returns none Ok
+     * @throws ApiError
+     */
   async authorize(e) {
-    const r = await u(d, {
+    const r = await u(l, {
       method: "POST",
       url: "/api/access-tokens",
       body: e.requestBody,
       errors: {
-        400: "Invalid request body"
+        400: i.s400
       }
     });
-    this.accessToken = r.item;
+    this.planka.setAccessToken(r.item);
   }
   /**
-   * @returns none Ok
-   * @throws ApiError
-   */
+     * @returns none Ok
+     * @throws ApiError
+     */
   async authorizeOidc(e) {
-    const r = await u(d, {
+    const r = await u(l, {
       method: "POST",
       url: "/api/access-tokens/exchange-using-oidc",
       body: e.requestBody,
       errors: {
-        400: "Invalid request body"
+        400: i.s400
       }
     });
-    this.accessToken = r.item;
+    this.planka.setAccessToken(r.item);
   }
   /**
-   * @returns none Ok
-   * @throws ApiError
-   */
+     * @returns none Ok
+     * @throws ApiError
+     */
   async unauthorize() {
-    await u(d, {
+    await u(l, {
       method: "DELETE",
       url: "/api/access-tokens/me",
       headers: {
-        Authorization: `Bearer ${this.accessToken}`
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       errors: {
-        401: "Unauthorized"
+        401: i.s401
       }
-    }), this.accessToken = null;
+    }), this.planka.setAccessToken(null);
+  }
+}
+class v {
+  constructor(e) {
+    this.planka = e;
   }
   /**
-     * @returns ArrayResponse<User> Ok
-     * @throws ApiError
-     */
+   * @returns ArrayResponse<User> Ok
+   * @throws ApiError
+   */
   getUsers() {
-    return u(d, {
+    return u(l, {
       method: "GET",
       url: "/api/users",
       headers: {
-        Authorization: `Bearer ${this.accessToken}`
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       errors: {
-        401: "Unauthorized",
-        404: "User not found"
+        401: i.s401,
+        404: i.s404
       }
     });
   }
   /**
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
+   * @param data The data for the request.
+   * @param data.requestBody
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
   createUser(e) {
-    return u(d, {
-      method: "GET",
+    return u(l, {
+      method: "POST",
       url: "/api/users",
       headers: {
-        Authorization: `Bearer ${this.accessToken}`
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       body: e.requestBody,
       errors: {
-        401: "Unauthorized",
-        404: "User not found"
+        401: i.s401,
+        404: i.s404
       }
     });
   }
   /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
+   * @param data The data for the request.
+   * @param data.userId
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
   getUser(e) {
-    return u(d, {
+    return u(l, {
       method: "GET",
       url: "/api/users/{userId}",
       path: {
         userId: e.userId
       },
       headers: {
-        Authorization: `Bearer ${this.accessToken}`
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       errors: {
-        401: "Unauthorized",
-        404: "User not found"
+        401: i.s401,
+        404: i.s404
       }
     });
   }
   /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
+   * @param data The data for the request.
+   * @param data.userId
+   * @param data.requestBody
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
   updateUser(e) {
-    return u(d, {
-      method: "POST",
+    return u(l, {
+      method: "PATCH",
       url: "/api/users/{userId}",
       path: {
         userId: e.userId
       },
       headers: {
-        Authorization: `Bearer ${this.accessToken}`
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       body: e.requestBody,
       errors: {
-        400: "Invalid request body",
-        401: "Unauthorized",
-        404: "User not found"
+        400: i.s400,
+        401: i.s401,
+        404: i.s404
       }
     });
   }
   /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
+   * @param data The data for the request.
+   * @param data.userId
+   * @param data.requestBody
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
   deleteUser(e) {
-    return u(d, {
-      method: "GET",
+    return u(l, {
+      method: "DELETE",
       url: "/api/users/{userId}",
       path: {
         userId: e.userId
       },
       headers: {
-        Authorization: `Bearer ${this.accessToken}`
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
       },
       errors: {
-        401: "Unauthorized",
-        404: "User not found"
+        401: i.s401,
+        404: i.s404
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.userId
+   * @param data.requestBody
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
+  updateUserMail(e) {
+    return u(l, {
+      method: "PATCH",
+      url: "/api/users/{userId}/email",
+      path: {
+        userId: e.userId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: i.s400,
+        401: i.s401,
+        404: i.s404,
+        409: i.s409
+      }
+    });
+  }
+  /**
+   * @param data The data for the request.
+   * @param data.userId
+   * @param data.requestBody
+   * @returns SingleResponse<User> Ok
+   * @throws ApiError
+   */
+  updateUserPassword(e) {
+    return u(l, {
+      method: "PATCH",
+      url: "/api/users/{userId}/email",
+      path: {
+        userId: e.userId
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`
+      },
+      body: e.requestBody,
+      errors: {
+        400: i.s400,
+        401: i.s401,
+        404: i.s404,
+        409: i.s409
       }
     });
   }
 }
+class H {
+  constructor() {
+    this.accessToken = null, this.AuthService = new U(this), this.UserService = new v(this);
+  }
+  setAccessToken(e) {
+    this.accessToken = e;
+  }
+  getAccessToken() {
+    return this.accessToken;
+  }
+}
 export {
-  b as ApiError,
+  A as ApiError,
   S as CancelError,
-  A as CancelablePromise,
-  d as OpenAPI,
-  D as PlankaService
+  w as CancelablePromise,
+  l as OpenAPI,
+  H as Planka,
+  i as StatusCode
 };
