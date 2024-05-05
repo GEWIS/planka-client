@@ -1,5 +1,9 @@
-export type Oidc = {
-  oidc: string
+/*
+  All schemas
+ */
+export type AccessTokenOidcRequest = {
+  code: string
+  nonce: string
 }
 
 export type AccessTokenRequest = {
@@ -7,42 +11,45 @@ export type AccessTokenRequest = {
   password: string
 }
 
-export type AccessTokenOidcRequest = {
-  code: string
-  nonce: string
-}
-
-export type UserCreate = {
-  email: string
-  password: string
-  name: string
-  username?: string
-}
-
-export type User = {
-  id: string
-  email?: string
-  isAdmin: boolean
-  name?: string
-  username?: string
-  phone?: string
-  organization?: string
-  language?: string
-  subscribeToOwnCards: boolean
-  avatarUrl?: string
-  createdAt: Date
-  updatedAt?: Date
-  deletedAt?: Date
-}
-
-export type Project = {
+export type Action = {
   id: string
   createdAt: Date
   updatedAt?: Date
-  name: string
-  background?: Background
-  backgroundImage?: BackgroundImage
+  type: CommentType
+  data: ActionText
+  cardId: string
+  userId: string
 }
+
+export type ActionText = {
+  text: string
+}
+
+export type Attachment = {
+  id: string
+  name: string
+  cardId: string
+  url: string
+  createUserId: string
+  createdAt: Date
+  updatedAt?: Date
+  coverUrl?: string
+  image?: Image
+}
+
+export type Background = {
+  type: BackgroundType
+  name?: BackgroundGradient
+}
+
+export type BackgroundGradient = 'old-lime' | 'ocean-dive' | 'tzepesch-style' | 'jungle-mesh' | 'strawberry-dust' | 'purple-rose' | 'sun-scream' | 'warm-rust' | 'sky-change' | 'green-eyes' | 'blue-xchange' | 'blood-orange' | 'sour-peel' | 'green-ninja' | 'algae-green' | 'coral-reef' | 'steel-grey' | 'heat-waves' | 'velvet-lounge' | 'purple-rain' | 'blue-steel' | 'blueish-curve' | 'prism-light' | 'green-mist' | 'red-curtain'
+
+export type BackgroundImage = {
+  url?: string
+  coverUrl?: string
+}
+
+export type BackgroundType = 'gradient' | 'image'
 
 export type Board = {
   id: string
@@ -63,7 +70,54 @@ export type BoardMembership = {
   userId: string
 }
 
-export type Role = 'editor' | 'viewer'
+export type Card = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  creatorUserId: string
+  position: number
+  name: string
+  description?: string
+  dueDate?: Date
+  stopWatch?: StopWatch
+  boardId: string
+  listId: string
+  coverAttachmentId?: string
+  isSubscribed: boolean
+}
+
+export type CardLabel = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  cardId: string
+  labelId?: string
+}
+
+export type CardMembership = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  cardId: string
+  userId: string
+}
+
+export type Comment = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  cardId: string
+  userId: string
+  data: ActionText
+  type: CommentType
+}
+
+export type CommentType = 'commentCard'
+
+export type Image = {
+  width: number
+  height: number
+}
 
 export type Label = {
   id: string
@@ -86,41 +140,42 @@ export type List = {
   boardId: string
 }
 
-export type Card = {
+export type Notification = {
   id: string
   createdAt: Date
   updatedAt?: Date
-  creatorUserId: string
-  position: number
-  name: string
-  description?: string
-  dueDate?: Date
-  stopWatch?: StopWatch
-  boardId: string
-  listId: string
-  coverAttachmentId?: string
-  isSubscribed: boolean
+  isRead: boolean
+  userId: string
+  cardId: string
+  actionId: string
 }
+
+export type Oidc = {
+  oidc: string
+}
+
+export type Project = {
+  id: string
+  createdAt: Date
+  updatedAt?: Date
+  name: string
+  background?: Background
+  backgroundImage?: BackgroundImage
+}
+
+export type ProjectManager = {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  projectId: string
+  userId: string
+}
+
+export type Role = 'editor' | 'viewer'
 
 export type StopWatch = {
   startedAt?: Date
   total: number
-}
-
-export type CardMembership = {
-  id: string
-  createdAt: Date
-  updatedAt?: Date
-  cardId: string
-  userId: string
-}
-
-export type CardLabel = {
-  id: string
-  createdAt: Date
-  updatedAt?: Date
-  cardId: string
-  labelId?: string
 }
 
 export type Task = {
@@ -133,81 +188,25 @@ export type Task = {
   cardId: string
 }
 
-export type Action = {
+export type User = {
   id: string
+  email?: string
+  isAdmin: boolean
+  name?: string
+  username?: string
+  phone?: string
+  organization?: string
+  language?: string
+  subscribeToOwnCards: boolean
+  avatarUrl?: string
   createdAt: Date
   updatedAt?: Date
-  type: CommentType
-  data: ActionText
-  cardId: string
-  userId: string
+  deletedAt?: Date
 }
 
-export type ActionText = {
-  text: string
-}
-
-export type Comment = {
-  id: string
-  createdAt: Date
-  updatedAt?: Date
-  cardId: string
-  userId: string
-  data: ActionText
-  type: CommentType
-}
-
-export type CommentType = 'commentCard'
-
-export type Notification = {
-  id: string
-  createdAt: Date
-  updatedAt?: Date
-  isRead: boolean
-  userId: string
-  cardId: string
-  actionId: string
-}
-
-export type Attachment = {
-  id: string
-  name: string
-  cardId: string
-  url: string
-  createUserId: string
-  createdAt: Date
-  updatedAt?: Date
-  coverUrl?: string
-  image?: Image
-}
-
-export type Image = {
-  width: number
-  height: number
-}
-
-export type BackgroundImage = {
-  url?: string
-  coverUrl?: string
-}
-
-export type Background = {
-  type: BackgroundType
-  name?: BackgroundGradient
-}
-
-export type BackgroundType = 'gradient' | 'image'
-
-export type BackgroundGradient = 'old-lime' | 'ocean-dive' | 'tzepesch-style' | 'jungle-mesh' | 'strawberry-dust' | 'purple-rose' | 'sun-scream' | 'warm-rust' | 'sky-change' | 'green-eyes' | 'blue-xchange' | 'blood-orange' | 'sour-peel' | 'green-ninja' | 'algae-green' | 'coral-reef' | 'steel-grey' | 'heat-waves' | 'velvet-lounge' | 'purple-rain' | 'blue-steel' | 'blueish-curve' | 'prism-light' | 'green-mist' | 'red-curtain'
-
-export type ProjectManager = {
-  id: string
-  createdAt: Date
-  updatedAt: Date
-  projectId: string
-  userId: string
-}
-
+/*
+  Wrappers for types above
+ */
 export type SingleResponse<T> = {
   item: T
   included?: Partial<Include>
@@ -229,6 +228,9 @@ export type Include = {
   tasks: Action[]
 }
 
+/*
+  All type of possible errors
+ */
 export type BaseError = {
   code: string
   message: string
@@ -246,6 +248,9 @@ export type NotFoundError = Omit<BaseError, 'message'>
 
 export type UnprocessableError = BaseError
 
+/*
+  Routes
+ */
 export type $OpenApiTs = {
   // 'GET /api/config': 'show-config'
   '/api/config': {
@@ -304,7 +309,12 @@ export type $OpenApiTs = {
     }
     post: {
       req: {
-        requestBody: UserCreate
+        requestBody: {
+          email: string
+          password: string
+          name: string
+          username?: string
+        }
       }
       res: {
         200: SingleResponse<User>
