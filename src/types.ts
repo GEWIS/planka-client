@@ -465,7 +465,7 @@ export type $OpenApiTs = {
         }
       }
       res: {
-        200: ArrayResponse<Project>
+        200: SingleResponse<Project>
         400: BadRequestError
         401: UnauthorizedError
       }
@@ -533,7 +533,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/projects/:projectId/managers': 'project-managers/create'
-  '/api/projects/{projectId}/manager': {
+  '/api/projects/{projectId}/managers': {
     post: {
       req: {
         projectId: string
@@ -558,6 +558,7 @@ export type $OpenApiTs = {
       }
       res: {
         200: SingleResponse<ProjectManager>
+        400: NotFoundError
         401: UnauthorizedError
         404: NotFoundError
       }

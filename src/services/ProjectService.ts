@@ -4,26 +4,25 @@ import { request as __request } from '../core/request'
 import { OpenAPI } from '../core/OpenAPI'
 import { Planka } from '.'
 
-export class UserService {
+export class ProjectService {
   private planka: Planka
   constructor(planka: Planka) {
     this.planka = planka
   }
 
   /**
-   * @returns ArrayResponse<User> Ok
+   * @returns ArrayResponse<Project> Ok
    * @throws ApiError
    */
-  public getUsers(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]> {
+  public getAll(): CancelablePromise<$OpenApiTs['/api/projects']['get']['res'][200]> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/users',
+      url: '/api/projects',
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
       },
       errors: {
         401: StatusCode.s401,
-        404: StatusCode.s404,
       },
     })
   }
@@ -31,60 +30,37 @@ export class UserService {
   /**
    * @param data The data for the request.
    * @param data.requestBody
-   * @returns SingleResponse<User> Ok
+   * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public createUser(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]> {
+  public create(data: $OpenApiTs['/api/projects']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/users',
+      url: '/api/projects',
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
       },
       body: data.requestBody,
       errors: {
+        400: StatusCode.s400,
         401: StatusCode.s401,
-        404: StatusCode.s404,
       },
     })
   }
 
   /**
    * @param data The data for the request.
-   * @param data.userId
-   * @returns SingleResponse<User> Ok
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public getUser(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]> {
+  public get(data: $OpenApiTs['/api/projects/{projectId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['get']['res'][200]> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/users/{userId}',
+      url: '/api/projects/{projectId}',
       path: {
-        userId: data.userId,
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`,
-      },
-      errors: {
-        401: StatusCode.s401,
-        404: StatusCode.s404,
-      },
-    })
-  }
-
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  public updateUser(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]> {
-    return __request(OpenAPI, {
-      method: 'PATCH',
-      url: '/api/users/{userId}',
-      path: {
-        userId: data.userId,
+        projectId: data.projectId,
       },
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
@@ -100,17 +76,42 @@ export class UserService {
 
   /**
    * @param data The data for the request.
-   * @param data.userId
+   * @param data.projectId
    * @param data.requestBody
-   * @returns SingleResponse<User> Ok
+   * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public deleteUser(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]> {
+  public update(data: $OpenApiTs['/api/projects/{projectId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['patch']['res'][200]> {
+    return __request(OpenAPI, {
+      method: 'PATCH',
+      url: '/api/projects/{projectId}',
+      path: {
+        projectId: data.projectId,
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`,
+      },
+      body: data.requestBody,
+      errors: {
+        401: StatusCode.s401,
+        404: StatusCode.s404,
+      },
+    })
+  }
+
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Project> Ok
+   * @throws ApiError
+   */
+  public delete(data: $OpenApiTs['/api/projects/{projectId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/users/{userId}',
+      url: '/api/projects/{projectId}',
       path: {
-        userId: data.userId,
+        projectId: data.projectId,
       },
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
@@ -124,108 +125,100 @@ export class UserService {
 
   /**
    * @param data The data for the request.
-   * @param data.userId
+   * @param data.projectId
    * @param data.requestBody
-   * @returns SingleResponse<User> Ok
+   * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public updateUserMail(data: $OpenApiTs['/api/users/{userId}/email']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/email']['patch']['res'][200]> {
-    return __request(OpenAPI, {
-      method: 'PATCH',
-      url: '/api/users/{userId}/email',
-      path: {
-        userId: data.userId,
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`,
-      },
-      body: data.requestBody,
-      errors: {
-        400: StatusCode.s400,
-        401: StatusCode.s401,
-        404: StatusCode.s404,
-        409: StatusCode.s409,
-      },
-    })
-  }
-
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  public updateUserPassword(data: $OpenApiTs['/api/users/{userId}/password']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/password']['patch']['res'][200]> {
-    return __request(OpenAPI, {
-      method: 'PATCH',
-      url: '/api/users/{userId}/password',
-      path: {
-        userId: data.userId,
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`,
-      },
-      body: data.requestBody,
-      errors: {
-        400: StatusCode.s400,
-        401: StatusCode.s401,
-        404: StatusCode.s404,
-        409: StatusCode.s409,
-      },
-    })
-  }
-
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  public updateUserName(data: $OpenApiTs['/api/users/{userId}/username']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/username']['patch']['res'][200]> {
-    return __request(OpenAPI, {
-      method: 'PATCH',
-      url: '/api/users/{userId}/username',
-      path: {
-        userId: data.userId,
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`,
-      },
-      body: data.requestBody,
-      errors: {
-        400: StatusCode.s400,
-        401: StatusCode.s401,
-        404: StatusCode.s404,
-        409: StatusCode.s409,
-      },
-    })
-  }
-
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  public updateUserAvatar(data: $OpenApiTs['/api/users/{userId}/avatar']['post']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/avatar']['post']['res'][200]> {
+  public setBackgroundImage(data: $OpenApiTs['/api/projects/{projectId}/background-image']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/users/{userId}/avatar',
+      url: '/api/projects/{projectId}/background-image',
       path: {
-        userId: data.userId,
+        projectId: data.projectId,
       },
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
       },
-      body: data.requestBody,
       errors: {
-        400: StatusCode.s400,
         401: StatusCode.s401,
         404: StatusCode.s404,
         422: StatusCode.s422,
+      },
+    })
+  }
+
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<ProjectManager> Ok
+   * @throws ApiError
+   */
+  public addManager(data: $OpenApiTs['/api/projects/{projectId}/managers']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/api/projects/{projectId}/managers',
+      path: {
+        projectId: data.projectId,
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`,
+      },
+      errors: {
+        400: StatusCode.s400,
+        401: StatusCode.s401,
+        404: StatusCode.s404,
+      },
+    })
+  }
+
+  /**
+   * @param data The data for the request.
+   * @param data.managerId
+   * @param data.requestBody
+   * @returns SingleResponse<ProjectManager> Ok
+   * @throws ApiError
+   */
+  public removeManager(data: $OpenApiTs['/api/project-managers/{managerId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/project-managers/{managerId}']['delete']['res'][200]> {
+    return __request(OpenAPI, {
+      method: 'DELETE',
+      url: '/api/projects/{projectId}/managers',
+      path: {
+        projectId: data.managerId,
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`,
+      },
+      errors: {
+        400: StatusCode.s400,
+        401: StatusCode.s401,
+        404: StatusCode.s404,
+      },
+    })
+  }
+
+  /**
+   * @param data The data for the request.
+   * @param data.projectId
+   * @param data.requestBody
+   * @returns SingleResponse<Board> Ok
+   * @throws ApiError
+   */
+  public createBoard(data: $OpenApiTs['/api/projects/{projectId}/boards']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/boards']['post']['res'][200]> {
+    return __request(OpenAPI, {
+      method: 'DELETE',
+      url: '/api/projects/{projectId}/managers',
+      path: {
+        projectId: data.projectId,
+      },
+      headers: {
+        Authorization: `Bearer ${this.planka.getAccessToken()}`,
+      },
+      errors: {
+        400: StatusCode.s400,
+        401: StatusCode.s401,
+        404: StatusCode.s404,
       },
     })
   }
