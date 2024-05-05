@@ -248,7 +248,7 @@ export type UnprocessableError = BaseError
 
 export type $OpenApiTs = {
   // 'GET /api/config': 'show-config'
-  '/config': {
+  '/api/config': {
     get: {
       res: {
         200: SingleResponse<Oidc>
@@ -257,7 +257,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/access-tokens': 'access-tokens/create'
-  '/access-tokens': {
+  '/api/access-tokens': {
     post: {
       req: {
         requestBody: AccessTokenRequest
@@ -270,7 +270,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
-  '/access-tokens/exchange-using-oidc': {
+  '/api/access-tokens/exchange-using-oidc': {
     post: {
       req: {
         requestBody: AccessTokenOidcRequest
@@ -284,7 +284,7 @@ export type $OpenApiTs = {
   }
 
   // 'DELETE /api/access-tokens/me': 'access-tokens/delete'
-  '/access-tokens/me': {
+  '/api/access-tokens/me': {
     delete: {
       res: {
         200: SingleResponse<string>
@@ -295,7 +295,7 @@ export type $OpenApiTs = {
 
   // 'GET /api/users': 'users/index'
   // 'POST /api/users': 'users/create'
-  '/users': {
+  '/api/users': {
     get: {
       res: {
         200: ArrayResponse<User>
@@ -318,7 +318,7 @@ export type $OpenApiTs = {
   // 'GET /api/users/:id': 'users/show'
   // 'PATCH /api/users/:id': 'users/update'
   // 'DELETE /api/users/:id': 'users/delete'
-  '/users/{userId}': {
+  '/api/users/{userId}': {
     get: {
       req: {
         userId: string
@@ -355,7 +355,7 @@ export type $OpenApiTs = {
   }
 
   // 'PATCH /api/users/:id/email': 'users/update-email'
-  '/users/{userId}/email': {
+  '/api/users/{userId}/email': {
     patch: {
       req: {
         userId: string
@@ -374,7 +374,7 @@ export type $OpenApiTs = {
   }
 
   // 'PATCH /api/users/:id/password': 'users/update-password'
-  '/users/{userId}/password': {
+  '/api/users/{userId}/password': {
     patch: {
       req: {
         userId: string
@@ -393,7 +393,7 @@ export type $OpenApiTs = {
   }
 
   // 'PATCH /api/users/:id/username': 'users/update-username'
-  '/users/{userId}/username': {
+  '/api/users/{userId}/username': {
     patch: {
       req: {
         userId: string
@@ -412,12 +412,13 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/users/:id/avatar': 'users/update-avatar'
-  '/users/{userId}/avatar': {
+  '/api/users/{userId}/avatar': {
     post: {
       req: {
         userId: string
         requestBody: {
-          file: string
+          // TODO check correctness
+          file: File
         }
       }
       res: {
@@ -432,7 +433,7 @@ export type $OpenApiTs = {
 
   // 'GET /api/projects': 'projects/index'
   // 'POST /api/projects': 'projects/create'
-  '/projects': {
+  '/api/projects': {
     get: {
       res: {
         200: ArrayResponse<Project>
@@ -456,7 +457,7 @@ export type $OpenApiTs = {
   // 'GET /api/projects/:id': 'projects/show'
   // 'PATCH /api/projects/:id': 'projects/update'
   // 'DELETE /api/projects/:id': 'projects/delete'
-  '/projects/{projectId}': {
+  '/api/projects/{projectId}': {
     get: {
       req: {
         projectId: string
@@ -495,12 +496,13 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/projects/:id/background-image': 'projects/update-background-image'
-  '/projects/{projectId}/background-image': {
+  '/api/projects/{projectId}/background-image': {
     post: {
       req: {
         projectId: string
         requestBody: {
-          file: string
+          // TODO check correctness
+          file: File
         }
       }
       res: {
@@ -512,26 +514,40 @@ export type $OpenApiTs = {
     }
   }
 
-
-  // TODO implement
   // 'POST /api/projects/:projectId/managers': 'project-managers/create'
-  '/projects/{projectId}/manager': {
+  '/api/projects/{projectId}/manager': {
     post: {
       req: {
         projectId: string
+        requestBody: {
+          userId: string
+        }
       }
-      res: {}
+      res: {
+        200: SingleResponse<ProjectManager>
+        400: BadRequestError
+        401: UnauthorizedError
+        404: NotFoundError
+      }
     }
   }
 
-  // TODO implement
   // 'DELETE /api/project-managers/:id': 'project-managers/delete'
-  '/project-managers/{id}': {
-    delete: {}
+  '/api/project-managers/{managerId}': {
+    delete: {
+      req: {
+        managerId: string
+      }
+      res: {
+        200: SingleResponse<ProjectManager>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
+    }
   }
 
   // 'POST /api/projects/:projectId/boards': 'boards/create'
-  '/projects/{projectId}/boards': {
+  '/api/projects/{projectId}/boards': {
     post: {
       req: {
         projectId: string
@@ -552,7 +568,7 @@ export type $OpenApiTs = {
   // 'GET /api/boards/:id': 'boards/show'
   // 'PATCH /api/boards/:id': 'boards/update'
   // 'DELETE /api/boards/:id': 'boards/delete'
-  '/boards/{boardId}': {
+  '/api/boards/{boardId}': {
     get: {
       req: {
         boardId: string
@@ -587,7 +603,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
-  '/boards/{boardId}/memberships': {
+  '/api/boards/{boardId}/memberships': {
     post: {
       req: {
         boardId: string
@@ -608,7 +624,7 @@ export type $OpenApiTs = {
 
   // 'PATCH /api/board-memberships/:id': 'board-memberships/update'
   // 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
-  '/board-memberships/{membershipId}': {
+  '/api/board-memberships/{membershipId}': {
     update: {
       req: {
         membershipId: string
@@ -636,7 +652,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/boards/:boardId/labels': 'labels/create'
-  '/boards/{boardId}/labels': {
+  '/api/boards/{boardId}/labels': {
     post: {
       req: {
         boardId: string
@@ -656,7 +672,7 @@ export type $OpenApiTs = {
 
   // 'PATCH /api/labels/:id': 'labels/update'
   // 'DELETE /api/labels/:id': 'labels/delete'
-  '/labels/{labelId}': {
+  '/api/labels/{labelId}': {
     patch: {
       req: {
         labelId: string
@@ -681,7 +697,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/boards/:boardId/lists': 'lists/create'
-  '/boards/{boardId}/lists': {
+  '/api/boards/{boardId}/lists': {
     post: {
       req: {
         boardId: string
@@ -701,7 +717,7 @@ export type $OpenApiTs = {
 
   // 'PATCH /api/lists/:id': 'lists/update'
   // 'DELETE /api/lists/:id': 'lists/delete'
-  '/lists/{listId}': {
+  '/api/lists/{listId}': {
     patch: {
       req: {
         listId: string
@@ -726,7 +742,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/lists/:id/sort': 'lists/sort'
-  '/lists/{listId}/sort': {
+  '/api/lists/{listId}/sort': {
     post: {
       req: {
         listId: number
@@ -740,7 +756,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/lists/:listId/cards': 'cards/create'
-  '/lists/{listId}/cards': {
+  '/api/lists/{listId}/cards': {
     post: {
       req: {
         listId: number
@@ -762,7 +778,7 @@ export type $OpenApiTs = {
   // 'GET /api/cards/:id': 'cards/show'
   // 'PATCH /api/cards/:id': 'cards/update'
   // 'DELETE /api/cards/:id': 'cards/delete'
-  '/cards/{cardId}': {
+  '/api/cards/{cardId}': {
     get: {
       req: {
         cardId: string
@@ -797,7 +813,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/cards/:id/duplicate': 'cards/duplicate'
-  '/cards/{cardId}/duplicate': {
+  '/api/cards/{cardId}/duplicate': {
     post: {
       req: {
         cardId: string
@@ -816,7 +832,7 @@ export type $OpenApiTs = {
 
   // 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
   // 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
-  '/cards/{cardId}/memberships': {
+  '/api/cards/{cardId}/memberships': {
     post: {
       req: {
         cardId: string
@@ -848,7 +864,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/cards/:cardId/labels': 'card-labels/create'
-  '/cards/{cardId}/labels': {
+  '/api/cards/{cardId}/labels': {
     post: {
       req: {
         cardId: string
@@ -866,7 +882,7 @@ export type $OpenApiTs = {
   }
 
   // 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
-  '/cards/{cardId}/labels/{labelId}': {
+  '/api/cards/{cardId}/labels/{labelId}': {
     delete: {
       req: {
         cardId: string
@@ -882,7 +898,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/cards/:cardId/tasks': 'tasks/create'
-  '/cards/{cardId}/tasks': {
+  '/api/cards/{cardId}/tasks': {
     post: {
       req: {
         cardId: string
@@ -902,7 +918,7 @@ export type $OpenApiTs = {
 
   // 'PATCH /api/tasks/:id': 'tasks/update'
   // 'DELETE /api/tasks/:id': 'tasks/delete'
-  '/tasks/{taskId}': {
+  '/api/tasks/{taskId}': {
     patch: {
       req: {
         taskId: string
@@ -926,24 +942,53 @@ export type $OpenApiTs = {
     }
   }
 
-  // TODO implement
   // 'POST /api/cards/:cardId/attachments': 'attachments/create'
-  // '/cards/{id}/attachments': {
-  // post: {
-  // req: {}
-  // res: {}
-  // }
-  // }
+  '/api/cards/{cardId}/attachments': {
+    post: {
+      req: {
+        cardId: string
+        requestBody: {
+          // TODO check correctness
+          file: File
+        }
+      }
+      res: {
+        200: SingleResponse<Attachment>
+        401: UnauthorizedError
+        404: NotFoundError
+        422: UnprocessableError
+      }
+    }
+  }
 
   // 'PATCH /api/attachments/:id': 'attachments/update'
   // 'DELETE /api/attachments/:id': 'attachments/delete'
-  // '/attachments/{id}': {
-  // patch: {}
-  // delete: {}
-  // }
+  '/api/attachments/{attachmentId}': {
+    patch: {
+      req: {
+        attachmentId: string
+        requestBody: Partial<Attachment>
+      }
+      res: {
+        200: SingleResponse<Attachment>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
+    }
+    delete: {
+      req: {
+        attachmentId: string
+      }
+      res: {
+        200: SingleResponse<Attachment>
+        401: UnauthorizedError
+        404: NotFoundError
+      }
+    }
+  }
 
   // 'GET /api/cards/:cardId/actions': 'actions/index'
-  '/cards/{cardId}/actions': {
+  '/api/cards/{cardId}/actions': {
     get: {
       req: {
         cardId: string
@@ -957,7 +1002,7 @@ export type $OpenApiTs = {
   }
 
   // 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
-  '/cards/{cardId}/comment-actions': {
+  '/api/cards/{cardId}/comment-actions': {
     post: {
       req: {
         cardId: string
@@ -966,7 +1011,7 @@ export type $OpenApiTs = {
         }
       }
       res: {
-        200: SingleResponse<Action>
+        200: SingleResponse<Comment>
         400: BadRequestError
         401: UnauthorizedError
         404: NotFoundError
@@ -976,7 +1021,7 @@ export type $OpenApiTs = {
 
   // 'PATCH /api/comment-actions/:id': 'comment-actions/update'
   // 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
-  '/comment-actions/{actionId}': {
+  '/api/comment-actions/{actionId}': {
     'patch': {
       req: {
         actionId: string
@@ -984,7 +1029,7 @@ export type $OpenApiTs = {
           text: string
         }
         res: {
-          200: SingleResponse<Action>
+          200: SingleResponse<Comment>
           401: UnauthorizedError
           404: NotFoundError
         }
@@ -994,7 +1039,7 @@ export type $OpenApiTs = {
           actionId: string
         }
         res: {
-          200: SingleResponse<Action>
+          200: SingleResponse<Comment>
           401: UnauthorizedError
           404: NotFoundError
         }
@@ -1002,7 +1047,7 @@ export type $OpenApiTs = {
     }
 
     // 'GET /api/notifications': 'notifications/index'
-    '/notifications': {
+    '/api/notifications': {
       get: {
         res: {
           200: ArrayResponse<Notification>
@@ -1012,9 +1057,10 @@ export type $OpenApiTs = {
       }
     }
 
+    // TODO check correctness for endpoint
     // 'GET /api/notifications/:id': 'notifications/show'
     // 'PATCH /api/notifications/:ids': 'notifications/update'
-    '/notifications/{notificationId}': {
+    '/api/notifications/{notificationId}': {
       get: {
         req: {
           notificationId: string
@@ -1028,7 +1074,6 @@ export type $OpenApiTs = {
       patch: {
         req: {
           notificationId: string
-          // TODO check if correct
           requestBody: Partial<Notification>
         }
         res: {
@@ -1039,21 +1084,42 @@ export type $OpenApiTs = {
       }
     }
 
-    // TODO implement
     // 'GET /attachments/:id/download/:filename': {
     //    action: 'attachments/download',
     //    skipAssets: false,
     // },
-    // '/attachments/{id}/download/{filename}': {
-    // get: {}
-    // }
+    '/attachments/{attachmentId}/download/{filename}': {
+      get: {
+        req: {
+          attachmentId: string
+          filename: string
+        }
+        res: {
+          // TODO check correctness
+          200: File
+          401: UnauthorizedError
+          404: NotFoundError
+        }
+      }
+    }
 
     // 'GET /attachments/:id/download/thumbnails/cover-256.:extension': {
     //    action: 'attachments/download-thumbnail',
     //    skipAssets: false,
     // },
-    // '/attachments/{id}/download/thumbnails/cover-256.{extension}': {
-    // get: {}
-    // }
+    '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
+      get: {
+        req: {
+          attachmentId: string
+          extension: string
+        }
+        res: {
+          // TODO check correctness
+          200: File
+          401: UnauthorizedError
+          404: NotFoundError
+        }
+      }
+    }
   }
 }
