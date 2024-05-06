@@ -11,6 +11,13 @@ export class ActionService {
     this.planka = planka
   }
 
+  /**
+   * @param data The data for the request.
+   * @param data.cardId
+   * @param data.requestBody
+   * @returns SingleResponse<Comment> Ok
+   * @throws ApiError
+   */
   public create(data: $OpenApiTs['/api/cards/{cardId}/comment-actions']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/comment-actions']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'POST',
@@ -30,6 +37,13 @@ export class ActionService {
     })
   }
 
+  /**
+   * @param data The data for the request.
+   * @param data.actionId
+   * @param data.requestBody
+   * @returns SingleResponse<Comment> Ok
+   * @throws ApiError
+   */
   public update(data: $OpenApiTs['/api/comment-actions/{actionId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/comment-actions/{actionId}']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
@@ -49,12 +63,18 @@ export class ActionService {
     })
   }
 
-  public remove(data: $OpenApiTs['/api/attachments/{attachmentId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/attachments/{attachmentId}']['delete']['res'][200]> {
+  /**
+   * @param data The data for the request.
+   * @param data.actionId
+   * @returns SingleResponse<Comment> Ok
+   * @throws ApiError
+   */
+  public remove(data: $OpenApiTs['/api/comment-actions/{actionId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/comment-actions/{actionId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/attachments/{attachmentId}',
+      url: '/api/comment-actions/{actionId}',
       path: {
-        attachmentId: data.attachmentId,
+        actionId: data.actionId,
       },
       headers: {
         Authorization: `Bearer ${this.planka.getAccessToken()}`,
