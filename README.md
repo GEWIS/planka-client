@@ -12,10 +12,23 @@ Simple client for Trello generated from the Trello openapi specification using o
 }
 ```
 
-2. Import the desired service and call the desired endpoint, e.g.
+2. Import the desired service and call the desired endpoint. [Heyapi](https://heyapi.dev/openapi-ts/clients/fetch.html#fetch-api)
+provides more information on how to use the client.
 
 ```typescript
-import { DefaultService } from '@gewis/planka-client';
+import { client, authorize } from '@gewis/planka-client';
 
-DefaultService.getActionsId(...);
+client.setConfig({
+  baseUrl: 'https://example.com',
+})
+
+/** Fetch access token with `authorize` or `authorizeOidc` */
+const accessToken = authorize(...)
+
+client.setConfig({
+  baseUrl: 'https://example.com',
+  headers: {
+    Authorization: `Bearer ${accessToken}`
+  }
+})
 ```
