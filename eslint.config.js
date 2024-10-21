@@ -1,14 +1,34 @@
-import pluginJs from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import stylistic from '@stylistic/eslint-plugin'
+import eslint from '@eslint/js';
+import tsEslint from 'typescript-eslint';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
-  pluginJs.configs.recommended,
-  stylistic.configs['recommended-flat'],
-  ...tseslint.configs.recommended,
   {
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
+    ignores: ['src/components/icons/', 'src/api/']
+  },
+  eslint.configs.recommended,
+  {
+    files: ['src/**/*.{js,ts,jsx,tsx,vue}'],
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.app.json'
+        },
+        node: {
+          project: './tsconfig.node.json'
+        }
+      }
+    },
+    languageOptions: {
+      ecmaVersion: 'latest'
     },
   },
-]
+  ...tsEslint.configs.recommended,
+  {
+    files: ['src/**/*.{ts,tsx,vue}'],
+    languageOptions: {
+      parser: tsEslint.parser
+    }
+  },
+  prettierConfig
+];

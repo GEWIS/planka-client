@@ -1,4 +1,4 @@
-# trello-client
+# planka-client
 Simple client for Trello generated from the Trello openapi specification using openapi-ts.
 
 # Usage
@@ -7,7 +7,7 @@ Simple client for Trello generated from the Trello openapi specification using o
 ```json
 {
   "dependencies": {
-    "@planka/planka-client": "github:planka/planka-client"
+    "@gewis/planka-client": "github:GEWIS/planka-client"
   }
 }
 ```
@@ -15,7 +15,7 @@ Simple client for Trello generated from the Trello openapi specification using o
 2. Import the desired service and call the desired endpoint, e.g.
 
 ```typescript
-import { DefaultService } from '@planka/planka-client';
+import { DefaultService } from '@gewis/planka-client';
 
 DefaultService.getActionsId(...);
 ```

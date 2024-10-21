@@ -1,14 +1,14 @@
-import type { CancelablePromise } from '../core/CancelablePromise'
-import { $OpenApiTs, StatusCode } from '../types'
-import { request as __request } from '../core/request'
-import { OpenAPI } from '../core/OpenAPI'
-import { Planka } from '.'
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { $OpenApiTs, StatusCode } from '../types';
+import { request as __request } from '../core/request';
+import { OpenAPI } from '../core/OpenAPI';
+import { Planka } from '.';
 
 export class BoardService {
-  private planka: Planka
+  private planka: Planka;
 
   constructor(planka: Planka) {
-    this.planka = planka
+    this.planka = planka;
   }
 
   /**
@@ -18,7 +18,9 @@ export class BoardService {
    * @returns SingleResponse<Board> Ok
    * @throws ApiError
    */
-  public create(data: $OpenApiTs['/api/projects/{projectId}/boards']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/boards']['post']['res'][200]> {
+  public create(
+    data: $OpenApiTs['/api/projects/{projectId}/boards']['post']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/boards']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/projects/{projectId}/managers',
@@ -34,10 +36,12 @@ export class BoardService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
-  public get(data: $OpenApiTs['/api/boards/{boardId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['get']['res'][200]> {
+  public get(
+    data: $OpenApiTs['/api/boards/{boardId}']['get']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['get']['res'][200]> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/boards/{projectId}',
@@ -51,10 +55,12 @@ export class BoardService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
-  public update(data: $OpenApiTs['/api/boards/{boardId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['patch']['res'][200]> {
+  public update(
+    data: $OpenApiTs['/api/boards/{boardId}']['patch']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/api/boards/{boardId}',
@@ -69,10 +75,12 @@ export class BoardService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
-  public remove(data: $OpenApiTs['/api/boards/{boardId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['delete']['res'][200]> {
+  public remove(
+    data: $OpenApiTs['/api/boards/{boardId}']['delete']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/boards/{boardId}',
@@ -86,10 +94,12 @@ export class BoardService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
-  public addMember(data: $OpenApiTs['/api/boards/{boardId}/memberships']['post']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/memberships']['post']['res'][200]> {
+  public addMember(
+    data: $OpenApiTs['/api/boards/{boardId}/memberships']['post']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/memberships']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/boards/{boardId}/memberships',
@@ -106,10 +116,12 @@ export class BoardService {
         404: StatusCode.s404,
         409: StatusCode.s409,
       },
-    })
+    });
   }
 
-  public updateMember(data: $OpenApiTs['/api/board-memberships/{membershipId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['patch']['res'][200]> {
+  public updateMember(
+    data: $OpenApiTs['/api/board-memberships/{membershipId}']['patch']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/api/board-memberships/{membershipId}',
@@ -124,10 +136,12 @@ export class BoardService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
-  public removeMember(data: $OpenApiTs['/api/board-memberships/{membershipId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['delete']['res'][200]> {
+  public removeMember(
+    data: $OpenApiTs['/api/board-memberships/{membershipId}']['delete']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/board-memberships/{membershipId}',
@@ -141,6 +155,6 @@ export class BoardService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 }

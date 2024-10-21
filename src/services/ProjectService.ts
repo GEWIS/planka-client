@@ -1,13 +1,13 @@
-import type { CancelablePromise } from '../core/CancelablePromise'
-import { $OpenApiTs, StatusCode } from '../types'
-import { request as __request } from '../core/request'
-import { OpenAPI } from '../core/OpenAPI'
-import { Planka } from '.'
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { $OpenApiTs, StatusCode } from '../types';
+import { request as __request } from '../core/request';
+import { OpenAPI } from '../core/OpenAPI';
+import { Planka } from '.';
 
 export class ProjectService {
-  private planka: Planka
+  private planka: Planka;
   constructor(planka: Planka) {
-    this.planka = planka
+    this.planka = planka;
   }
 
   /**
@@ -24,7 +24,7 @@ export class ProjectService {
       errors: {
         401: StatusCode.s401,
       },
-    })
+    });
   }
 
   /**
@@ -33,7 +33,9 @@ export class ProjectService {
    * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public create(data: $OpenApiTs['/api/projects']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects']['post']['res'][200]> {
+  public create(
+    data: $OpenApiTs['/api/projects']['post']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/projects']['post']['res'][200]> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/projects',
@@ -45,7 +47,7 @@ export class ProjectService {
         400: StatusCode.s400,
         401: StatusCode.s401,
       },
-    })
+    });
   }
 
   /**
@@ -55,7 +57,9 @@ export class ProjectService {
    * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public get(data: $OpenApiTs['/api/projects/{projectId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['get']['res'][200]> {
+  public get(
+    data: $OpenApiTs['/api/projects/{projectId}']['get']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['get']['res'][200]> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/api/projects/{projectId}',
@@ -71,7 +75,7 @@ export class ProjectService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
   /**
@@ -81,7 +85,9 @@ export class ProjectService {
    * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public update(data: $OpenApiTs['/api/projects/{projectId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['patch']['res'][200]> {
+  public update(
+    data: $OpenApiTs['/api/projects/{projectId}']['patch']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['patch']['res'][200]> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/api/projects/{projectId}',
@@ -96,7 +102,7 @@ export class ProjectService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
   /**
@@ -106,7 +112,9 @@ export class ProjectService {
    * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public remove(data: $OpenApiTs['/api/projects/{projectId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['delete']['res'][200]> {
+  public remove(
+    data: $OpenApiTs['/api/projects/{projectId}']['delete']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/projects/{projectId}',
@@ -120,7 +128,7 @@ export class ProjectService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
   /**
@@ -130,7 +138,11 @@ export class ProjectService {
    * @returns SingleResponse<Project> Ok
    * @throws ApiError
    */
-  public setBackgroundImage(data: $OpenApiTs['/api/projects/{projectId}/background-image']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]> {
+  public setBackgroundImage(
+    data: $OpenApiTs['/api/projects/{projectId}/background-image']['post']['req'],
+  ): CancelablePromise<
+    $OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]
+  > {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/projects/{projectId}/background-image',
@@ -146,7 +158,7 @@ export class ProjectService {
         404: StatusCode.s404,
         422: StatusCode.s422,
       },
-    })
+    });
   }
 
   /**
@@ -156,7 +168,11 @@ export class ProjectService {
    * @returns SingleResponse<ProjectManager> Ok
    * @throws ApiError
    */
-  public addManager(data: $OpenApiTs['/api/projects/{projectId}/managers']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]> {
+  public addManager(
+    data: $OpenApiTs['/api/projects/{projectId}/managers']['post']['req'],
+  ): CancelablePromise<
+    $OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]
+  > {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/projects/{projectId}/managers',
@@ -172,7 +188,7 @@ export class ProjectService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 
   /**
@@ -182,7 +198,9 @@ export class ProjectService {
    * @returns SingleResponse<ProjectManager> Ok
    * @throws ApiError
    */
-  public removeManager(data: $OpenApiTs['/api/project-managers/{managerId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/project-managers/{managerId}']['delete']['res'][200]> {
+  public removeManager(
+    data: $OpenApiTs['/api/project-managers/{managerId}']['delete']['req'],
+  ): CancelablePromise<$OpenApiTs['/api/project-managers/{managerId}']['delete']['res'][200]> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/projects/{projectId}/managers',
@@ -197,6 +215,6 @@ export class ProjectService {
         401: StatusCode.s401,
         404: StatusCode.s404,
       },
-    })
+    });
   }
 }
