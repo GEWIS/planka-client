@@ -58,8 +58,8 @@ var P = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: l }) => {
   if (u instanceof Date) return `${l}=${u.toISOString()}`;
   if (s !== "deepObject" && !c) {
     let t = [];
-    Object.entries(u).forEach(([h, n]) => {
-      t = [...t, h, e ? n : encodeURIComponent(n)];
+    Object.entries(u).forEach(([b, n]) => {
+      t = [...t, b, e ? n : encodeURIComponent(n)];
     });
     let f = t.join(",");
     switch (s) {
@@ -94,8 +94,8 @@ var P = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: l }) => {
       l = l.replace(u, `;${j({ name: r, value: f })}`);
       continue;
     }
-    let h = encodeURIComponent(t === "label" ? `.${f}` : f);
-    l = l.replace(u, h);
+    let b = encodeURIComponent(t === "label" ? `.${f}` : f);
+    l = l.replace(u, b);
   }
   return l;
 }, A = ({ allowReserved: e, array: c, object: l } = {}) => (s) => {
@@ -163,177 +163,179 @@ var P = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: l }) => {
   let c = U(O(), e), l = () => ({ ...c }), s = (r) => (c = U(c, r), l()), u = L(), d = async (r) => {
     let t = { ...c, ...r, headers: $(c.headers, r.headers) };
     t.body && t.bodySerializer && (t.body = t.bodySerializer(t.body)), t.body || t.headers.delete("Content-Type");
-    let f = B({ baseUrl: t.baseUrl ?? "", path: t.path, query: t.query, querySerializer: typeof t.querySerializer == "function" ? t.querySerializer : A(t.querySerializer), url: t.url }), h = { redirect: "follow", ...t }, n = new Request(f, h);
+    let f = B({ baseUrl: t.baseUrl ?? "", path: t.path, query: t.query, querySerializer: typeof t.querySerializer == "function" ? t.querySerializer : A(t.querySerializer), url: t.url }), b = { redirect: "follow", ...t }, n = new Request(f, b);
     for (let m of u.request._fns) n = await m(n, t);
-    let R = t.fetch, g = await R(n);
-    for (let m of u.response._fns) g = await m(g, n, t);
-    let i = { request: n, response: g };
-    if (g.ok) {
-      if (g.status === 204 || g.headers.get("Content-Length") === "0") return { data: {}, ...i };
-      if (t.parseAs === "stream") return { data: g.body, ...i };
-      let m = (t.parseAs === "auto" ? E(g.headers.get("Content-Type")) : t.parseAs) ?? "json", w = await g[m]();
-      return m === "json" && t.responseTransformer && (w = await t.responseTransformer(w)), { data: w, ...i };
+    let R = t.fetch, h = await R(n);
+    for (let m of u.response._fns) h = await m(h, n, t);
+    let g = { request: n, response: h };
+    if (h.ok) {
+      if (h.status === 204 || h.headers.get("Content-Length") === "0") return { data: {}, ...g };
+      if (t.parseAs === "stream") return { data: h.body, ...g };
+      let m = (t.parseAs === "auto" ? E(h.headers.get("Content-Type")) : t.parseAs) ?? "json", w = await h[m]();
+      return m === "json" && t.responseTransformer && (w = await t.responseTransformer(w)), { data: w, ...g };
     }
-    let y = await g.text();
+    let y = await h.text();
     try {
       y = JSON.parse(y);
     } catch {
     }
-    let b = y;
-    for (let m of u.error._fns) b = await m(y, g, n, t);
-    if (b = b || {}, t.throwOnError) throw b;
-    return { error: b, ...i };
+    let i = y;
+    for (let m of u.error._fns) i = await m(y, h, n, t);
+    if (i = i || {}, t.throwOnError) throw i;
+    return { error: i, ...g };
   };
   return { connect: (r) => d({ ...r, method: "CONNECT" }), delete: (r) => d({ ...r, method: "DELETE" }), get: (r) => d({ ...r, method: "GET" }), getConfig: l, head: (r) => d({ ...r, method: "HEAD" }), interceptors: u, options: (r) => d({ ...r, method: "OPTIONS" }), patch: (r) => d({ ...r, method: "PATCH" }), post: (r) => d({ ...r, method: "POST" }), put: (r) => d({ ...r, method: "PUT" }), request: d, setConfig: s, trace: (r) => d({ ...r, method: "TRACE" }) };
 };
 const a = M(O()), G = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/config"
-}), F = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), F = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/access-tokens"
-}), K = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), K = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/access-tokens/exchange-using-oidc"
-}), Q = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Q = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/access-tokens/me"
 }), V = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/users"
-}), X = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), X = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/users"
 }), Y = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/users/{id}"
-}), Z = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Z = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/users/{id}"
-}), p = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), p = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/users/{id}/email"
-}), o = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), o = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/users/{id}/password"
-}), ee = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ee = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/users/{id}/username"
-}), re = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), re = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/users/{id}/avatar"
-}), ae = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ae = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/users/{id}"
 }), te = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/projects"
-}), le = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), le = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/projects"
 }), ce = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/projects/{id}"
-}), ue = (e) => ((e == null ? void 0 : e.client) ?? a).get({
-  ...e,
-  url: "/api/projects/{id}"
-}), de = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ue = (e) => ((e == null ? void 0 : e.client) ?? a).patch(
+  {
+    ...e,
+    url: "/api/projects/{id}"
+  }
+), de = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/projects/{id}/background-image"
-}), se = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), se = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/projects/{id}"
-}), fe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), fe = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/projects/{projectId}/managers"
-}), ge = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), he = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/project-managers/{id}"
-}), ne = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ne = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/projects/{projectId}/boards"
 }), me = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/boards/{id}"
-}), he = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), be = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/boards/{id}"
-}), be = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ie = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/boards/{id}"
-}), ie = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ge = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/boards/{boardId}/memberships"
-}), ye = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ye = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/board-memberships/{id}"
-}), je = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), je = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/board-memberships/{id}"
-}), we = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), we = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/boards/{boardId}/labels"
-}), ve = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ve = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/labels/{id}"
-}), Ce = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ce = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/labels/{id}"
-}), Ue = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ue = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/boards/{boardId}/lists"
-}), xe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), xe = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/lists/{id}"
-}), Ie = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ie = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/lists/{id}/sort"
-}), Ae = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ae = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/lists/{id}"
-}), $e = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), $e = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/lists/{listId}/cards"
 }), Oe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/cards/{id}"
-}), Re = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Re = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/cards/{id}"
-}), Te = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Te = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/cards/{id}/duplicate"
-}), qe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), qe = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/cards/{id}"
-}), Pe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Pe = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/cards/{cardId}/memberships"
-}), ze = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ze = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/cards/{cardId}/memberships"
-}), Se = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Se = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/cards/{cardId}/labels"
-}), _e = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), _e = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/cards/{cardId}/labels/{labelId}"
-}), ke = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ke = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/cards/{cardId}/tasks"
-}), Ee = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ee = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/tasks/{id}"
-}), Be = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Be = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/tasks/{id}"
-}), Le = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Le = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/cards/{cardId}/attachments"
-}), We = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), We = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/attachments/{id}"
-}), Ne = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ne = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/attachments/{id}"
 }), De = (e) => ((e == null ? void 0 : e.client) ?? a).get(
@@ -341,13 +343,13 @@ const a = M(O()), G = (e) => ((e == null ? void 0 : e.client) ?? a).get({
     ...e,
     url: "/api/cards/{cardId}/actions"
   }
-), Me = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+), Me = (e) => ((e == null ? void 0 : e.client) ?? a).post({
   ...e,
   url: "/api/cards/{cardId}/comment-actions"
-}), He = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), He = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/comment-actions/{id}"
-}), Je = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Je = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
   ...e,
   url: "/api/comment-actions/{id}"
 }), Ge = (e) => ((e == null ? void 0 : e.client) ?? a).get({
@@ -356,7 +358,7 @@ const a = M(O()), G = (e) => ((e == null ? void 0 : e.client) ?? a).get({
 }), Fe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
   ...e,
   url: "/api/notifications/{id}"
-}), Ke = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ke = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
   ...e,
   url: "/api/notifications/{ids}"
 });
@@ -368,7 +370,7 @@ export {
   a as client,
   Le as createAttachment,
   ne as createBoard,
-  ie as createBoardMembership,
+  ge as createBoardMembership,
   $e as createCard,
   Se as createCardLabel,
   Pe as createCardMembership,
@@ -380,7 +382,7 @@ export {
   ke as createTask,
   X as createUser,
   Ne as deleteAttachment,
-  be as deleteBoard,
+  ie as deleteBoard,
   je as deleteBoardMembership,
   qe as deleteCard,
   _e as deleteCardLabel,
@@ -389,7 +391,7 @@ export {
   Ce as deleteLabel,
   Ae as deleteList,
   se as deleteProject,
-  ge as deleteProjectManager,
+  he as deleteProjectManager,
   Be as deleteTask,
   ae as deleteUser,
   Te as duplicateCard,
@@ -406,7 +408,7 @@ export {
   Ie as sortList,
   Q as unauthorize,
   We as updateAttachment,
-  he as updateBoard,
+  be as updateBoard,
   ye as updateBoardMembership,
   Re as updateCard,
   He as updateCommentAction,
