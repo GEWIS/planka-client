@@ -1,748 +1,10 @@
+import { Client } from '@hey-api/client-fetch';
+import { Config } from '@hey-api/client-fetch';
+import { Options } from '@hey-api/client-fetch';
+import { RequestOptionsBase } from '@hey-api/client-fetch';
+import { RequestResult } from '@hey-api/client-fetch';
+
 export declare type $OpenApiTs = {
-    '/api/config': {
-        get: {
-            res: {
-                200: SingleResponse<Oidc>;
-            };
-        };
-    };
-    '/api/access-tokens': {
-        post: {
-            req: {
-                requestBody: AccessTokenRequest;
-            };
-            res: {
-                200: SingleResponse<string>;
-                400: BadRequestError;
-            };
-        };
-    };
-    '/api/access-tokens/exchange-using-oidc': {
-        post: {
-            req: {
-                requestBody: AccessTokenOidcRequest;
-            };
-            res: {
-                200: SingleResponse<string>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-            };
-        };
-    };
-    '/api/access-tokens/me': {
-        delete: {
-            res: {
-                200: SingleResponse<string>;
-                401: UnauthorizedError;
-            };
-        };
-    };
-    '/api/users': {
-        get: {
-            res: {
-                200: ArrayResponse<User>;
-                401: UnauthorizedError;
-            };
-        };
-        post: {
-            req: {
-                requestBody: {
-                    email: string;
-                    password: string;
-                    name: string;
-                    username?: string;
-                };
-            };
-            res: {
-                200: SingleResponse<User>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                409: ConflictError;
-            };
-        };
-    };
-    '/api/users/{userId}': {
-        get: {
-            req: {
-                userId: string;
-            };
-            res: {
-                200: SingleResponse<User>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        patch: {
-            req: {
-                userId: string;
-                requestBody: Partial<User>;
-            };
-            res: {
-                200: SingleResponse<User>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                userId: string;
-                requestBody: User;
-            };
-            res: {
-                200: void;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/users/{userId}/email': {
-        patch: {
-            req: {
-                userId: string;
-                requestBody: {
-                    email: string;
-                };
-            };
-            res: {
-                200: SingleResponse<User>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                409: ConflictError;
-            };
-        };
-    };
-    '/api/users/{userId}/password': {
-        patch: {
-            req: {
-                userId: string;
-                requestBody: {
-                    password: string;
-                };
-            };
-            res: {
-                200: SingleResponse<User>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                409: ConflictError;
-            };
-        };
-    };
-    '/api/users/{userId}/username': {
-        patch: {
-            req: {
-                userId: string;
-                requestBody: {
-                    username: string;
-                };
-            };
-            res: {
-                200: SingleResponse<User>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                409: ConflictError;
-            };
-        };
-    };
-    '/api/users/{userId}/avatar': {
-        post: {
-            req: {
-                userId: string;
-                requestBody: {
-                    file: File;
-                };
-            };
-            res: {
-                200: SingleResponse<User>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                422: UnprocessableError;
-            };
-        };
-    };
-    '/api/projects': {
-        get: {
-            res: {
-                200: ArrayResponse<Project>;
-                401: UnauthorizedError;
-            };
-        };
-        post: {
-            req: {
-                requestBody: {
-                    name: string;
-                };
-            };
-            res: {
-                200: SingleResponse<Project>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-            };
-        };
-    };
-    '/api/projects/{projectId}': {
-        get: {
-            req: {
-                projectId: string;
-                requestBody: {
-                    name: string;
-                };
-            };
-            res: {
-                200: SingleResponse<Project>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        patch: {
-            req: {
-                projectId: string;
-                requestBody: Partial<Project>;
-            };
-            res: {
-                200: SingleResponse<Project>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                projectId: string;
-            };
-            res: {
-                200: SingleResponse<Project>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/projects/{projectId}/background-image': {
-        post: {
-            req: {
-                projectId: string;
-                requestBody: {
-                    file: File;
-                };
-            };
-            res: {
-                200: SingleResponse<Project>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                422: UnprocessableError;
-            };
-        };
-    };
-    '/api/projects/{projectId}/managers': {
-        post: {
-            req: {
-                projectId: string;
-                requestBody: {
-                    userId: string;
-                };
-            };
-            res: {
-                200: SingleResponse<ProjectManager>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/project-managers/{managerId}': {
-        delete: {
-            req: {
-                managerId: string;
-            };
-            res: {
-                200: SingleResponse<ProjectManager>;
-                400: NotFoundError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/projects/{projectId}/boards': {
-        post: {
-            req: {
-                projectId: string;
-                requestBody: {
-                    position: number;
-                    name: string;
-                };
-            };
-            res: {
-                200: SingleResponse<Board>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/boards/{boardId}': {
-        get: {
-            req: {
-                boardId: string;
-            };
-            res: {
-                200: SingleResponse<Board>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        patch: {
-            req: {
-                boardId: string;
-                requestBody: Partial<Board>;
-            };
-            res: {
-                200: SingleResponse<Board>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                boardId: string;
-            };
-            res: {
-                200: SingleResponse<Board>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/boards/{boardId}/memberships': {
-        post: {
-            req: {
-                boardId: string;
-                requestBody: {
-                    userId: string;
-                    role: Role;
-                };
-            };
-            res: {
-                200: SingleResponse<Board>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                409: ConflictError;
-            };
-        };
-    };
-    '/api/board-memberships/{membershipId}': {
-        patch: {
-            req: {
-                membershipId: string;
-                requestBody: {
-                    role: Role;
-                    canComment: boolean;
-                };
-            };
-            res: {
-                200: SingleResponse<BoardMembership>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                membershipId: string;
-            };
-            res: {
-                200: SingleResponse<BoardMembership>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/boards/{boardId}/labels': {
-        post: {
-            req: {
-                boardId: string;
-                requestBody: {
-                    position: number;
-                    color: LabelColor;
-                };
-            };
-            res: {
-                200: SingleResponse<Label>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/labels/{labelId}': {
-        patch: {
-            req: {
-                labelId: string;
-                requestBody: Partial<Label>;
-            };
-            res: {
-                200: SingleResponse<Label>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                labelId: string;
-            };
-            res: {
-                200: SingleResponse<Label>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/boards/{boardId}/lists': {
-        post: {
-            req: {
-                boardId: string;
-                requestBody: {
-                    position: number;
-                    name: string;
-                };
-            };
-            res: {
-                200: SingleResponse<List>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/lists/{listId}': {
-        patch: {
-            req: {
-                listId: string;
-                requestBody: Partial<List>;
-            };
-            res: {
-                200: SingleResponse<List>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                listId: string;
-            };
-            res: {
-                200: SingleResponse<Label>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/lists/{listId}/sort': {
-        post: {
-            req: {
-                listId: number;
-            };
-            res: {
-                200: SingleResponse<List>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/lists/{listId}/cards': {
-        post: {
-            req: {
-                listId: number;
-                requestBody: {
-                    name: string;
-                    position: number;
-                };
-            };
-            res: {
-                200: SingleResponse<List>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                422: UnprocessableError;
-            };
-        };
-    };
-    '/api/cards/{cardId}': {
-        get: {
-            req: {
-                cardId: string;
-            };
-            res: {
-                200: SingleResponse<Card>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        patch: {
-            req: {
-                cardId: string;
-                requestBody: Partial<Card>;
-            };
-            res: {
-                200: SingleResponse<Card>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                cardId: string;
-            };
-            res: {
-                200: SingleResponse<Card>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/duplicate': {
-        post: {
-            req: {
-                cardId: string;
-                requestBody: {
-                    position: number;
-                };
-            };
-            res: {
-                200: SingleResponse<Card>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/memberships': {
-        post: {
-            req: {
-                cardId: string;
-                requestBody: {
-                    userId: string;
-                };
-            };
-            res: {
-                200: SingleResponse<CardMembership>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                cardId: string;
-                requestBody: {
-                    userId: string;
-                };
-            };
-            res: {
-                200: SingleResponse<CardMembership>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/labels': {
-        post: {
-            req: {
-                cardId: string;
-                requestBody: {
-                    labelId: string;
-                };
-            };
-            res: {
-                200: SingleResponse<CardLabel>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/labels/{labelId}': {
-        delete: {
-            req: {
-                cardId: string;
-                labelId: string;
-            };
-            res: {
-                200: SingleResponse<CardLabel>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/tasks': {
-        post: {
-            req: {
-                cardId: string;
-                requestBody: {
-                    position: number;
-                    name: string;
-                };
-            };
-            res: {
-                200: SingleResponse<Task>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/tasks/{taskId}': {
-        patch: {
-            req: {
-                taskId: string;
-                requestBody: Partial<Task>;
-            };
-            res: {
-                200: SingleResponse<Task>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                taskId: string;
-            };
-            res: {
-                200: SingleResponse<Task>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/attachments': {
-        post: {
-            req: {
-                cardId: string;
-                requestBody: {
-                    file: File;
-                };
-            };
-            res: {
-                200: SingleResponse<Attachment>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-                422: UnprocessableError;
-            };
-        };
-    };
-    '/api/attachments/{attachmentId}': {
-        patch: {
-            req: {
-                attachmentId: string;
-                requestBody: Partial<Attachment>;
-            };
-            res: {
-                200: SingleResponse<Attachment>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                attachmentId: string;
-            };
-            res: {
-                200: SingleResponse<Attachment>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/actions': {
-        get: {
-            req: {
-                cardId: string;
-            };
-            res: {
-                200: ArrayResponse<Action>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/cards/{cardId}/comment-actions': {
-        post: {
-            req: {
-                cardId: string;
-                requestBody: {
-                    text: string;
-                };
-            };
-            res: {
-                200: SingleResponse<Comment_2>;
-                400: BadRequestError;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/comment-actions/{actionId}': {
-        patch: {
-            req: {
-                actionId: string;
-                requestBody: {
-                    text: string;
-                };
-            };
-            res: {
-                200: SingleResponse<Comment_2>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        delete: {
-            req: {
-                actionId: string;
-            };
-            res: {
-                200: SingleResponse<Comment_2>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/notifications': {
-        get: {
-            res: {
-                200: ArrayResponse<Notification_2>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/api/notifications/{notificationId}': {
-        get: {
-            req: {
-                notificationId: string;
-            };
-            res: {
-                200: ArrayResponse<Notification_2>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-        patch: {
-            req: {
-                notificationId: string;
-                requestBody: Partial<Notification_2>;
-            };
-            res: {
-                200: ArrayResponse<Notification_2>;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
     '/attachments/{attachmentId}/download/{filename}': {
         get: {
             req: {
@@ -791,47 +53,8 @@ export declare type Action = {
     userId: string;
 };
 
-declare class ActionService {
-    private planka;
-    constructor(planka: Planka);
-    create(data: $OpenApiTs['/api/cards/{cardId}/comment-actions']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/comment-actions']['post']['res'][200]>;
-    update(data: $OpenApiTs['/api/comment-actions/{actionId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/comment-actions/{actionId}']['patch']['res'][200]>;
-    remove(data: $OpenApiTs['/api/attachments/{attachmentId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/attachments/{attachmentId}']['delete']['res'][200]>;
-}
-
 export declare type ActionText = {
     text: string;
-};
-
-export declare class ApiError extends Error {
-    readonly url: string;
-    readonly status: number;
-    readonly statusText: string;
-    readonly body: unknown;
-    readonly request: ApiRequestOptions;
-    constructor(request: ApiRequestOptions, response: ApiResult, message: string);
-}
-
-declare type ApiRequestOptions = {
-    readonly method: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'OPTIONS' | 'HEAD' | 'PATCH';
-    readonly url: string;
-    readonly path?: Record<string, unknown>;
-    readonly cookies?: Record<string, unknown>;
-    readonly headers?: Record<string, unknown>;
-    readonly query?: Record<string, unknown>;
-    readonly formData?: Record<string, unknown>;
-    readonly body?: any;
-    readonly mediaType?: string;
-    readonly responseHeader?: string;
-    readonly errors?: Record<number, string>;
-};
-
-declare type ApiResult<TData = any> = {
-    readonly body: TData;
-    readonly ok: boolean;
-    readonly status: number;
-    readonly statusText: string;
-    readonly url: string;
 };
 
 export declare type ArrayResponse<T> = {
@@ -851,39 +74,25 @@ export declare type Attachment = {
     image?: Image_2;
 };
 
-declare class AttachmentService {
-    private planka;
-    constructor(planka: Planka);
-    create(data: $OpenApiTs['/api/cards/{cardId}/attachments']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/attachments']['post']['res'][200]>;
-    update(data: $OpenApiTs['/api/attachments/{attachmentId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/attachments/{attachmentId}']['patch']['res'][200]>;
-    remove(data: $OpenApiTs['/api/attachments/{attachmentId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/attachments/{attachmentId}']['delete']['res'][200]>;
-    download(data: $OpenApiTs['/attachments/{attachmentId}/download/{filename}']['get']['req']): CancelablePromise<$OpenApiTs['/attachments/{attachmentId}/download/{filename}']['get']['res'][200]>;
-    thumbnail(data: $OpenApiTs['/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}']['get']['req']): CancelablePromise<$OpenApiTs['/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}']['get']['res'][200]>;
-}
+export declare const authorize: <ThrowOnError extends boolean = false>(options: Options<AuthorizeRequest, ThrowOnError>) => RequestResult<AuthorizeResponse, BadRequestError, ThrowOnError>;
 
-declare class AuthService {
-    private planka;
-    constructor(planka: Planka);
-    /**
-     * @returns SingleResponse<Oidc> Ok
-     */
-    getConfig(): CancelablePromise<$OpenApiTs['/api/config']['get']['res'][200]>;
-    /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-    authorize(data: $OpenApiTs['/api/access-tokens']['post']['req']): Promise<void>;
-    /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-    authorizeOidc(data: $OpenApiTs['/api/access-tokens/exchange-using-oidc']['post']['req']): Promise<void>;
-    /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-    unauthorize(): Promise<void>;
-}
+export declare type AuthorizeError = BadRequestError;
+
+export declare const authorizeOidc: <ThrowOnError extends boolean = false>(options: Options<AuthorizeOidcRequest, ThrowOnError>) => RequestResult<AuthorizeOidcResponse, AuthorizeOidcError, ThrowOnError>;
+
+export declare type AuthorizeOidcError = BadRequestError | UnauthorizedError;
+
+export declare type AuthorizeOidcRequest = {
+    body: AccessTokenOidcRequest;
+};
+
+export declare type AuthorizeOidcResponse = SingleResponse<string>;
+
+export declare type AuthorizeRequest = {
+    body: AccessTokenRequest;
+};
+
+export declare type AuthorizeResponse = SingleResponse<string>;
 
 export declare type Background = {
     type: BackgroundType;
@@ -927,47 +136,6 @@ export declare type BoardMembership = {
     userId: string;
 };
 
-declare class BoardService {
-    private planka;
-    constructor(planka: Planka);
-    /**
-     * @param data The data for the request.
-     * @param data.projectId
-     * @param data.requestBody
-     * @returns SingleResponse<Board> Ok
-     * @throws ApiError
-     */
-    create(data: $OpenApiTs['/api/projects/{projectId}/boards']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/boards']['post']['res'][200]>;
-    get(data: $OpenApiTs['/api/boards/{boardId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['get']['res'][200]>;
-    update(data: $OpenApiTs['/api/boards/{boardId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['patch']['res'][200]>;
-    remove(data: $OpenApiTs['/api/boards/{boardId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}']['delete']['res'][200]>;
-    addMember(data: $OpenApiTs['/api/boards/{boardId}/memberships']['post']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/memberships']['post']['res'][200]>;
-    updateMember(data: $OpenApiTs['/api/board-memberships/{membershipId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['patch']['res'][200]>;
-    removeMember(data: $OpenApiTs['/api/board-memberships/{membershipId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/board-memberships/{membershipId}']['delete']['res'][200]>;
-}
-
-export declare class CancelablePromise<T> implements Promise<T> {
-    private _isResolved;
-    private _isRejected;
-    private _isCancelled;
-    readonly cancelHandlers: (() => void)[];
-    readonly promise: Promise<T>;
-    private _resolve?;
-    private _reject?;
-    constructor(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: unknown) => void, onCancel: OnCancel) => void);
-    get [Symbol.toStringTag](): string;
-    then<TResult1 = T, TResult2 = never>(onFulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null, onRejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null): Promise<TResult1 | TResult2>;
-    catch<TResult = never>(onRejected?: ((reason: unknown) => TResult | PromiseLike<TResult>) | null): Promise<T | TResult>;
-    finally(onFinally?: (() => void) | null): Promise<T>;
-    cancel(): void;
-    get isCancelled(): boolean;
-}
-
-export declare class CancelError extends Error {
-    constructor(message: string);
-    get isCancelled(): boolean;
-}
-
 export declare type Card = {
     id: string;
     createdAt: Date;
@@ -1000,26 +168,9 @@ export declare type CardMembership = {
     userId: string;
 };
 
-declare class CardService {
-    private planka;
-    constructor(planka: Planka);
-    /**
-     * @param data The data for the request.
-     * @param data.projectId
-     * @param data.requestBody
-     * @returns SingleResponse<Board> Ok
-     * @throws ApiError
-     */
-    create(data: $OpenApiTs['/api/lists/{listId}/cards']['post']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}/cards']['post']['res'][200]>;
-    get(data: $OpenApiTs['/api/cards/{cardId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}']['get']['res'][200]>;
-    update(data: $OpenApiTs['/api/cards/{cardId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}']['patch']['res'][200]>;
-    delete(data: $OpenApiTs['/api/cards/{cardId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}']['delete']['res'][200]>;
-    duplicate(data: $OpenApiTs['/api/cards/{cardId}/duplicate']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/duplicate']['post']['res'][200]>;
-    addMember(data: $OpenApiTs['/api/cards/{cardId}/memberships']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/memberships']['post']['res'][200]>;
-    removeMember(data: $OpenApiTs['/api/cards/{cardId}/memberships']['delete']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/memberships']['delete']['res'][200]>;
-    addLabel(data: $OpenApiTs['/api/cards/{cardId}/labels']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/labels']['post']['res'][200]>;
-    removeLabel(data: $OpenApiTs['/api/cards/{cardId}/labels/{labelId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/labels/{labelId}']['delete']['res'][200]>;
-}
+export declare const client: Client<Request, Response, unknown, RequestOptionsBase<false> & Config<false> & {
+headers: Headers;
+}>;
 
 declare type Comment_2 = {
     id: string;
@@ -1036,7 +187,478 @@ export declare type CommentType = 'commentCard';
 
 export declare type ConflictError = BaseError;
 
-declare type Headers_2 = Record<string, string>;
+export declare const createAttachment: <ThrowOnError extends boolean = false>(options: Options<CreateAttachmentRequest, ThrowOnError>) => RequestResult<CreateAttachmentResponse, CreateAttachmentError, ThrowOnError>;
+
+export declare type CreateAttachmentError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateAttachmentRequest = {
+    path: {
+        cardId: string;
+    };
+    body: {
+        text: string;
+    };
+};
+
+export declare type CreateAttachmentResponse = SingleResponse<Attachment>;
+
+export declare const createBoard: <ThrowOnError extends boolean = false>(options: Options<CreateBoardRequest, ThrowOnError>) => RequestResult<CreateBoardResponse, CreateBoardError, ThrowOnError>;
+
+export declare type CreateBoardError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare const createBoardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateBoardMembershipRequest, ThrowOnError>) => RequestResult<CreateBoardMembershipResponse, CreateBoardMembershipError, ThrowOnError>;
+
+export declare type CreateBoardMembershipError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+
+export declare type CreateBoardMembershipRequest = {
+    path: {
+        boardId: string;
+    };
+    body: {
+        userId: string;
+        role: Role;
+    };
+};
+
+export declare type CreateBoardMembershipResponse = SingleResponse<Board>;
+
+export declare type CreateBoardRequest = {
+    path: {
+        projectId: string;
+    };
+    body: {
+        position: number;
+        name: string;
+    };
+};
+
+export declare type CreateBoardResponse = SingleResponse<Board>;
+
+export declare const createCard: <ThrowOnError extends boolean = false>(options: Options<CreateCardRequest, ThrowOnError>) => RequestResult<CreateCardResponse, CreateCardError, ThrowOnError>;
+
+export declare type CreateCardError = BadRequestError | UnauthorizedError | NotFoundError | UnprocessableError;
+
+export declare const createCardLabel: <ThrowOnError extends boolean = false>(options: Options<CreateCardLabelRequest, ThrowOnError>) => RequestResult<CreateCardLabelResponse, CreateCardLabelError, ThrowOnError>;
+
+export declare type CreateCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateCardLabelRequest = {
+    path: {
+        cardId: string;
+    };
+    body: {
+        labelId: string;
+    };
+};
+
+export declare type CreateCardLabelResponse = SingleResponse<CardLabel>;
+
+export declare const createCardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateCardMembershipRequest, ThrowOnError>) => RequestResult<CreateCardMembershipResponse, CreateCardMembershipError, ThrowOnError>;
+
+export declare type CreateCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateCardMembershipRequest = {
+    path: {
+        cardId: string;
+    };
+    body: {
+        userId: string;
+    };
+};
+
+export declare type CreateCardMembershipResponse = SingleResponse<CardMembership>;
+
+export declare type CreateCardRequest = {
+    path: {
+        listId: string;
+    };
+    body: {
+        name: string;
+        position: number;
+    };
+};
+
+export declare type CreateCardResponse = SingleResponse<Card>;
+
+export declare const createCommentAction: <ThrowOnError extends boolean = false>(options: Options<CreateCommentActionRequest, ThrowOnError>) => RequestResult<CreateCommentActionResponse, CreateCommentActionError, ThrowOnError>;
+
+export declare type CreateCommentActionError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateCommentActionRequest = {
+    path: {
+        cardId: string;
+    };
+    body: {
+        text: string;
+    };
+};
+
+export declare type CreateCommentActionResponse = SingleResponse<Comment_2>;
+
+export declare const createLabel: <ThrowOnError extends boolean = false>(options: Options<CreateLabelRequest, ThrowOnError>) => RequestResult<CreateLabelResponse, CreateLabelError, ThrowOnError>;
+
+export declare type CreateLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateLabelRequest = {
+    path: {
+        boardId: string;
+    };
+    body: {
+        position: number;
+        color: LabelColor;
+    };
+};
+
+export declare type CreateLabelResponse = SingleResponse<Label>;
+
+export declare const createList: <ThrowOnError extends boolean = false>(options: Options<CreateListRequest, ThrowOnError>) => RequestResult<CreateListResponse, CreateListError, ThrowOnError>;
+
+export declare type CreateListError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateListRequest = {
+    path: {
+        boardId: string;
+    };
+    body: {
+        position: number;
+        name: string;
+    };
+};
+
+export declare type CreateListResponse = SingleResponse<List>;
+
+export declare const createProject: <ThrowOnError extends boolean = false>(options: Options<CreateProjectRequest, ThrowOnError>) => RequestResult<CreateProjectResponse, CreateProjectError, ThrowOnError>;
+
+export declare type CreateProjectError = BadRequestError | UnauthorizedError;
+
+export declare const createProjectManager: <ThrowOnError extends boolean = false>(options: Options<CreateProjectManagerRequest, ThrowOnError>) => RequestResult<CreateProjectManagerResponse, CreateProjectManagerError, ThrowOnError>;
+
+export declare type CreateProjectManagerError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateProjectManagerRequest = {
+    path: {
+        projectId: string;
+    };
+    body: {
+        userId: string;
+    };
+};
+
+export declare type CreateProjectManagerResponse = SingleResponse<ProjectManager>;
+
+export declare type CreateProjectRequest = {
+    body: {
+        name: string;
+    };
+};
+
+export declare type CreateProjectResponse = SingleResponse<Project>;
+
+export declare const createTask: <ThrowOnError extends boolean = false>(options: Options<CreateTaskRequest, ThrowOnError>) => RequestResult<CreateTaskResponse, CreateTaskError, ThrowOnError>;
+
+export declare type CreateTaskError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type CreateTaskRequest = {
+    path: {
+        cardId: string;
+    };
+    body: {
+        position: number;
+        name: string;
+    };
+};
+
+export declare type CreateTaskResponse = SingleResponse<Task>;
+
+export declare const createUser: <ThrowOnError extends boolean = false>(options: Options<CreateUserRequest, ThrowOnError>) => RequestResult<CreateUserResponse, CreateUserError, ThrowOnError>;
+
+export declare type CreateUserError = BadRequestError | UnauthorizedError | ConflictError;
+
+export declare type CreateUserRequest = {
+    body: {
+        email: string;
+        password: string;
+        name: string;
+        username?: string;
+    };
+};
+
+export declare type CreateUserResponse = SingleResponse<User>;
+
+export declare const deleteAttachment: <ThrowOnError extends boolean = false>(options: Options<DeleteAttachmentRequest, ThrowOnError>) => RequestResult<DeleteAttachmentResponse, DeleteAttachmentError, ThrowOnError>;
+
+export declare type DeleteAttachmentError = UnauthorizedError | NotFoundError;
+
+export declare type DeleteAttachmentRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteAttachmentResponse = SingleResponse<Attachment>;
+
+export declare const deleteBoard: <ThrowOnError extends boolean = false>(options: Options<DeleteBoardRequest, ThrowOnError>) => RequestResult<DeleteBoardResponse, DeleteBoardError, ThrowOnError>;
+
+export declare type DeleteBoardError = UnauthorizedError | NotFoundError;
+
+export declare const deleteBoardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteBoardMembershipRequest, ThrowOnError>) => RequestResult<DeleteBoardMembershipResponse, DeleteBoardMembershipError, ThrowOnError>;
+
+export declare type DeleteBoardMembershipError = UnauthorizedError | NotFoundError;
+
+export declare type DeleteBoardMembershipRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteBoardMembershipResponse = SingleResponse<BoardMembership>;
+
+export declare type DeleteBoardRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteBoardResponse = SingleResponse<void>;
+
+export declare const deleteCard: <ThrowOnError extends boolean = false>(options: Options<DeleteCardRequest, ThrowOnError>) => RequestResult<DeleteCardResponse, DeleteCardError, ThrowOnError>;
+
+export declare type DeleteCardError = UnauthorizedError | NotFoundError;
+
+export declare const deleteCardLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteCardLabelRequest, ThrowOnError>) => RequestResult<DeleteCardLabelResponse, DeleteCardLabelError, ThrowOnError>;
+
+export declare type DeleteCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type DeleteCardLabelRequest = {
+    path: {
+        cardId: string;
+        labelId: string;
+    };
+};
+
+export declare type DeleteCardLabelResponse = SingleResponse<CardLabel>;
+
+export declare const deleteCardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteCardMembershipRequest, ThrowOnError>) => RequestResult<DeleteCardMembershipResponse, DeleteCardMembershipError, ThrowOnError>;
+
+export declare type DeleteCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type DeleteCardMembershipRequest = {
+    path: {
+        cardId: string;
+    };
+    body: {
+        userId: string;
+    };
+};
+
+export declare type DeleteCardMembershipResponse = SingleResponse<CardMembership>;
+
+export declare type DeleteCardRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteCardResponse = SingleResponse<Card>;
+
+export declare const deleteCommentAction: <ThrowOnError extends boolean = false>(options: Options<DeleteCommentActionRequest, ThrowOnError>) => RequestResult<DeleteCommentActionResponse, DeleteCommentActionError, ThrowOnError>;
+
+export declare type DeleteCommentActionError = UnauthorizedError | NotFoundError;
+
+export declare type DeleteCommentActionRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteCommentActionResponse = SingleResponse<Comment_2>;
+
+export declare const deleteLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteLabelRequest, ThrowOnError>) => RequestResult<DeleteLabelResponse, DeleteLabelError, ThrowOnError>;
+
+export declare type DeleteLabelError = UnauthorizedError | NotFoundError;
+
+export declare type DeleteLabelRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteLabelResponse = SingleResponse<Label>;
+
+export declare const deleteList: <ThrowOnError extends boolean = false>(options: Options<DeleteListRequest, ThrowOnError>) => RequestResult<DeleteListResponse, DeleteListError, ThrowOnError>;
+
+export declare type DeleteListError = UnauthorizedError | NotFoundError;
+
+export declare type DeleteListRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteListResponse = SingleResponse<List>;
+
+export declare const deleteProject: <ThrowOnError extends boolean = false>(options: Options<DeleteProjectRequest, ThrowOnError>) => RequestResult<DeleteProjectResponse, DeleteProjectError, ThrowOnError>;
+
+export declare type DeleteProjectError = UnauthorizeError | NotFoundError;
+
+export declare const deleteProjectManager: <ThrowOnError extends boolean = false>(options: Options<DeleteProjectManagerRequest, ThrowOnError>) => RequestResult<DeleteProjectManagerResponse, DeleteProjectManagerError, ThrowOnError>;
+
+export declare type DeleteProjectManagerError = BadRequestError | UnauthorizedError;
+
+export declare type DeleteProjectManagerRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteProjectManagerResponse = SingleResponse<ProjectManager>;
+
+export declare type DeleteProjectRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type DeleteProjectResponse = SingleResponse<Project>;
+
+export declare const deleteTask: <ThrowOnError extends boolean = false>(options: Options<DeleteTaskRequest, ThrowOnError>) => RequestResult<DeleteTaskResponse, DeleteTaskError, ThrowOnError>;
+
+export declare type DeleteTaskError = UnauthorizedError | NotFoundError;
+
+export declare type DeleteTaskRequest = {
+    path: {
+        taskId: string;
+    };
+};
+
+export declare type DeleteTaskResponse = SingleResponse<Task>;
+
+export declare const deleteUser: <ThrowOnError extends boolean = false>(options: Options<DeleteUserRequest, ThrowOnError>) => RequestResult<void, DeleteUserError, ThrowOnError>;
+
+export declare type DeleteUserError = UnauthorizedError | NotFoundError;
+
+export declare type DeleteUserRequest = {
+    path: {
+        id: string;
+    };
+    body: User;
+};
+
+export declare type DeleteUserResponse = void;
+
+export declare const duplicateCard: <ThrowOnError extends boolean = false>(options: Options<DuplicateCardRequest, ThrowOnError>) => RequestResult<DuplicateCardResponse, DuplicateCardError, ThrowOnError>;
+
+export declare type DuplicateCardError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type DuplicateCardRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        position: number;
+    };
+};
+
+export declare type DuplicateCardResponse = SingleResponse<Card>;
+
+export declare const getBoard: <ThrowOnError extends boolean = false>(options: Options<GetBoardRequest, ThrowOnError>) => RequestResult<GetBoardResponse, GetBoardError, ThrowOnError>;
+
+export declare type GetBoardError = UnauthorizeError | NotFoundError;
+
+export declare type GetBoardRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type GetBoardResponse = SingleResponse<Board>;
+
+export declare const getCard: <ThrowOnError extends boolean = false>(options: Options<GetCardRequest, ThrowOnError>) => RequestResult<GetCardResponse, GetCardError, ThrowOnError>;
+
+export declare const getCardActions: <ThrowOnError extends boolean = false>(options: Options<GetCardActionsRequest, ThrowOnError>) => RequestResult<GetCardActionsResponse, GetCardActionsError, ThrowOnError>;
+
+export declare type GetCardActionsError = UnauthorizedError | NotFoundError;
+
+export declare type GetCardActionsRequest = {
+    path: {
+        cardId: string;
+    };
+};
+
+export declare type GetCardActionsResponse = ArrayResponse<Action>;
+
+export declare type GetCardError = UnauthorizedError | NotFoundError;
+
+export declare type GetCardRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type GetCardResponse = SingleResponse<Card>;
+
+export declare const getConfig: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetConfigResponse, unknown, ThrowOnError>;
+
+export declare type GetConfigError = unknown;
+
+export declare type GetConfigResponse = SingleResponse<Oidc>;
+
+export declare const getNotification: <ThrowOnError extends boolean = false>(options: Options<GetNotificationRequest, ThrowOnError>) => RequestResult<GetNotificationResponse, GetNotificationError, ThrowOnError>;
+
+export declare type GetNotificationError = UnauthorizedError | NotFoundError;
+
+export declare type GetNotificationRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type GetNotificationResponse = ArrayResponse<Notification_2>;
+
+export declare const getNotifications: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetNotificationsResponse, GetNotificationsError, ThrowOnError>;
+
+export declare type GetNotificationsError = UnauthorizedError | NotFoundError;
+
+export declare type GetNotificationsResponse = ArrayResponse<Notification_2>;
+
+export declare const getProject: <ThrowOnError extends boolean = false>(options: Options<GetProjectRequest, ThrowOnError>) => RequestResult<GetProjectResponse, GetProjectError, ThrowOnError>;
+
+export declare type GetProjectError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare type GetProjectRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        name: string;
+    };
+};
+
+export declare type GetProjectResponse = SingleResponse<Project>;
+
+export declare const getProjects: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetProjectsResponse, BaseError, ThrowOnError>;
+
+export declare type GetProjectsError = UnauthorizedError;
+
+export declare type GetProjectsResponse = ArrayResponse<Project>;
+
+export declare const getUser: <ThrowOnError extends boolean = false>(options: Options<GetUserRequest, ThrowOnError>) => RequestResult<GetUserResponse, GetUserError, ThrowOnError>;
+
+export declare type GetUserError = UnauthorizedError | NotFoundError;
+
+export declare type GetUserRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type GetUserResponse = SingleResponse<User>;
+
+export declare const getUsers: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetUsersResponse, BaseError, ThrowOnError>;
+
+export declare type GetUsersError = UnauthorizedError;
+
+export declare type GetUsersResponse = ArrayResponse<User>;
 
 declare type Image_2 = {
     width: number;
@@ -1055,13 +677,6 @@ export declare type Include = {
     tasks: Action[];
 };
 
-declare class Interceptors<T> {
-    _fns: Middleware<T>[];
-    constructor();
-    eject(fn: Middleware<T>): void;
-    use(fn: Middleware<T>): void;
-}
-
 export declare type Label = {
     id: string;
     createdAt: Date;
@@ -1074,14 +689,6 @@ export declare type Label = {
 
 export declare type LabelColor = 'berry-red' | 'pumpkin-orange' | 'lagoon-blue' | 'pink-tulip' | 'light-mud' | 'orange-peel' | 'bright-moss' | 'antique-blue' | 'dark-granite' | 'lagune-blue' | 'sunny-grass' | 'morning-sky' | 'light-orange' | 'midnight-blue' | 'tank-green' | 'gun-metal' | 'wet-moss' | 'red-burgundy' | 'light-concrete' | 'apricot-red' | 'desert-sand' | 'navy-blue' | 'egg-yellow' | 'coral-green' | 'light-cocoa';
 
-declare class LabelService {
-    private planka;
-    constructor(planka: Planka);
-    create(data: $OpenApiTs['/api/boards/{boardId}/labels']['post']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/labels']['post']['res'][200]>;
-    update(data: $OpenApiTs['/api/labels/{labelId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/labels/{labelId}']['patch']['res'][200]>;
-    remove(data: $OpenApiTs['/api/labels/{labelId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/labels/{labelId}']['delete']['res'][200]>;
-}
-
 export declare type List = {
     id: string;
     createdAt: Date;
@@ -1090,17 +697,6 @@ export declare type List = {
     name: string;
     boardId: string;
 };
-
-declare class ListService {
-    private planka;
-    constructor(planka: Planka);
-    create(data: $OpenApiTs['/api/boards/{boardId}/lists']['post']['req']): CancelablePromise<$OpenApiTs['/api/boards/{boardId}/lists']['post']['res'][200]>;
-    update(data: $OpenApiTs['/api/lists/{listId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}']['patch']['res'][200]>;
-    delete(data: $OpenApiTs['/api/lists/{listId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}']['delete']['res'][200]>;
-    sort(data: $OpenApiTs['/api/lists/{listId}/sort']['post']['req']): CancelablePromise<$OpenApiTs['/api/lists/{listId}/sort']['post']['res'][200]>;
-}
-
-declare type Middleware<T> = (value: T) => T | Promise<T>;
 
 export declare type NotFoundError = Omit<BaseError, 'message'>;
 
@@ -1115,60 +711,9 @@ declare type Notification_2 = {
 };
 export { Notification_2 as Notification }
 
-declare class NotificationService {
-    private planka;
-    constructor(planka: Planka);
-    getAll(): CancelablePromise<$OpenApiTs['/api/notifications']['get']['res'][200]>;
-    get(data: $OpenApiTs['/api/notifications/{notificationId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/notifications/{notificationId}']['get']['res'][200]>;
-    update(data: $OpenApiTs['/api/notifications/{notificationId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/notifications/{notificationId}']['patch']['res'][200]>;
-}
-
 export declare type Oidc = {
     oidc: string;
 };
-
-declare interface OnCancel {
-    readonly isResolved: boolean;
-    readonly isRejected: boolean;
-    readonly isCancelled: boolean;
-    (cancelHandler: () => void): void;
-}
-
-export declare const OpenAPI: OpenAPIConfig;
-
-export declare type OpenAPIConfig = {
-    BASE: string;
-    CREDENTIALS: 'include' | 'omit' | 'same-origin';
-    ENCODE_PATH?: ((path: string) => string) | undefined;
-    HEADERS?: Headers_2 | Resolver<Headers_2> | undefined;
-    PASSWORD?: string | Resolver<string> | undefined;
-    TOKEN?: string | Resolver<string> | undefined;
-    USERNAME?: string | Resolver<string> | undefined;
-    VERSION: string;
-    WITH_CREDENTIALS: boolean;
-    interceptors: {
-        request: Interceptors<RequestInit>;
-        response: Interceptors<Response>;
-    };
-};
-
-export declare class Planka {
-    private accessToken;
-    setAccessToken(accessToken: string): void;
-    getAccessToken(): string;
-    ActionService: ActionService;
-    AttachmentService: AttachmentService;
-    AuthService: AuthService;
-    BoardService: BoardService;
-    CardService: CardService;
-    LabelService: LabelService;
-    ListService: ListService;
-    NotificationService: NotificationService;
-    ProjectService: ProjectService;
-    TaskService: TaskService;
-    UserService: UserService;
-    constructor();
-}
 
 export declare type Project = {
     id: string;
@@ -1187,79 +732,24 @@ export declare type ProjectManager = {
     userId: string;
 };
 
-declare class ProjectService {
-    private planka;
-    constructor(planka: Planka);
-    /**
-     * @returns ArrayResponse<Project> Ok
-     * @throws ApiError
-     */
-    getAll(): CancelablePromise<$OpenApiTs['/api/projects']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns SingleResponse<Project> Ok
-     * @throws ApiError
-     */
-    create(data: $OpenApiTs['/api/projects']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects']['post']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.projectId
-     * @param data.requestBody
-     * @returns SingleResponse<Project> Ok
-     * @throws ApiError
-     */
-    get(data: $OpenApiTs['/api/projects/{projectId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.projectId
-     * @param data.requestBody
-     * @returns SingleResponse<Project> Ok
-     * @throws ApiError
-     */
-    update(data: $OpenApiTs['/api/projects/{projectId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['patch']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.projectId
-     * @param data.requestBody
-     * @returns SingleResponse<Project> Ok
-     * @throws ApiError
-     */
-    remove(data: $OpenApiTs['/api/projects/{projectId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}']['delete']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.projectId
-     * @param data.requestBody
-     * @returns SingleResponse<Project> Ok
-     * @throws ApiError
-     */
-    setBackgroundImage(data: $OpenApiTs['/api/projects/{projectId}/background-image']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.projectId
-     * @param data.requestBody
-     * @returns SingleResponse<ProjectManager> Ok
-     * @throws ApiError
-     */
-    addManager(data: $OpenApiTs['/api/projects/{projectId}/managers']['post']['req']): CancelablePromise<$OpenApiTs['/api/projects/{projectId}/background-image']['post']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.managerId
-     * @param data.requestBody
-     * @returns SingleResponse<ProjectManager> Ok
-     * @throws ApiError
-     */
-    removeManager(data: $OpenApiTs['/api/project-managers/{managerId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/project-managers/{managerId}']['delete']['res'][200]>;
-}
-
-declare type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
-
 export declare type Role = 'editor' | 'viewer';
 
 export declare type SingleResponse<T> = {
     item: T;
     included?: Partial<Include>;
 };
+
+export declare const sortList: <ThrowOnError extends boolean = false>(options: Options<SortListRequest, ThrowOnError>) => RequestResult<SortListResponse, SortListError, ThrowOnError>;
+
+export declare type SortListError = UnauthorizedError | NotFoundError;
+
+export declare type SortListRequest = {
+    path: {
+        id: string;
+    };
+};
+
+export declare type SortListResponse = SingleResponse<List>;
 
 export declare enum StatusCode {
     s400 = "Bad request",
@@ -1284,17 +774,238 @@ export declare type Task = {
     cardId: string;
 };
 
-declare class TaskService {
-    private planka;
-    constructor(planka: Planka);
-    create(data: $OpenApiTs['/api/cards/{cardId}/tasks']['post']['req']): CancelablePromise<$OpenApiTs['/api/cards/{cardId}/tasks']['post']['res'][200]>;
-    update(data: $OpenApiTs['/api/tasks/{taskId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/tasks/{taskId}']['patch']['res'][200]>;
-    remove(data: $OpenApiTs['/api/tasks/{taskId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/tasks/{taskId}']['delete']['res'][200]>;
-}
+export declare const unauthorize: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<UnauthorizeResponse, BaseError, ThrowOnError>;
 
 export declare type UnauthorizedError = BaseError;
 
+export declare type UnauthorizeError = UnauthorizedError;
+
+export declare type UnauthorizeResponse = SingleResponse<string>;
+
 export declare type UnprocessableError = BaseError;
+
+export declare const updateAttachment: <ThrowOnError extends boolean = false>(options: Options<UpdateAttachmentRequest, ThrowOnError>) => RequestResult<UpdateAttachmentResponse, UpdateAttachmentError, ThrowOnError>;
+
+export declare type UpdateAttachmentError = UnauthorizedError | NotFoundError;
+
+export declare type UpdateAttachmentRequest = {
+    path: {
+        id: string;
+    };
+    body: Partial<Attachment>;
+};
+
+export declare type UpdateAttachmentResponse = SingleResponse<Attachment>;
+
+export declare const updateBoard: <ThrowOnError extends boolean = false>(options: Options<UpdateBoardRequest, ThrowOnError>) => RequestResult<UpdateBoardResponse, UpdateBoardError, ThrowOnError>;
+
+export declare type UpdateBoardError = UnauthorizedError | NotFoundError;
+
+export declare const updateBoardMembership: <ThrowOnError extends boolean = false>(options: Options<UpdateBoardMembershipRequest, ThrowOnError>) => RequestResult<UpdateBoardMembershipResponse, UpdateBoardMembershipError, ThrowOnError>;
+
+export declare type UpdateBoardMembershipError = UnauthorizedError | NotFoundError;
+
+export declare type UpdateBoardMembershipRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        role: Role;
+        canComment: boolean;
+    };
+};
+
+export declare type UpdateBoardMembershipResponse = SingleResponse<BoardMembership>;
+
+export declare type UpdateBoardRequest = {
+    path: {
+        id: string;
+    };
+    body: Partial<Board>;
+};
+
+export declare type UpdateBoardResponse = SingleResponse<Board>;
+
+export declare const updateCard: <ThrowOnError extends boolean = false>(options: Options<UpdateCardRequest, ThrowOnError>) => RequestResult<UpdateCardResponse, UpdateCardError, ThrowOnError>;
+
+export declare type UpdateCardError = UnauthorizedError | NotFoundError;
+
+export declare type UpdateCardRequest = {
+    path: {
+        id: string;
+    };
+    body: Partial<Card>;
+};
+
+export declare type UpdateCardResponse = SingleResponse<Card>;
+
+export declare const updateCommentAction: <ThrowOnError extends boolean = false>(options: Options<UpdateCommentActionRequest, ThrowOnError>) => RequestResult<UpdateCommentActionResponse, UpdateCommentActionError, ThrowOnError>;
+
+export declare type UpdateCommentActionError = UnauthorizedError | NotFoundError;
+
+export declare type UpdateCommentActionRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        text: string;
+    };
+};
+
+export declare type UpdateCommentActionResponse = SingleResponse<Comment_2>;
+
+export declare const updateLabel: <ThrowOnError extends boolean = false>(options: Options<UpdateLabelRequest, ThrowOnError>) => RequestResult<UpdateLabelResponse, UpdateLabelError, ThrowOnError>;
+
+export declare type UpdateLabelError = UnauthorizedError | NotFoundError;
+
+export declare type UpdateLabelRequest = {
+    path: {
+        id: string;
+    };
+    body: Partial<Label>;
+};
+
+export declare type UpdateLabelResponse = SingleResponse<Label>;
+
+export declare const updateList: <ThrowOnError extends boolean = false>(options: Options<UpdateListRequest, ThrowOnError>) => RequestResult<UpdateListResponse, UpdateListError, ThrowOnError>;
+
+export declare type UpdateListError = UnauthorizedError | NotFoundError;
+
+export declare type UpdateListRequest = {
+    path: {
+        id: string;
+    };
+    body: Partial<List>;
+};
+
+export declare type UpdateListResponse = SingleResponse<List>;
+
+export declare const updateNotifications: <ThrowOnError extends boolean = false>(options: Options<UpdateNotificationsRequest, ThrowOnError>) => RequestResult<UpdateNotificationsResponse, NotFoundError, ThrowOnError>;
+
+export declare type UpdateNotificationsError = NotFoundError;
+
+export declare type UpdateNotificationsRequest = {
+    path: {
+        ids: string;
+    };
+    body: Partial<Notification_2>;
+};
+
+export declare type UpdateNotificationsResponse = ArrayResponse<Notification_2>;
+
+export declare const updateProject: <ThrowOnError extends boolean = false>(options: Options<UpdateProjectRequest, ThrowOnError>) => RequestResult<UpdateProjectResponse, UpdateProjectError, ThrowOnError>;
+
+export declare const updateProjectBackgroundImage: <ThrowOnError extends boolean = false>(options: Options<UpdateProjectBackgroundImageRequest, ThrowOnError>) => RequestResult<UpdateProjectBackgroundImageResponse, UpdateProjectBackgroundImageError, ThrowOnError>;
+
+export declare type UpdateProjectBackgroundImageError = BadRequestError | UnauthorizedError | NotFoundError | UnprocessableError;
+
+export declare type UpdateProjectBackgroundImageRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        file: File;
+    };
+};
+
+export declare type UpdateProjectBackgroundImageResponse = SingleResponse<Project>;
+
+export declare type UpdateProjectError = UnauthorizeError | NotFoundError;
+
+export declare type UpdateProjectRequest = {
+    path: {
+        id: string;
+    };
+    body: Partial<Project>;
+};
+
+export declare type UpdateProjectResponse = SingleResponse<Project>;
+
+export declare const updateTask: <ThrowOnError extends boolean = false>(options: Options<UpdateTaskRequest, ThrowOnError>) => RequestResult<UpdateTaskResponse, UpdateTaskError, ThrowOnError>;
+
+export declare type UpdateTaskError = UnauthorizedError | NotFoundError;
+
+export declare type UpdateTaskRequest = {
+    path: {
+        taskId: string;
+    };
+    body: Partial<Task>;
+};
+
+export declare type UpdateTaskResponse = SingleResponse<Task>;
+
+export declare const updateUser: <ThrowOnError extends boolean = false>(options: Options<UpdateUserRequest, ThrowOnError>) => RequestResult<UpdateUserResponse, UpdateUserError, ThrowOnError>;
+
+export declare const updateUserAvatar: <ThrowOnError extends boolean = false>(options: Options<UpdateUserAvatarRequest, ThrowOnError>) => RequestResult<UpdateUserAvatarResponse, UpdateUserAvatarError, ThrowOnError>;
+
+export declare type UpdateUserAvatarError = BadRequestError | UnauthorizedError | NotFoundError | UnprocessableError;
+
+export declare type UpdateUserAvatarRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        file: File;
+    };
+};
+
+export declare type UpdateUserAvatarResponse = SingleResponse<User>;
+
+export declare const updateUserEmail: <ThrowOnError extends boolean = false>(options: Options<UpdateUserEmailRequest, ThrowOnError>) => RequestResult<UpdateUserEmailResponse, UpdateUserEmailError, ThrowOnError>;
+
+export declare type UpdateUserEmailError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+
+export declare type UpdateUserEmailRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        email: string;
+    };
+};
+
+export declare type UpdateUserEmailResponse = SingleResponse<User>;
+
+export declare type UpdateUserError = BadRequestError | UnauthorizedError | NotFoundError;
+
+export declare const updateUserPassword: <ThrowOnError extends boolean = false>(options: Options<UpdateUserPasswordRequest, ThrowOnError>) => RequestResult<UpdateUserPasswordResponse, UpdateUserPasswordError, ThrowOnError>;
+
+export declare type UpdateUserPasswordError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+
+export declare type UpdateUserPasswordRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        password: string;
+    };
+};
+
+export declare type UpdateUserPasswordResponse = SingleResponse<User>;
+
+export declare type UpdateUserRequest = {
+    path: {
+        id: string;
+    };
+    body: Partial<User>;
+};
+
+export declare type UpdateUserResponse = SingleResponse<User>;
+
+export declare const updateUserUsername: <ThrowOnError extends boolean = false>(options: Options<UpdateUserUsernameRequest, ThrowOnError>) => RequestResult<UpdateUserUsernameResponse, UpdateUserUsernameError, ThrowOnError>;
+
+export declare type UpdateUserUsernameError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+
+export declare type UpdateUserUsernameRequest = {
+    path: {
+        id: string;
+    };
+    body: {
+        username: string;
+    };
+};
+
+export declare type UpdateUserUsernameResponse = SingleResponse<User>;
 
 export declare type User = {
     id: string;
@@ -1311,77 +1022,5 @@ export declare type User = {
     updatedAt?: Date;
     deletedAt?: Date;
 };
-
-declare class UserService {
-    private planka;
-    constructor(planka: Planka);
-    /**
-     * @returns ArrayResponse<User> Ok
-     * @throws ApiError
-     */
-    getAll(): CancelablePromise<$OpenApiTs['/api/users']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    create(data: $OpenApiTs['/api/users']['post']['req']): CancelablePromise<$OpenApiTs['/api/users']['post']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    get(data: $OpenApiTs['/api/users/{userId}']['get']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['get']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    update(data: $OpenApiTs['/api/users/{userId}']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['patch']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    remove(data: $OpenApiTs['/api/users/{userId}']['delete']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}']['delete']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    updateMail(data: $OpenApiTs['/api/users/{userId}/email']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/email']['patch']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    updatePassword(data: $OpenApiTs['/api/users/{userId}/password']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/password']['patch']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    updateName(data: $OpenApiTs['/api/users/{userId}/username']['patch']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/username']['patch']['res'][200]>;
-    /**
-     * @param data The data for the request.
-     * @param data.userId
-     * @param data.requestBody
-     * @returns SingleResponse<User> Ok
-     * @throws ApiError
-     */
-    updateAvatar(data: $OpenApiTs['/api/users/{userId}/avatar']['post']['req']): CancelablePromise<$OpenApiTs['/api/users/{userId}/avatar']['post']['res'][200]>;
-}
 
 export { }

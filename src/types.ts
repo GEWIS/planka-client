@@ -306,854 +306,608 @@ export enum StatusCode {
   s422 = 'Bad request (unprocessable)',
 }
 
-/*
-  Routes
- */
+// 'GET /api/config': 'show-config'
+export type GetConfigResponse = SingleResponse<Oidc>;
+export type GetConfigError = unknown;
+
+// 'POST /api/access-tokens': 'access-tokens/create'
+export type AuthorizeRequest = {
+  body: AccessTokenRequest;
+};
+export type AuthorizeResponse = SingleResponse<string>;
+export type AuthorizeError = BadRequestError;
+
+// 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
+export type AuthorizeOidcRequest = {
+  body: AccessTokenOidcRequest;
+};
+export type AuthorizeOidcResponse = SingleResponse<string>;
+export type AuthorizeOidcError = BadRequestError | UnauthorizedError;
+
+// 'DELETE /api/access-tokens/me': 'access-tokens/delete'
+export type UnauthorizeResponse = SingleResponse<string>;
+export type UnauthorizeError = UnauthorizedError;
+
+// 'GET /api/users': 'users/index'
+export type GetUsersResponse = ArrayResponse<User>;
+export type GetUsersError = UnauthorizedError;
+
+// 'POST /api/users': 'users/create'
+export type CreateUserRequest = {
+  body: {
+    email: string;
+    password: string;
+    name: string;
+    username?: string;
+  };
+};
+export type CreateUserResponse = SingleResponse<User>;
+export type CreateUserError = BadRequestError | UnauthorizedError | ConflictError;
+
+// 'GET /api/users/:id': 'users/show'
+export type GetUserRequest = {
+  path: {
+    id: string;
+  };
+};
+export type GetUserResponse = SingleResponse<User>;
+export type GetUserError = UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/users/:id/email': 'users/update-email'
+export type UpdateUserRequest = {
+  path: {
+    id: string;
+  };
+  body: Partial<User>;
+};
+export type UpdateUserResponse = SingleResponse<User>;
+export type UpdateUserError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/users/:id/email': 'users/update-email'
+export type UpdateUserEmailRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    email: string;
+  };
+};
+export type UpdateUserEmailResponse = SingleResponse<User>;
+export type UpdateUserEmailError =
+  | BadRequestError
+  | UnauthorizedError
+  | NotFoundError
+  | ConflictError;
+
+// 'PATCH /api/users/:id/password': 'users/update-password'
+export type UpdateUserPasswordRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    password: string;
+  };
+};
+export type UpdateUserPasswordResponse = SingleResponse<User>;
+export type UpdateUserPasswordError =
+  | BadRequestError
+  | UnauthorizedError
+  | NotFoundError
+  | ConflictError;
+
+// 'PATCH /api/users/:id/username': 'users/update-username'
+export type UpdateUserUsernameRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    username: string;
+  };
+};
+export type UpdateUserUsernameResponse = SingleResponse<User>;
+export type UpdateUserUsernameError =
+  | BadRequestError
+  | UnauthorizedError
+  | NotFoundError
+  | ConflictError;
+
+// 'PATCH /api/users/:id/username': 'users/update-username'
+export type UpdateUserAvatarRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    // TODO check if this is correct
+    file: File;
+  };
+};
+export type UpdateUserAvatarResponse = SingleResponse<User>;
+export type UpdateUserAvatarError =
+  | BadRequestError
+  | UnauthorizedError
+  | NotFoundError
+  | UnprocessableError;
+
+// 'DELETE /api/users/:id': 'users/delete'
+export type DeleteUserRequest = {
+  path: {
+    id: string;
+  };
+  body: User;
+};
+export type DeleteUserResponse = void;
+export type DeleteUserError = UnauthorizedError | NotFoundError;
+
+// 'GET /api/projects': 'projects/index'
+export type GetProjectsResponse = ArrayResponse<Project>;
+export type GetProjectsError = UnauthorizedError;
+
+// 'POST /api/projects': 'projects/create'
+export type CreateProjectRequest = {
+  body: {
+    name: string;
+  };
+};
+export type CreateProjectResponse = SingleResponse<Project>;
+export type CreateProjectError = BadRequestError | UnauthorizedError;
+
+// 'GET /api/projects/:id': 'projects/show'
+export type GetProjectRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    name: string;
+  };
+};
+export type GetProjectResponse = SingleResponse<Project>;
+export type GetProjectError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'POST /api/projects/:id/background-image': 'projects/update-background-image'
+export type UpdateProjectBackgroundImageRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    // TODO check if this is correct
+    file: File;
+  };
+};
+export type UpdateProjectBackgroundImageResponse = SingleResponse<Project>;
+export type UpdateProjectBackgroundImageError =
+  | BadRequestError
+  | UnauthorizedError
+  | NotFoundError
+  | UnprocessableError;
+
+// 'PATCH /api/projects/:id': 'projects/update'
+export type UpdateProjectRequest = {
+  path: {
+    id: string;
+  };
+  body: Partial<Project>;
+};
+export type UpdateProjectResponse = SingleResponse<Project>;
+export type UpdateProjectError = UnauthorizeError | NotFoundError;
+
+// 'DELETE /api/projects/:id': 'projects/delete'
+export type DeleteProjectRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteProjectResponse = SingleResponse<Project>;
+export type DeleteProjectError = UnauthorizeError | NotFoundError;
+
+// 'POST /api/projects/:projectId/managers': 'project-managers/create'
+export type CreateProjectManagerRequest = {
+  path: {
+    projectId: string;
+  };
+  body: {
+    userId: string;
+  };
+};
+export type CreateProjectManagerResponse = SingleResponse<ProjectManager>;
+export type CreateProjectManagerError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/project-managers/:id': 'project-managers/delete'
+export type DeleteProjectManagerRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteProjectManagerResponse = SingleResponse<ProjectManager>;
+export type DeleteProjectManagerError = BadRequestError | UnauthorizedError;
+
+// 'POST /api/projects/:projectId/boards': 'boards/create'
+export type CreateBoardRequest = {
+  path: {
+    projectId: string;
+  };
+  body: {
+    position: number;
+    name: string;
+  };
+};
+export type CreateBoardResponse = SingleResponse<Board>;
+export type CreateBoardError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'GET /api/boards/:id': 'boards/show'
+export type GetBoardRequest = {
+  path: {
+    id: string;
+  };
+};
+export type GetBoardResponse = SingleResponse<Board>;
+export type GetBoardError = UnauthorizeError | NotFoundError;
+
+// 'PATCH /api/boards/:id': 'boards/update'
+export type UpdateBoardRequest = {
+  path: {
+    id: string;
+  };
+  body: Partial<Board>;
+};
+export type UpdateBoardResponse = SingleResponse<Board>;
+export type UpdateBoardError = UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/boards/:id': 'boards/delete'
+export type DeleteBoardRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteBoardResponse = SingleResponse<void>;
+export type DeleteBoardError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
+export type CreateBoardMembershipRequest = {
+  path: {
+    boardId: string;
+  };
+  body: {
+    userId: string;
+    role: Role;
+  };
+};
+export type CreateBoardMembershipResponse = SingleResponse<Board>;
+export type CreateBoardMembershipError =
+  | BadRequestError
+  | UnauthorizedError
+  | NotFoundError
+  | ConflictError;
+
+// 'PATCH /api/board-memberships/:id': 'board-memberships/update'
+export type UpdateBoardMembershipRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    role: Role;
+    canComment: boolean;
+  };
+};
+export type UpdateBoardMembershipResponse = SingleResponse<BoardMembership>;
+export type UpdateBoardMembershipError = UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
+export type DeleteBoardMembershipRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteBoardMembershipResponse = SingleResponse<BoardMembership>;
+export type DeleteBoardMembershipError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/boards/:boardId/labels': 'labels/create'
+export type CreateLabelRequest = {
+  path: {
+    boardId: string;
+  };
+  body: {
+    position: number;
+    color: LabelColor;
+  };
+};
+export type CreateLabelResponse = SingleResponse<Label>;
+export type CreateLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/labels/:id': 'labels/update'
+export type UpdateLabelRequest = {
+  path: {
+    id: string;
+  };
+  body: Partial<Label>;
+};
+export type UpdateLabelResponse = SingleResponse<Label>;
+export type UpdateLabelError = UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/labels/:id': 'labels/delete'
+export type DeleteLabelRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteLabelResponse = SingleResponse<Label>;
+export type DeleteLabelError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/boards/:boardId/lists': 'lists/create'
+export type CreateListRequest = {
+  path: {
+    boardId: string;
+  };
+  body: {
+    position: number;
+    name: string;
+  };
+};
+export type CreateListResponse = SingleResponse<List>;
+export type CreateListError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/lists/:id': 'lists/update'
+export type UpdateListRequest = {
+  path: {
+    id: string;
+  };
+  body: Partial<List>;
+};
+export type UpdateListResponse = SingleResponse<List>;
+export type UpdateListError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/lists/:id/sort': 'lists/sort'
+export type SortListRequest = {
+  path: {
+    id: string;
+  };
+};
+export type SortListResponse = SingleResponse<List>;
+export type SortListError = UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/lists/:id': 'lists/delete'
+export type DeleteListRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteListResponse = SingleResponse<List>;
+export type DeleteListError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/lists/:listId/cards': 'cards/create'
+export type CreateCardRequest = {
+  path: {
+    listId: string;
+  };
+  body: {
+    name: string;
+    position: number;
+  };
+};
+export type CreateCardResponse = SingleResponse<Card>;
+export type CreateCardError =
+  | BadRequestError
+  | UnauthorizedError
+  | NotFoundError
+  | UnprocessableError;
+
+// 'GET /api/cards/:id': 'cards/show'
+export type GetCardRequest = {
+  path: {
+    id: string;
+  };
+};
+export type GetCardResponse = SingleResponse<Card>;
+export type GetCardError = UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/cards/:id': 'cards/update'
+export type UpdateCardRequest = {
+  path: {
+    id: string;
+  };
+  body: Partial<Card>;
+};
+export type UpdateCardResponse = SingleResponse<Card>;
+export type UpdateCardError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/cards/:id/duplicate': 'cards/duplicate'
+export type DuplicateCardRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    position: number;
+  };
+};
+export type DuplicateCardResponse = SingleResponse<Card>;
+export type DuplicateCardError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/cards/:id': 'cards/delete'
+export type DeleteCardRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteCardResponse = SingleResponse<Card>;
+export type DeleteCardError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
+export type CreateCardMembershipRequest = {
+  path: {
+    cardId: string;
+  };
+  body: {
+    userId: string;
+  };
+};
+export type CreateCardMembershipResponse = SingleResponse<CardMembership>;
+export type CreateCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
+export type DeleteCardMembershipRequest = {
+  path: {
+    cardId: string;
+  };
+  body: {
+    userId: string;
+  };
+};
+export type DeleteCardMembershipResponse = SingleResponse<CardMembership>;
+export type DeleteCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'POST /api/cards/:cardId/labels': 'card-labels/create'
+export type CreateCardLabelRequest = {
+  path: {
+    cardId: string;
+  };
+  body: {
+    labelId: string;
+  };
+};
+export type CreateCardLabelResponse = SingleResponse<CardLabel>;
+export type CreateCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
+export type DeleteCardLabelRequest = {
+  path: {
+    cardId: string;
+    labelId: string;
+  };
+};
+export type DeleteCardLabelResponse = SingleResponse<CardLabel>;
+export type DeleteCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'POST /api/cards/:cardId/tasks': 'tasks/create'
+export type CreateTaskRequest = {
+  path: {
+    cardId: string;
+  };
+  body: {
+    position: number;
+    name: string;
+  };
+};
+export type CreateTaskResponse = SingleResponse<Task>;
+export type CreateTaskError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/tasks/:id': 'tasks/update'
+export type UpdateTaskRequest = {
+  path: {
+    taskId: string;
+  };
+  body: Partial<Task>;
+};
+export type UpdateTaskResponse = SingleResponse<Task>;
+export type UpdateTaskError = UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/tasks/:id': 'tasks/delete'
+export type DeleteTaskRequest = {
+  path: {
+    taskId: string;
+  };
+};
+export type DeleteTaskResponse = SingleResponse<Task>;
+export type DeleteTaskError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/cards/:cardId/attachments': 'attachments/create'
+// TODO CHECK
+export type CreateAttachmentRequest = {
+  path: {
+    cardId: string;
+  };
+  body: {
+    text: string;
+  };
+};
+export type CreateAttachmentResponse = SingleResponse<Attachment>;
+export type CreateAttachmentError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/attachments/:id': 'attachments/update'
+export type UpdateAttachmentRequest = {
+  path: {
+    id: string;
+  };
+  body: Partial<Attachment>;
+};
+export type UpdateAttachmentResponse = SingleResponse<Attachment>;
+export type UpdateAttachmentError = UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/attachments/:id': 'attachments/delete'
+export type DeleteAttachmentRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteAttachmentResponse = SingleResponse<Attachment>;
+export type DeleteAttachmentError = UnauthorizedError | NotFoundError;
+
+// 'GET /api/cards/:cardId/actions': 'actions/index'
+export type GetCardActionsRequest = {
+  path: {
+    cardId: string;
+  };
+};
+export type GetCardActionsResponse = ArrayResponse<Action>;
+export type GetCardActionsError = UnauthorizedError | NotFoundError;
+
+// 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
+export type CreateCommentActionRequest = {
+  path: {
+    cardId: string;
+  };
+  body: {
+    text: string;
+  };
+};
+export type CreateCommentActionResponse = SingleResponse<Comment>;
+export type CreateCommentActionError = BadRequestError | UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/comment-actions/:id': 'comment-actions/update'
+export type UpdateCommentActionRequest = {
+  path: {
+    id: string;
+  };
+  body: {
+    text: string;
+  };
+};
+export type UpdateCommentActionResponse = SingleResponse<Comment>;
+export type UpdateCommentActionError = UnauthorizedError | NotFoundError;
+
+// 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
+export type DeleteCommentActionRequest = {
+  path: {
+    id: string;
+  };
+};
+export type DeleteCommentActionResponse = SingleResponse<Comment>;
+export type DeleteCommentActionError = UnauthorizedError | NotFoundError;
+
+// 'GET /api/notifications': 'notifications/index'
+export type GetNotificationsResponse = ArrayResponse<Notification>;
+export type GetNotificationsError = UnauthorizedError | NotFoundError;
+
+// 'GET /api/notifications/:id': 'notifications/show'
+export type GetNotificationRequest = {
+  path: {
+    id: string;
+  };
+};
+export type GetNotificationResponse = ArrayResponse<Notification>;
+export type GetNotificationError = UnauthorizedError | NotFoundError;
+
+// 'PATCH /api/notifications/:ids': 'notifications/update'
+// TODO check if correct
+export type UpdateNotificationsRequest = {
+  path: {
+    ids: string;
+  };
+  body: Partial<Notification>;
+};
+export type UpdateNotificationsResponse = ArrayResponse<Notification>;
+export type UpdateNotificationsError = NotFoundError;
+
+// TODO - these still need to be implemented
 export type $OpenApiTs = {
-  // 'GET /api/config': 'show-config'
-  '/api/config': {
-    get: {
-      res: {
-        200: SingleResponse<Oidc>;
-      };
-    };
-  };
-
-  // 'POST /api/access-tokens': 'access-tokens/create'
-  '/api/access-tokens': {
-    post: {
-      req: {
-        requestBody: AccessTokenRequest;
-      };
-      res: {
-        200: SingleResponse<string>;
-        400: BadRequestError;
-      };
-    };
-  };
-
-  // 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
-  '/api/access-tokens/exchange-using-oidc': {
-    post: {
-      req: {
-        requestBody: AccessTokenOidcRequest;
-      };
-      res: {
-        200: SingleResponse<string>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-      };
-    };
-  };
-
-  // 'DELETE /api/access-tokens/me': 'access-tokens/delete'
-  '/api/access-tokens/me': {
-    delete: {
-      res: {
-        200: SingleResponse<string>;
-        401: UnauthorizedError;
-      };
-    };
-  };
-
-  // 'GET /api/users': 'users/index'
-  // 'POST /api/users': 'users/create'
-  '/api/users': {
-    get: {
-      res: {
-        200: ArrayResponse<User>;
-        401: UnauthorizedError;
-      };
-    };
-    post: {
-      req: {
-        requestBody: {
-          email: string;
-          password: string;
-          name: string;
-          username?: string;
-        };
-      };
-      res: {
-        200: SingleResponse<User>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        409: ConflictError;
-      };
-    };
-  };
-
-  // 'GET /api/users/:id': 'users/show'
-  // 'PATCH /api/users/:id': 'users/update'
-  // 'DELETE /api/users/:id': 'users/delete'
-  '/api/users/{userId}': {
-    get: {
-      req: {
-        userId: string;
-      };
-      res: {
-        200: SingleResponse<User>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    patch: {
-      req: {
-        userId: string;
-        requestBody: Partial<User>;
-      };
-      res: {
-        200: SingleResponse<User>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        userId: string;
-        requestBody: User;
-      };
-      res: {
-        200: void;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'PATCH /api/users/:id/email': 'users/update-email'
-  '/api/users/{userId}/email': {
-    patch: {
-      req: {
-        userId: string;
-        requestBody: {
-          email: string;
-        };
-      };
-      res: {
-        200: SingleResponse<User>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        409: ConflictError;
-      };
-    };
-  };
-
-  // 'PATCH /api/users/:id/password': 'users/update-password'
-  '/api/users/{userId}/password': {
-    patch: {
-      req: {
-        userId: string;
-        requestBody: {
-          password: string;
-        };
-      };
-      res: {
-        200: SingleResponse<User>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        409: ConflictError;
-      };
-    };
-  };
-
-  // 'PATCH /api/users/:id/username': 'users/update-username'
-  '/api/users/{userId}/username': {
-    patch: {
-      req: {
-        userId: string;
-        requestBody: {
-          username: string;
-        };
-      };
-      res: {
-        200: SingleResponse<User>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        409: ConflictError;
-      };
-    };
-  };
-
-  // 'POST /api/users/:id/avatar': 'users/update-avatar'
-  '/api/users/{userId}/avatar': {
-    post: {
-      req: {
-        userId: string;
-        requestBody: {
-          // TODO check correctness
-          file: File;
-        };
-      };
-      res: {
-        200: SingleResponse<User>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        422: UnprocessableError;
-      };
-    };
-  };
-
-  // 'GET /api/projects': 'projects/index'
-  // 'POST /api/projects': 'projects/create'
-  '/api/projects': {
-    get: {
-      res: {
-        200: ArrayResponse<Project>;
-        401: UnauthorizedError;
-      };
-    };
-    post: {
-      req: {
-        requestBody: {
-          name: string;
-        };
-      };
-      res: {
-        200: SingleResponse<Project>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-      };
-    };
-  };
-
-  // 'GET /api/projects/:id': 'projects/show'
-  // 'PATCH /api/projects/:id': 'projects/update'
-  // 'DELETE /api/projects/:id': 'projects/delete'
-  '/api/projects/{projectId}': {
-    get: {
-      req: {
-        projectId: string;
-        requestBody: {
-          name: string;
-        };
-      };
-      res: {
-        200: SingleResponse<Project>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    patch: {
-      req: {
-        projectId: string;
-        requestBody: Partial<Project>;
-      };
-      res: {
-        200: SingleResponse<Project>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        projectId: string;
-      };
-      res: {
-        200: SingleResponse<Project>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/projects/:id/background-image': 'projects/update-background-image'
-  '/api/projects/{projectId}/background-image': {
-    post: {
-      req: {
-        projectId: string;
-        requestBody: {
-          // TODO check correctness
-          file: File;
-        };
-      };
-      res: {
-        200: SingleResponse<Project>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        422: UnprocessableError;
-      };
-    };
-  };
-
-  // 'POST /api/projects/:projectId/managers': 'project-managers/create'
-  '/api/projects/{projectId}/managers': {
-    post: {
-      req: {
-        projectId: string;
-        requestBody: {
-          userId: string;
-        };
-      };
-      res: {
-        200: SingleResponse<ProjectManager>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'DELETE /api/project-managers/:id': 'project-managers/delete'
-  '/api/project-managers/{managerId}': {
-    delete: {
-      req: {
-        managerId: string;
-      };
-      res: {
-        200: SingleResponse<ProjectManager>;
-        400: NotFoundError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/projects/:projectId/boards': 'boards/create'
-  '/api/projects/{projectId}/boards': {
-    post: {
-      req: {
-        projectId: string;
-        requestBody: {
-          position: number;
-          name: string;
-        };
-      };
-      res: {
-        200: SingleResponse<Board>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'GET /api/boards/:id': 'boards/show'
-  // 'PATCH /api/boards/:id': 'boards/update'
-  // 'DELETE /api/boards/:id': 'boards/delete'
-  '/api/boards/{boardId}': {
-    get: {
-      req: {
-        boardId: string;
-      };
-      res: {
-        200: SingleResponse<Board>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    patch: {
-      req: {
-        boardId: string;
-        requestBody: Partial<Board>;
-      };
-      res: {
-        200: SingleResponse<Board>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        boardId: string;
-      };
-      res: {
-        200: SingleResponse<Board>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
-  '/api/boards/{boardId}/memberships': {
-    post: {
-      req: {
-        boardId: string;
-        requestBody: {
-          userId: string;
-          role: Role;
-        };
-      };
-      res: {
-        200: SingleResponse<Board>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        409: ConflictError;
-      };
-    };
-  };
-
-  // 'PATCH /api/board-memberships/:id': 'board-memberships/update'
-  // 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
-  '/api/board-memberships/{membershipId}': {
-    patch: {
-      req: {
-        membershipId: string;
-        requestBody: {
-          role: Role;
-          canComment: boolean;
-        };
-      };
-      res: {
-        200: SingleResponse<BoardMembership>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        membershipId: string;
-      };
-      res: {
-        200: SingleResponse<BoardMembership>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/boards/:boardId/labels': 'labels/create'
-  '/api/boards/{boardId}/labels': {
-    post: {
-      req: {
-        boardId: string;
-        requestBody: {
-          position: number;
-          color: LabelColor;
-        };
-      };
-      res: {
-        200: SingleResponse<Label>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'PATCH /api/labels/:id': 'labels/update'
-  // 'DELETE /api/labels/:id': 'labels/delete'
-  '/api/labels/{labelId}': {
-    patch: {
-      req: {
-        labelId: string;
-        requestBody: Partial<Label>;
-      };
-      res: {
-        200: SingleResponse<Label>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        labelId: string;
-      };
-      res: {
-        200: SingleResponse<Label>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/boards/:boardId/lists': 'lists/create'
-  '/api/boards/{boardId}/lists': {
-    post: {
-      req: {
-        boardId: string;
-        requestBody: {
-          position: number;
-          name: string;
-        };
-      };
-      res: {
-        200: SingleResponse<List>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'PATCH /api/lists/:id': 'lists/update'
-  // 'DELETE /api/lists/:id': 'lists/delete'
-  '/api/lists/{listId}': {
-    patch: {
-      req: {
-        listId: string;
-        requestBody: Partial<List>;
-      };
-      res: {
-        200: SingleResponse<List>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        listId: string;
-      };
-      res: {
-        200: SingleResponse<Label>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/lists/:id/sort': 'lists/sort'
-  '/api/lists/{listId}/sort': {
-    post: {
-      req: {
-        listId: number;
-      };
-      res: {
-        200: SingleResponse<List>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/lists/:listId/cards': 'cards/create'
-  '/api/lists/{listId}/cards': {
-    post: {
-      req: {
-        listId: number;
-        requestBody: {
-          name: string;
-          position: number;
-        };
-      };
-      res: {
-        200: SingleResponse<List>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        422: UnprocessableError;
-      };
-    };
-  };
-
-  // 'GET /api/cards/:id': 'cards/show'
-  // 'PATCH /api/cards/:id': 'cards/update'
-  // 'DELETE /api/cards/:id': 'cards/delete'
-  '/api/cards/{cardId}': {
-    get: {
-      req: {
-        cardId: string;
-      };
-      res: {
-        200: SingleResponse<Card>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    patch: {
-      req: {
-        cardId: string;
-        requestBody: Partial<Card>;
-      };
-      res: {
-        200: SingleResponse<Card>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        cardId: string;
-      };
-      res: {
-        200: SingleResponse<Card>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/cards/:id/duplicate': 'cards/duplicate'
-  '/api/cards/{cardId}/duplicate': {
-    post: {
-      req: {
-        cardId: string;
-        requestBody: {
-          position: number;
-        };
-      };
-      res: {
-        200: SingleResponse<Card>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
-  // 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
-  '/api/cards/{cardId}/memberships': {
-    post: {
-      req: {
-        cardId: string;
-        requestBody: {
-          userId: string;
-        };
-      };
-      res: {
-        200: SingleResponse<CardMembership>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        cardId: string;
-        requestBody: {
-          userId: string;
-        };
-      };
-      res: {
-        200: SingleResponse<CardMembership>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/cards/:cardId/labels': 'card-labels/create'
-  '/api/cards/{cardId}/labels': {
-    post: {
-      req: {
-        cardId: string;
-        requestBody: {
-          labelId: string;
-        };
-      };
-      res: {
-        200: SingleResponse<CardLabel>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
-  '/api/cards/{cardId}/labels/{labelId}': {
-    delete: {
-      req: {
-        cardId: string;
-        labelId: string;
-      };
-      res: {
-        200: SingleResponse<CardLabel>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/cards/:cardId/tasks': 'tasks/create'
-  '/api/cards/{cardId}/tasks': {
-    post: {
-      req: {
-        cardId: string;
-        requestBody: {
-          position: number;
-          name: string;
-        };
-      };
-      res: {
-        200: SingleResponse<Task>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'PATCH /api/tasks/:id': 'tasks/update'
-  // 'DELETE /api/tasks/:id': 'tasks/delete'
-  '/api/tasks/{taskId}': {
-    patch: {
-      req: {
-        taskId: string;
-        requestBody: Partial<Task>;
-      };
-      res: {
-        200: SingleResponse<Task>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        taskId: string;
-      };
-      res: {
-        200: SingleResponse<Task>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/cards/:cardId/attachments': 'attachments/create'
-  '/api/cards/{cardId}/attachments': {
-    post: {
-      req: {
-        cardId: string;
-        requestBody: {
-          // TODO check correctness
-          file: File;
-        };
-      };
-      res: {
-        200: SingleResponse<Attachment>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-        422: UnprocessableError;
-      };
-    };
-  };
-
-  // 'PATCH /api/attachments/:id': 'attachments/update'
-  // 'DELETE /api/attachments/:id': 'attachments/delete'
-  '/api/attachments/{attachmentId}': {
-    patch: {
-      req: {
-        attachmentId: string;
-        requestBody: Partial<Attachment>;
-      };
-      res: {
-        200: SingleResponse<Attachment>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        attachmentId: string;
-      };
-      res: {
-        200: SingleResponse<Attachment>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'GET /api/cards/:cardId/actions': 'actions/index'
-  '/api/cards/{cardId}/actions': {
-    get: {
-      req: {
-        cardId: string;
-      };
-      res: {
-        200: ArrayResponse<Action>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
-  '/api/cards/{cardId}/comment-actions': {
-    post: {
-      req: {
-        cardId: string;
-        requestBody: {
-          text: string;
-        };
-      };
-      res: {
-        200: SingleResponse<Comment>;
-        400: BadRequestError;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'PATCH /api/comment-actions/:id': 'comment-actions/update'
-  // 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
-  '/api/comment-actions/{actionId}': {
-    patch: {
-      req: {
-        actionId: string;
-        requestBody: {
-          text: string;
-        };
-      };
-      res: {
-        200: SingleResponse<Comment>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    delete: {
-      req: {
-        actionId: string;
-      };
-      res: {
-        200: SingleResponse<Comment>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // 'GET /api/notifications': 'notifications/index'
-  '/api/notifications': {
-    get: {
-      res: {
-        200: ArrayResponse<Notification>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
-  // TODO check correctness for endpoint
-  // 'GET /api/notifications/:id': 'notifications/show'
-  // 'PATCH /api/notifications/:ids': 'notifications/update'
-  '/api/notifications/{notificationId}': {
-    get: {
-      req: {
-        notificationId: string;
-      };
-      res: {
-        200: ArrayResponse<Notification>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-    patch: {
-      req: {
-        notificationId: string;
-        requestBody: Partial<Notification>;
-      };
-      res: {
-        200: ArrayResponse<Notification>;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
-    };
-  };
-
   // 'GET /attachments/:id/download/:filename': {
   //    action: 'attachments/download',
   //    skipAssets: false,

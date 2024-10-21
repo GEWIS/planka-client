@@ -219,6 +219,11 @@
   dependencies:
     levn "^0.4.1"
 
+"@hey-api/client-fetch@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@hey-api/client-fetch/-/client-fetch-0.4.2.tgz#02924579205dcfd4cb7c33db236007cb617ab30d"
+  integrity sha512-9BqcLTjsM3rWbads3afJkELS86vK7EqJvYgT429EVS9IO/kN75HEka3Ay/k142xCHSfXOuOShMdDam3nbG8wVA==
+
 "@humanfs/core@^0.19.0":
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.0.tgz#08db7a8c73bb07673d9ebd925f2dad746411fcec"

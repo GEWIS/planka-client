@@ -1,1419 +1,424 @@
-class k extends Error {
-  constructor(e, o, i) {
-    super(i), this.name = "ApiError", this.url = o.url, this.status = o.status, this.statusText = o.statusText, this.body = o.body, this.request = e;
+var T = Object.defineProperty;
+var q = (e, c, l) => c in e ? T(e, c, { enumerable: !0, configurable: !0, writable: !0, value: l }) : e[c] = l;
+var C = (e, c, l) => q(e, typeof c != "symbol" ? c + "" : c, l);
+var P = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: l }) => {
+  if (l == null) return "";
+  if (typeof l == "object") throw new Error("Deeply-nested arrays/objects aren’t supported. Provide your own `querySerializer()` to handle these.");
+  return `${c}=${e ? l : encodeURIComponent(l)}`;
+}, z = (e) => {
+  switch (e) {
+    case "label":
+      return ".";
+    case "matrix":
+      return ";";
+    case "simple":
+      return ",";
+    default:
+      return "&";
   }
-}
-class E extends Error {
-  constructor(e) {
-    super(e), this.name = "CancelError";
+}, S = (e) => {
+  switch (e) {
+    case "form":
+      return ",";
+    case "pipeDelimited":
+      return "|";
+    case "spaceDelimited":
+      return "%20";
+    default:
+      return ",";
   }
-  get isCancelled() {
-    return !0;
+}, _ = (e) => {
+  switch (e) {
+    case "label":
+      return ".";
+    case "matrix":
+      return ";";
+    case "simple":
+      return ",";
+    default:
+      return "&";
   }
-}
-class S {
-  constructor(e) {
-    this._isResolved = !1, this._isRejected = !1, this._isCancelled = !1, this.cancelHandlers = [], this.promise = new Promise((o, i) => {
-      this._resolve = o, this._reject = i;
-      const n = (h) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(h));
-      }, d = (h) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(h));
-      }, c = (h) => {
-        this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(h);
-      };
-      return Object.defineProperty(c, "isResolved", {
-        get: () => this._isResolved
-      }), Object.defineProperty(c, "isRejected", {
-        get: () => this._isRejected
-      }), Object.defineProperty(c, "isCancelled", {
-        get: () => this._isCancelled
-      }), e(n, d, c);
-    });
-  }
-  get [Symbol.toStringTag]() {
-    return "Cancellable Promise";
-  }
-  then(e, o) {
-    return this.promise.then(e, o);
-  }
-  catch(e) {
-    return this.promise.catch(e);
-  }
-  finally(e) {
-    return this.promise.finally(e);
-  }
-  cancel() {
-    if (!(this._isResolved || this._isRejected || this._isCancelled)) {
-      if (this._isCancelled = !0, this.cancelHandlers.length)
-        try {
-          for (const e of this.cancelHandlers)
-            e();
-        } catch (e) {
-          console.warn("Cancellation threw an error", e);
-          return;
-        }
-      this.cancelHandlers.length = 0, this._reject && this._reject(new E("Request aborted"));
+}, x = ({ allowReserved: e, explode: c, name: l, style: s, value: u }) => {
+  if (!c) {
+    let t = (e ? u : u.map((f) => encodeURIComponent(f))).join(S(s));
+    switch (s) {
+      case "label":
+        return `.${t}`;
+      case "matrix":
+        return `;${l}=${t}`;
+      case "simple":
+        return t;
+      default:
+        return `${l}=${t}`;
     }
   }
-  get isCancelled() {
-    return this._isCancelled;
+  let d = z(s), r = u.map((t) => s === "label" || s === "simple" ? e ? t : encodeURIComponent(t) : j({ allowReserved: e, name: l, value: t })).join(d);
+  return s === "label" || s === "matrix" ? d + r : r;
+}, I = ({ allowReserved: e, explode: c, name: l, style: s, value: u }) => {
+  if (u instanceof Date) return `${l}=${u.toISOString()}`;
+  if (s !== "deepObject" && !c) {
+    let t = [];
+    Object.entries(u).forEach(([h, n]) => {
+      t = [...t, h, e ? n : encodeURIComponent(n)];
+    });
+    let f = t.join(",");
+    switch (s) {
+      case "form":
+        return `${l}=${f}`;
+      case "label":
+        return `.${f}`;
+      case "matrix":
+        return `;${l}=${f}`;
+      default:
+        return f;
+    }
   }
-}
-class y {
+  let d = _(s), r = Object.entries(u).map(([t, f]) => j({ allowReserved: e, name: s === "deepObject" ? `${l}[${t}]` : t, value: f })).join(d);
+  return s === "label" || s === "matrix" ? d + r : r;
+}, k = ({ path: e, url: c }) => {
+  let l = c, s = c.match(P);
+  if (s) for (let u of s) {
+    let d = !1, r = u.substring(1, u.length - 1), t = "simple";
+    r.endsWith("*") && (d = !0, r = r.substring(0, r.length - 1)), r.startsWith(".") ? (r = r.substring(1), t = "label") : r.startsWith(";") && (r = r.substring(1), t = "matrix");
+    let f = e[r];
+    if (f == null) continue;
+    if (Array.isArray(f)) {
+      l = l.replace(u, x({ explode: d, name: r, style: t, value: f }));
+      continue;
+    }
+    if (typeof f == "object") {
+      l = l.replace(u, I({ explode: d, name: r, style: t, value: f }));
+      continue;
+    }
+    if (t === "matrix") {
+      l = l.replace(u, `;${j({ name: r, value: f })}`);
+      continue;
+    }
+    let h = encodeURIComponent(t === "label" ? `.${f}` : f);
+    l = l.replace(u, h);
+  }
+  return l;
+}, A = ({ allowReserved: e, array: c, object: l } = {}) => (s) => {
+  let u = [];
+  if (s && typeof s == "object") for (let d in s) {
+    let r = s[d];
+    if (r != null) {
+      if (Array.isArray(r)) {
+        u = [...u, x({ allowReserved: e, explode: !0, name: d, style: "form", value: r, ...c })];
+        continue;
+      }
+      if (typeof r == "object") {
+        u = [...u, I({ allowReserved: e, explode: !0, name: d, style: "deepObject", value: r, ...l })];
+        continue;
+      }
+      u = [...u, j({ allowReserved: e, name: d, value: r })];
+    }
+  }
+  return u.join("&");
+}, E = (e) => {
+  if (e) {
+    if (e.startsWith("application/json") || e.endsWith("+json")) return "json";
+    if (e === "multipart/form-data") return "formData";
+    if (["application/", "audio/", "image/", "video/"].some((c) => e.startsWith(c))) return "blob";
+    if (e.startsWith("text/")) return "text";
+  }
+}, B = ({ baseUrl: e, path: c, query: l, querySerializer: s, url: u }) => {
+  let d = u.startsWith("/") ? u : `/${u}`, r = e + d;
+  c && (r = k({ path: c, url: r }));
+  let t = l ? s(l) : "";
+  return t.startsWith("?") && (t = t.substring(1)), t && (r += `?${t}`), r;
+}, U = (e, c) => {
+  var s;
+  let l = { ...e, ...c };
+  return (s = l.baseUrl) != null && s.endsWith("/") && (l.baseUrl = l.baseUrl.substring(0, l.baseUrl.length - 1)), l.headers = $(e.headers, c.headers), l;
+}, $ = (...e) => {
+  let c = new Headers();
+  for (let l of e) {
+    if (!l || typeof l != "object") continue;
+    let s = l instanceof Headers ? l.entries() : Object.entries(l);
+    for (let [u, d] of s) if (d === null) c.delete(u);
+    else if (Array.isArray(d)) for (let r of d) c.append(u, r);
+    else d !== void 0 && c.set(u, typeof d == "object" ? JSON.stringify(d) : d);
+  }
+  return c;
+}, v = class {
   constructor() {
+    C(this, "_fns");
     this._fns = [];
   }
+  clear() {
+    this._fns = [];
+  }
+  exists(e) {
+    return this._fns.indexOf(e) !== -1;
+  }
   eject(e) {
-    const o = this._fns.indexOf(e);
-    o !== -1 && (this._fns = [...this._fns.slice(0, o), ...this._fns.slice(o + 1)]);
+    let c = this._fns.indexOf(e);
+    c !== -1 && (this._fns = [...this._fns.slice(0, c), ...this._fns.slice(c + 1)]);
   }
   use(e) {
     this._fns = [...this._fns, e];
   }
-}
-const s = {
-  BASE: process.env.PLANKA_URL || "http://localhost:3000",
-  CREDENTIALS: "include",
-  ENCODE_PATH: void 0,
-  HEADERS: void 0,
-  PASSWORD: void 0,
-  TOKEN: void 0,
-  USERNAME: void 0,
-  VERSION: "1.0.0",
-  WITH_CREDENTIALS: !1,
-  interceptors: {
-    request: new y(),
-    response: new y()
-  }
-};
-var r = /* @__PURE__ */ ((t) => (t.s400 = "Bad request", t.s401 = "Unauthorized", t.s404 = "Not found", t.s409 = "Conflict", t.s422 = "Bad request (unprocessable)", t))(r || {});
-const p = (t) => typeof t == "string", A = (t) => p(t) && t !== "", I = (t) => t instanceof Blob, b = (t) => t instanceof FormData, $ = (t) => {
-  try {
-    return btoa(t);
-  } catch {
-    return Buffer.from(t).toString("base64");
-  }
-}, j = (t) => {
-  const e = [], o = (n, d) => {
-    e.push(`${encodeURIComponent(n)}=${encodeURIComponent(String(d))}`);
-  }, i = (n, d) => {
-    d != null && (d instanceof Date ? o(n, d.toISOString()) : Array.isArray(d) ? d.forEach((c) => i(n, c)) : typeof d == "object" ? Object.entries(d).forEach(([c, h]) => i(`${n}[${c}]`, h)) : o(n, d));
-  };
-  return Object.entries(t).forEach(([n, d]) => i(n, d)), e.length ? `?${e.join("&")}` : "";
-}, z = (t, e) => {
-  const o = t.ENCODE_PATH || encodeURI, i = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (d, c) => Object.prototype.hasOwnProperty.call(e.path, c) ? o(String(e.path[c])) : d), n = t.BASE + i;
-  return e.query ? n + j(e.query) : n;
-}, q = (t) => {
-  if (t.formData) {
-    const e = new FormData(), o = (i, n) => {
-      p(n) || I(n) ? e.append(i, n) : e.append(i, JSON.stringify(n));
-    };
-    return Object.entries(t.formData).filter(([, i]) => i != null).forEach(([i, n]) => {
-      Array.isArray(n) ? n.forEach((d) => o(i, d)) : o(i, n);
-    }), e;
-  }
-}, m = async (t, e) => typeof e == "function" ? e(t) : e, P = async (t, e) => {
-  const [o, i, n, d] = await Promise.all([
-    m(e, t.TOKEN),
-    m(e, t.USERNAME),
-    m(e, t.PASSWORD),
-    m(e, t.HEADERS)
-  ]), c = Object.entries({
-    Accept: "application/json",
-    ...d,
-    ...e.headers
-  }).filter(([, h]) => h != null).reduce((h, [l, u]) => ({
-    ...h,
-    [l]: String(u)
-  }), {});
-  if (A(o) && (c.Authorization = `Bearer ${o}`), A(i) && A(n)) {
-    const h = $(`${i}:${n}`);
-    c.Authorization = `Basic ${h}`;
-  }
-  return e.body !== void 0 && (e.mediaType ? c["Content-Type"] = e.mediaType : I(e.body) ? c["Content-Type"] = e.body.type || "application/octet-stream" : p(e.body) ? c["Content-Type"] = "text/plain" : b(e.body) || (c["Content-Type"] = "application/json")), new Headers(c);
-}, v = (t) => {
-  var e, o;
-  if (t.body !== void 0)
-    return (e = t.mediaType) != null && e.includes("application/json") || (o = t.mediaType) != null && o.includes("+json") ? JSON.stringify(t.body) : p(t.body) || I(t.body) || b(t.body) ? t.body : JSON.stringify(t.body);
-}, R = async (t, e, o, i, n, d, c) => {
-  const h = new AbortController();
-  let l = {
-    headers: d,
-    body: i ?? n,
-    method: e.method,
-    signal: h.signal
-  };
-  t.WITH_CREDENTIALS && (l.credentials = t.CREDENTIALS);
-  for (const u of t.interceptors.request._fns)
-    l = await u(l);
-  return c(() => h.abort()), await fetch(o, l);
-}, w = (t, e) => {
-  if (e) {
-    const o = t.headers.get(e);
-    if (p(o))
-      return o;
-  }
-}, C = async (t) => {
-  if (t.status !== 204)
+}, L = () => ({ error: new v(), request: new v(), response: new v() }), W = { bodySerializer: (e) => JSON.stringify(e) }, N = A({ allowReserved: !1, array: { explode: !0, style: "form" }, object: { explode: !0, style: "deepObject" } }), D = { "Content-Type": "application/json" }, O = (e = {}) => ({ ...W, baseUrl: "", fetch: globalThis.fetch, headers: D, parseAs: "auto", querySerializer: N, ...e }), M = (e = {}) => {
+  let c = U(O(), e), l = () => ({ ...c }), s = (r) => (c = U(c, r), l()), u = L(), d = async (r) => {
+    let t = { ...c, ...r, headers: $(c.headers, r.headers) };
+    t.body && t.bodySerializer && (t.body = t.bodySerializer(t.body)), t.body || t.headers.delete("Content-Type");
+    let f = B({ baseUrl: t.baseUrl ?? "", path: t.path, query: t.query, querySerializer: typeof t.querySerializer == "function" ? t.querySerializer : A(t.querySerializer), url: t.url }), h = { redirect: "follow", ...t }, n = new Request(f, h);
+    for (let m of u.request._fns) n = await m(n, t);
+    let R = t.fetch, g = await R(n);
+    for (let m of u.response._fns) g = await m(g, n, t);
+    let i = { request: n, response: g };
+    if (g.ok) {
+      if (g.status === 204 || g.headers.get("Content-Length") === "0") return { data: {}, ...i };
+      if (t.parseAs === "stream") return { data: g.body, ...i };
+      let m = (t.parseAs === "auto" ? E(g.headers.get("Content-Type")) : t.parseAs) ?? "json", w = await g[m]();
+      return m === "json" && t.responseTransformer && (w = await t.responseTransformer(w)), { data: w, ...i };
+    }
+    let y = await g.text();
     try {
-      const e = t.headers.get("Content-Type");
-      if (e) {
-        const o = ["application/octet-stream", "application/pdf", "application/zip", "audio/", "image/", "video/"];
-        if (e.includes("application/json") || e.includes("+json"))
-          return await t.json();
-        if (o.some((i) => e.includes(i)))
-          return await t.blob();
-        if (e.includes("multipart/form-data"))
-          return await t.formData();
-        if (e.includes("text/"))
-          return await t.text();
-      }
-    } catch (e) {
-      console.error(e);
+      y = JSON.parse(y);
+    } catch {
     }
-}, _ = (t, e) => {
-  const i = {
-    400: "Bad Request",
-    401: "Unauthorized",
-    402: "Payment Required",
-    403: "Forbidden",
-    404: "Not Found",
-    405: "Method Not Allowed",
-    406: "Not Acceptable",
-    407: "Proxy Authentication Required",
-    408: "Request Timeout",
-    409: "Conflict",
-    410: "Gone",
-    411: "Length Required",
-    412: "Precondition Failed",
-    413: "Payload Too Large",
-    414: "URI Too Long",
-    415: "Unsupported Media Type",
-    416: "Range Not Satisfiable",
-    417: "Expectation Failed",
-    418: "Im a teapot",
-    421: "Misdirected Request",
-    422: "Unprocessable Content",
-    423: "Locked",
-    424: "Failed Dependency",
-    425: "Too Early",
-    426: "Upgrade Required",
-    428: "Precondition Required",
-    429: "Too Many Requests",
-    431: "Request Header Fields Too Large",
-    451: "Unavailable For Legal Reasons",
-    500: "Internal Server Error",
-    501: "Not Implemented",
-    502: "Bad Gateway",
-    503: "Service Unavailable",
-    504: "Gateway Timeout",
-    505: "HTTP Version Not Supported",
-    506: "Variant Also Negotiates",
-    507: "Insufficient Storage",
-    508: "Loop Detected",
-    510: "Not Extended",
-    511: "Network Authentication Required",
-    ...t.errors
-  }[e.status];
-  if (i)
-    throw new k(t, e, i);
-  if (!e.ok) {
-    const n = e.status ?? "unknown", d = e.statusText ?? "unknown", c = (() => {
-      try {
-        return JSON.stringify(e.body, null, 2);
-      } catch {
-        return;
-      }
-    })();
-    throw new k(
-      t,
-      e,
-      `Generic Error: status: ${n}; status text: ${d}; body: ${c}`
-    );
+    let b = y;
+    for (let m of u.error._fns) b = await m(y, g, n, t);
+    if (b = b || {}, t.throwOnError) throw b;
+    return { error: b, ...i };
+  };
+  return { connect: (r) => d({ ...r, method: "CONNECT" }), delete: (r) => d({ ...r, method: "DELETE" }), get: (r) => d({ ...r, method: "GET" }), getConfig: l, head: (r) => d({ ...r, method: "HEAD" }), interceptors: u, options: (r) => d({ ...r, method: "OPTIONS" }), patch: (r) => d({ ...r, method: "PATCH" }), post: (r) => d({ ...r, method: "POST" }), put: (r) => d({ ...r, method: "PUT" }), request: d, setConfig: s, trace: (r) => d({ ...r, method: "TRACE" }) };
+};
+const a = M(O()), G = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/config"
+}), F = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/access-tokens"
+}), K = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/access-tokens/exchange-using-oidc"
+}), Q = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/access-tokens/me"
+}), V = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users"
+}), X = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users"
+}), Y = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users/{id}"
+}), Z = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users/{id}"
+}), p = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users/{id}/email"
+}), o = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users/{id}/password"
+}), ee = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users/{id}/username"
+}), re = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users/{id}/avatar"
+}), ae = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/users/{id}"
+}), te = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects"
+}), le = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects"
+}), ce = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects/{id}"
+}), ue = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects/{id}"
+}), de = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects/{id}/background-image"
+}), se = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects/{id}"
+}), fe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects/{projectId}/managers"
+}), ge = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/project-managers/{id}"
+}), ne = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/projects/{projectId}/boards"
+}), me = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/boards/{id}"
+}), he = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/boards/{id}"
+}), be = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/boards/{id}"
+}), ie = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/boards/{boardId}/memberships"
+}), ye = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/board-memberships/{id}"
+}), je = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/board-memberships/{id}"
+}), we = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/boards/{boardId}/labels"
+}), ve = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/labels/{id}"
+}), Ce = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/labels/{id}"
+}), Ue = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/boards/{boardId}/lists"
+}), xe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/lists/{id}"
+}), Ie = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/lists/{id}/sort"
+}), Ae = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/lists/{id}"
+}), $e = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/lists/{listId}/cards"
+}), Oe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{id}"
+}), Re = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{id}"
+}), Te = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{id}/duplicate"
+}), qe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{id}"
+}), Pe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{cardId}/memberships"
+}), ze = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{cardId}/memberships"
+}), Se = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{cardId}/labels"
+}), _e = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{cardId}/labels/{labelId}"
+}), ke = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{cardId}/tasks"
+}), Ee = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/tasks/{id}"
+}), Be = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/tasks/{id}"
+}), Le = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{cardId}/attachments"
+}), We = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/attachments/{id}"
+}), Ne = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/attachments/{id}"
+}), De = (e) => ((e == null ? void 0 : e.client) ?? a).get(
+  {
+    ...e,
+    url: "/api/cards/{cardId}/actions"
   }
-}, a = (t, e) => new S(async (o, i, n) => {
-  try {
-    const d = z(t, e), c = q(e), h = v(e), l = await P(t, e);
-    if (!n.isCancelled) {
-      let u = await R(t, e, d, h, c, l, n);
-      for (const B of t.interceptors.response._fns)
-        u = await B(u);
-      const g = await C(u), f = w(u, e.responseHeader), T = {
-        url: d,
-        ok: u.ok,
-        status: u.status,
-        statusText: u.statusText,
-        body: f ?? g
-      };
-      _(e, T), o(T.body);
-    }
-  } catch (d) {
-    i(d);
-  }
+), Me = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/cards/{cardId}/comment-actions"
+}), He = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/comment-actions/{id}"
+}), Je = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/comment-actions/{id}"
+}), Ge = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/notifications"
+}), Fe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/notifications/{id}"
+}), Ke = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+  ...e,
+  url: "/api/notifications/{ids}"
 });
-class O {
-  constructor(e) {
-    this.planka = e;
-  }
-  /**
-     * @returns SingleResponse<Oidc> Ok
-     */
-  getConfig() {
-    return a(s, {
-      method: "GET",
-      url: "/api/config"
-    });
-  }
-  /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-  async authorize(e) {
-    const o = await a(s, {
-      method: "POST",
-      url: "/api/access-tokens",
-      body: e.requestBody,
-      errors: {
-        400: r.s400
-      }
-    });
-    this.planka.setAccessToken(o.item);
-  }
-  /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-  async authorizeOidc(e) {
-    const o = await a(s, {
-      method: "POST",
-      url: "/api/access-tokens/exchange-using-oidc",
-      body: e.requestBody,
-      errors: {
-        400: r.s400
-      }
-    });
-    this.planka.setAccessToken(o.item);
-  }
-  /**
-     * @returns none Ok
-     * @throws ApiError
-     */
-  async unauthorize() {
-    await a(s, {
-      method: "DELETE",
-      url: "/api/access-tokens/me",
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401
-      }
-    }), this.planka.setAccessToken(null);
-  }
-}
-class D {
-  constructor(e) {
-    this.planka = e;
-  }
-  /**
-   * @returns ArrayResponse<User> Ok
-   * @throws ApiError
-   */
-  getAll() {
-    return a(s, {
-      method: "GET",
-      url: "/api/users",
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/users",
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  get(e) {
-    return a(s, {
-      method: "GET",
-      url: "/api/users/{userId}",
-      path: {
-        userId: e.userId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/users/{userId}",
-      path: {
-        userId: e.userId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  remove(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/users/{userId}",
-      path: {
-        userId: e.userId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  updateMail(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/users/{userId}/email",
-      path: {
-        userId: e.userId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404,
-        409: r.s409
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  updatePassword(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/users/{userId}/password",
-      path: {
-        userId: e.userId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404,
-        409: r.s409
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  updateName(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/users/{userId}/username",
-      path: {
-        userId: e.userId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404,
-        409: r.s409
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.userId
-   * @param data.requestBody
-   * @returns SingleResponse<User> Ok
-   * @throws ApiError
-   */
-  updateAvatar(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/users/{userId}/avatar",
-      path: {
-        userId: e.userId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404,
-        422: r.s422
-      }
-    });
-  }
-}
-class L {
-  constructor(e) {
-    this.planka = e;
-  }
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/cards/{cardId}/comment-actions",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/comment-actions/{actionId}",
-      path: {
-        actionId: e.actionId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  remove(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/attachments/{attachmentId}",
-      path: {
-        attachmentId: e.attachmentId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class H {
-  constructor(e) {
-    this.planka = e;
-  }
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/cards/{cardId}/attachments",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404,
-        422: r.s422
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/attachments/{attachmentId}",
-      path: {
-        attachmentId: e.attachmentId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  remove(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/attachments/{attachmentId}",
-      path: {
-        attachmentId: e.attachmentId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  download(e) {
-    return a(s, {
-      method: "GET",
-      url: "/attachments/{attachmentId}/download/{filename}",
-      path: {
-        attachmentId: e.attachmentId,
-        filename: e.filename
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  thumbnail(e) {
-    return a(s, {
-      method: "GET",
-      url: "/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}",
-      path: {
-        attachmentId: e.attachmentId,
-        extension: e.extension
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class N {
-  constructor(e) {
-    this.planka = e;
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<Board> Ok
-   * @throws ApiError
-   */
-  create(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/projects/{projectId}/managers",
-      path: {
-        projectId: e.projectId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  get(e) {
-    return a(s, {
-      method: "GET",
-      url: "/api/boards/{projectId}",
-      path: {
-        projectId: e.boardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/boards/{boardId}",
-      path: {
-        projectId: e.boardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  remove(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/boards/{boardId}",
-      path: {
-        boardId: e.boardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  addMember(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/boards/{boardId}/memberships",
-      path: {
-        boardId: e.boardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404,
-        409: r.s409
-      }
-    });
-  }
-  updateMember(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/board-memberships/{membershipId}",
-      path: {
-        membershipId: e.membershipId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  removeMember(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/board-memberships/{membershipId}",
-      path: {
-        membershipId: e.membershipId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class x {
-  constructor(e) {
-    this.planka = e;
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<Board> Ok
-   * @throws ApiError
-   */
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/lists/{listId}/cards",
-      path: {
-        listId: e.listId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404,
-        422: r.s422
-      }
-    });
-  }
-  get(e) {
-    return a(s, {
-      method: "GET",
-      url: "/api/cards/{cardId}",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/cards/{cardId}",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  delete(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/cards/{cardId}",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  duplicate(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/cards/{cardId}/duplicate",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  addMember(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/cards/{cardId}/memberships",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  removeMember(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/cards/{cardId}/memberships",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  addLabel(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/cards/{cardId}/labels",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  removeLabel(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/cards/{cardId}/labels/{labelId}",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class U {
-  constructor(e) {
-    this.planka = e;
-  }
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/boards/{boardId}/labels",
-      path: {
-        boardId: e.boardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/labels/{labelId}",
-      path: {
-        labelId: e.labelId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  remove(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/labels/{labelId}",
-      path: {
-        labelId: e.labelId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class G {
-  constructor(e) {
-    this.planka = e;
-  }
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/boards/{boardId}/lists",
-      path: {
-        boardId: e.boardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/lists/{listId}",
-      path: {
-        listId: e.listId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  delete(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/lists/{listId}",
-      path: {
-        listId: e.listId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  sort(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/lists/{listId}/sort",
-      path: {
-        listId: e.listId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class M {
-  constructor(e) {
-    this.planka = e;
-  }
-  getAll() {
-    return a(s, {
-      method: "GET",
-      url: "/api/notifications",
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  get(e) {
-    return a(s, {
-      method: "GET",
-      url: "/api/notifications/{notificationId}",
-      path: {
-        notificationId: e.notificationId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/notifications/{notificationId}",
-      path: {
-        notificationId: e.notificationId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class F {
-  constructor(e) {
-    this.planka = e;
-  }
-  /**
-   * @returns ArrayResponse<Project> Ok
-   * @throws ApiError
-   */
-  getAll() {
-    return a(s, {
-      method: "GET",
-      url: "/api/projects",
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.requestBody
-   * @returns SingleResponse<Project> Ok
-   * @throws ApiError
-   */
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/projects",
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<Project> Ok
-   * @throws ApiError
-   */
-  get(e) {
-    return a(s, {
-      method: "GET",
-      url: "/api/projects/{projectId}",
-      path: {
-        projectId: e.projectId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<Project> Ok
-   * @throws ApiError
-   */
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/projects/{projectId}",
-      path: {
-        projectId: e.projectId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<Project> Ok
-   * @throws ApiError
-   */
-  remove(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/projects/{projectId}",
-      path: {
-        projectId: e.projectId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<Project> Ok
-   * @throws ApiError
-   */
-  setBackgroundImage(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/projects/{projectId}/background-image",
-      path: {
-        projectId: e.projectId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404,
-        422: r.s422
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.projectId
-   * @param data.requestBody
-   * @returns SingleResponse<ProjectManager> Ok
-   * @throws ApiError
-   */
-  addManager(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/projects/{projectId}/managers",
-      path: {
-        projectId: e.projectId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  /**
-   * @param data The data for the request.
-   * @param data.managerId
-   * @param data.requestBody
-   * @returns SingleResponse<ProjectManager> Ok
-   * @throws ApiError
-   */
-  removeManager(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/projects/{projectId}/managers",
-      path: {
-        projectId: e.managerId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class V {
-  constructor(e) {
-    this.planka = e;
-  }
-  create(e) {
-    return a(s, {
-      method: "POST",
-      url: "/api/cards/{cardId}/tasks",
-      path: {
-        cardId: e.cardId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        400: r.s400,
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  update(e) {
-    return a(s, {
-      method: "PATCH",
-      url: "/api/tasks/{taskId}",
-      path: {
-        taskId: e.taskId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      body: e.requestBody,
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-  remove(e) {
-    return a(s, {
-      method: "DELETE",
-      url: "/api/tasks/{taskId}",
-      path: {
-        taskId: e.taskId
-      },
-      headers: {
-        Authorization: `Bearer ${this.planka.getAccessToken()}`
-      },
-      errors: {
-        401: r.s401,
-        404: r.s404
-      }
-    });
-  }
-}
-class W {
-  constructor() {
-    this.accessToken = null, this.ActionService = new L(this), this.AttachmentService = new H(this), this.AuthService = new O(this), this.BoardService = new N(this), this.CardService = new x(this), this.LabelService = new U(this), this.ListService = new G(this), this.NotificationService = new M(this), this.ProjectService = new F(this), this.TaskService = new V(this), this.UserService = new D(this);
-  }
-  setAccessToken(e) {
-    this.accessToken = e;
-  }
-  getAccessToken() {
-    return this.accessToken;
-  }
-}
+var H = /* @__PURE__ */ ((e) => (e.s400 = "Bad request", e.s401 = "Unauthorized", e.s404 = "Not found", e.s409 = "Conflict", e.s422 = "Bad request (unprocessable)", e))(H || {});
 export {
-  k as ApiError,
-  E as CancelError,
-  S as CancelablePromise,
-  s as OpenAPI,
-  W as Planka,
-  r as StatusCode
+  H as StatusCode,
+  F as authorize,
+  K as authorizeOidc,
+  a as client,
+  Le as createAttachment,
+  ne as createBoard,
+  ie as createBoardMembership,
+  $e as createCard,
+  Se as createCardLabel,
+  Pe as createCardMembership,
+  Me as createCommentAction,
+  we as createLabel,
+  Ue as createList,
+  le as createProject,
+  fe as createProjectManager,
+  ke as createTask,
+  X as createUser,
+  Ne as deleteAttachment,
+  be as deleteBoard,
+  je as deleteBoardMembership,
+  qe as deleteCard,
+  _e as deleteCardLabel,
+  ze as deleteCardMembership,
+  Je as deleteCommentAction,
+  Ce as deleteLabel,
+  Ae as deleteList,
+  se as deleteProject,
+  ge as deleteProjectManager,
+  Be as deleteTask,
+  ae as deleteUser,
+  Te as duplicateCard,
+  me as getBoard,
+  Oe as getCard,
+  De as getCardActions,
+  G as getConfig,
+  Fe as getNotification,
+  Ge as getNotifications,
+  ce as getProject,
+  te as getProjects,
+  Y as getUser,
+  V as getUsers,
+  Ie as sortList,
+  Q as unauthorize,
+  We as updateAttachment,
+  he as updateBoard,
+  ye as updateBoardMembership,
+  Re as updateCard,
+  He as updateCommentAction,
+  ve as updateLabel,
+  xe as updateList,
+  Ke as updateNotifications,
+  ue as updateProject,
+  de as updateProjectBackgroundImage,
+  Ee as updateTask,
+  Z as updateUser,
+  re as updateUserAvatar,
+  p as updateUserEmail,
+  o as updateUserPassword,
+  ee as updateUserUsername
 };
