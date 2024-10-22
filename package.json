@@ -4,6 +4,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "vite build",
+    "test": "vitest",
     "example": "tsx example/example.ts",
     "release-major": "release-it --ci major --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
     "release": "release-it --ci minor --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
@@ -52,7 +53,8 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.10.0",
     "vite": "^5.4.9",
-    "vite-plugin-dts": "^4.2.4"
+    "vite-plugin-dts": "^4.2.4",
+    "vitest": "^2.1.3"
   },
   "dependencies": {
     "@hey-api/client-fetch": "^0.4.2"

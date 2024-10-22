@@ -6,6 +6,7 @@ import {
   deleteBoard,
   deleteProject,
 } from '../dist/planka-client';
+import { getConfig } from '../src';
 
 client.setConfig({
   baseUrl: 'http://localhost:3000',
@@ -25,6 +26,9 @@ client.setConfig({
     Authorization: `Bearer ${accessToken}`,
   },
 });
+
+const test = await getConfig({});
+console.log(test);
 
 const projectResponse = await createProject({
   body: {

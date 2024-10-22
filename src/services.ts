@@ -1,4 +1,9 @@
-import { createClient, createConfig, type Options } from '@hey-api/client-fetch';
+import {
+  createClient,
+  createConfig,
+  formDataBodySerializer,
+  type Options,
+} from '@hey-api/client-fetch';
 import {
   AuthorizeError,
   AuthorizeOidcError,
@@ -301,7 +306,11 @@ export const updateUserAvatar = <ThrowOnError extends boolean = false>(
     UpdateUserAvatarError,
     ThrowOnError
   >({
+    ...formDataBodySerializer,
     ...options,
+    headers: {
+      'Content-Type': null,
+    },
     url: '/api/users/{id}/avatar',
   });
 };
@@ -367,7 +376,11 @@ export const updateProjectBackgroundImage = <ThrowOnError extends boolean = fals
     UpdateProjectBackgroundImageError,
     ThrowOnError
   >({
+    ...formDataBodySerializer,
     ...options,
+    headers: {
+      'Content-Type': null,
+    },
     url: '/api/projects/{id}/background-image',
   });
 };
