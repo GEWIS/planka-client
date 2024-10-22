@@ -12,5 +12,5 @@ export default defineConfig({
       fileName: 'planka-client',
     },
   },
-  plugins: [dts({ rollupTypes: true })]
+  plugins: [dts({ rollupTypes: true })],
 });

@@ -1,3 +1,10 @@
+export enum StatusCode {
+  s400 = 'E_MISSING_OR_INVALID_PARAMS',
+  s401 = 'E_UNAUTHORIZED',
+  s404 = 'E_NOT_FOUND',
+  s409 = 'E_CONFLICT',
+}
+
 /*
   All schemas
  */
@@ -240,19 +247,48 @@ export type Task = {
 
 export type User = {
   id: string;
-  email?: string;
+  email: string;
   isAdmin: boolean;
-  name?: string;
-  username?: string;
+  name: string;
+  username: string;
   phone?: string;
   organization?: string;
-  language?: string;
+  language?: Language;
   subscribeToOwnCards: boolean;
   avatarUrl?: string;
   createdAt: Date;
   updatedAt?: Date;
   deletedAt?: Date;
 };
+
+export type Language =
+  | 'ar-YE'
+  | 'bg-BG'
+  | 'cs-CZ'
+  | 'da-DK'
+  | 'de-DE'
+  | 'en-GB'
+  | 'en-US'
+  | 'es-ES'
+  | 'fa-IR'
+  | 'fr-FR'
+  | 'hu-HU'
+  | 'id-ID'
+  | 'it-IT'
+  | 'ja-JP'
+  | 'ko-KR'
+  | 'nl-NL'
+  | 'pl-PL'
+  | 'pt-BR'
+  | 'ro-RO'
+  | 'ru-RU'
+  | 'sk-SK'
+  | 'sv-SE'
+  | 'tr-TR'
+  | 'uk-UA'
+  | 'uz-UZ'
+  | 'zh-CN'
+  | 'zh-TW';
 
 /*
   Wrappers for types above
@@ -297,14 +333,6 @@ export type ConflictError = BaseError;
 export type NotFoundError = Omit<BaseError, 'message'>;
 
 export type UnprocessableError = BaseError;
-
-export enum StatusCode {
-  s400 = 'Bad request',
-  s401 = 'Unauthorized',
-  s404 = 'Not found',
-  s409 = 'Conflict',
-  s422 = 'Bad request (unprocessable)',
-}
 
 // 'GET /api/config': 'show-config'
 export type GetConfigResponse = SingleResponse<Oidc>;
@@ -358,7 +386,9 @@ export type UpdateUserRequest = {
   path: {
     id: string;
   };
-  body: Partial<User>;
+  body: Partial<
+    Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>
+  >;
 };
 export type UpdateUserResponse = SingleResponse<User>;
 export type UpdateUserError = BadRequestError | UnauthorizedError | NotFoundError;
@@ -417,7 +447,6 @@ export type UpdateUserAvatarRequest = {
     id: string;
   };
   body: {
-    // TODO check if this is correct
     file: File;
   };
 };
@@ -433,9 +462,8 @@ export type DeleteUserRequest = {
   path: {
     id: string;
   };
-  body: User;
 };
-export type DeleteUserResponse = void;
+export type DeleteUserResponse = SingleResponse<User>;
 export type DeleteUserError = UnauthorizedError | NotFoundError;
 
 // 'GET /api/projects': 'projects/index'
@@ -456,9 +484,6 @@ export type GetProjectRequest = {
   path: {
     id: string;
   };
-  body: {
-    name: string;
-  };
 };
 export type GetProjectResponse = SingleResponse<Project>;
 export type GetProjectError = BadRequestError | UnauthorizedError | NotFoundError;
@@ -469,7 +494,6 @@ export type UpdateProjectBackgroundImageRequest = {
     id: string;
   };
   body: {
-    // TODO check if this is correct
     file: File;
   };
 };
@@ -485,7 +509,7 @@ export type UpdateProjectRequest = {
   path: {
     id: string;
   };
-  body: Partial<Project>;
+  body: Partial<Omit<Project, 'createdAt' | 'updatedAt' | 'id' | 'backgroundImage'>>;
 };
 export type UpdateProjectResponse = SingleResponse<Project>;
 export type UpdateProjectError = UnauthorizeError | NotFoundError;
@@ -571,7 +595,7 @@ export type CreateBoardMembershipRequest = {
     role: Role;
   };
 };
-export type CreateBoardMembershipResponse = SingleResponse<Board>;
+export type CreateBoardMembershipResponse = SingleResponse<BoardMembership>;
 export type CreateBoardMembershipError =
   | BadRequestError
   | UnauthorizedError
@@ -585,7 +609,6 @@ export type UpdateBoardMembershipRequest = {
   };
   body: {
     role: Role;
-    canComment: boolean;
   };
 };
 export type UpdateBoardMembershipResponse = SingleResponse<BoardMembership>;
