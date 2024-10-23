@@ -2,9 +2,9 @@ name: Test & Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -36,20 +36,16 @@ jobs:
   test:
     needs: [ lint-and-format ]
     runs-on: ubuntu-latest
-    container:
-      image: node:20
     steps:
+      - uses: actions/checkout@v3
       - name: Start Planka
         run: docker compose -f "docker-compose.yml" up -d --build
-      - uses: actions/checkout@v3
-      - name: Cache and restore node_modules
-        id: cache-node
-        uses: actions/cache@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
+          node-version: 20
+          cache: 'yarn'
       - run: yarn
-        if: steps.cache-node.outputs.cache-hit != 'true'
       - run: yarn test
       - name: Stop Planka
         if: always()
@@ -71,10 +67,10 @@ jobs:
         if: steps.cache-node.outputs.cache-hit != 'true'
       - run: yarn build
       - name: "Compress out folder"
-        run: tar -zcvf out.tar.gz out/
+        run: tar -zcvf dist.tar.gz dist/
       - name: "Upload /out of build"
         uses: actions/upload-artifact@v3
         with:
           name: build
-          path: out.tar.gz
+          path: dist.tar.gz
           retention-days: 1
