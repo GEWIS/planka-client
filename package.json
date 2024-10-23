@@ -41,18 +41,18 @@
   "homepage": "https://github.com/GEWIS/planka-client#readme",
   "devDependencies": {
     "@eslint/js": "^9.13.0",
-    "@types/node": "^22.7.7",
+    "@types/node": "^22.8.1",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.10.0",
-    "vite": "^5.4.9",
-    "vite-plugin-dts": "^4.2.4",
+    "typescript-eslint": "^8.11.0",
+    "vite": "^5.4.10",
+    "vite-plugin-dts": "^4.3.0",
     "vitest": "^2.1.3"
   },
   "dependencies": {
