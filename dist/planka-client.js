@@ -1,10 +1,32 @@
-var T = Object.defineProperty;
-var q = (e, c, l) => c in e ? T(e, c, { enumerable: !0, configurable: !0, writable: !0, value: l }) : e[c] = l;
-var C = (e, c, l) => q(e, typeof c != "symbol" ? c + "" : c, l);
-var P = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: l }) => {
-  if (l == null) return "";
-  if (typeof l == "object") throw new Error("Deeply-nested arrays/objects aren’t supported. Provide your own `querySerializer()` to handle these.");
-  return `${c}=${e ? l : encodeURIComponent(l)}`;
+var S = Object.defineProperty;
+var E = (e, c, r) => c in e ? S(e, c, { enumerable: !0, configurable: !0, writable: !0, value: r }) : e[c] = r;
+var I = (e, c, r) => E(e, typeof c != "symbol" ? c + "" : c, r);
+var q = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: r }) => {
+  if (r == null) return "";
+  if (typeof r == "object") throw new Error("Deeply-nested arrays/objects aren’t supported. Provide your own `querySerializer()` to handle these.");
+  return `${c}=${e ? r : encodeURIComponent(r)}`;
+}, N = (e) => {
+  switch (e) {
+    case "label":
+      return ".";
+    case "matrix":
+      return ";";
+    case "simple":
+      return ",";
+    default:
+      return "&";
+  }
+}, P = (e) => {
+  switch (e) {
+    case "form":
+      return ",";
+    case "pipeDelimited":
+      return "|";
+    case "spaceDelimited":
+      return "%20";
+    default:
+      return ",";
+  }
 }, z = (e) => {
   switch (e) {
     case "label":
@@ -16,134 +38,112 @@ var P = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: l }) => {
     default:
       return "&";
   }
-}, S = (e) => {
-  switch (e) {
-    case "form":
-      return ",";
-    case "pipeDelimited":
-      return "|";
-    case "spaceDelimited":
-      return "%20";
-    default:
-      return ",";
-  }
-}, _ = (e) => {
-  switch (e) {
-    case "label":
-      return ".";
-    case "matrix":
-      return ";";
-    case "simple":
-      return ",";
-    default:
-      return "&";
-  }
-}, x = ({ allowReserved: e, explode: c, name: l, style: s, value: u }) => {
+}, U = ({ allowReserved: e, explode: c, name: r, style: d, value: u }) => {
   if (!c) {
-    let t = (e ? u : u.map((f) => encodeURIComponent(f))).join(S(s));
-    switch (s) {
+    let l = (e ? u : u.map((n) => encodeURIComponent(n))).join(P(d));
+    switch (d) {
       case "label":
-        return `.${t}`;
+        return `.${l}`;
       case "matrix":
-        return `;${l}=${t}`;
+        return `;${r}=${l}`;
       case "simple":
-        return t;
+        return l;
       default:
-        return `${l}=${t}`;
+        return `${r}=${l}`;
     }
   }
-  let d = z(s), r = u.map((t) => s === "label" || s === "simple" ? e ? t : encodeURIComponent(t) : j({ allowReserved: e, name: l, value: t })).join(d);
-  return s === "label" || s === "matrix" ? d + r : r;
-}, I = ({ allowReserved: e, explode: c, name: l, style: s, value: u }) => {
-  if (u instanceof Date) return `${l}=${u.toISOString()}`;
-  if (s !== "deepObject" && !c) {
-    let t = [];
-    Object.entries(u).forEach(([b, n]) => {
-      t = [...t, b, e ? n : encodeURIComponent(n)];
+  let s = N(d), a = u.map((l) => d === "label" || d === "simple" ? e ? l : encodeURIComponent(l) : j({ allowReserved: e, name: r, value: l })).join(s);
+  return d === "label" || d === "matrix" ? s + a : a;
+}, O = ({ allowReserved: e, explode: c, name: r, style: d, value: u }) => {
+  if (u instanceof Date) return `${r}=${u.toISOString()}`;
+  if (d !== "deepObject" && !c) {
+    let l = [];
+    Object.entries(u).forEach(([b, h]) => {
+      l = [...l, b, e ? h : encodeURIComponent(h)];
     });
-    let f = t.join(",");
-    switch (s) {
+    let n = l.join(",");
+    switch (d) {
       case "form":
-        return `${l}=${f}`;
+        return `${r}=${n}`;
       case "label":
-        return `.${f}`;
+        return `.${n}`;
       case "matrix":
-        return `;${l}=${f}`;
+        return `;${r}=${n}`;
       default:
-        return f;
+        return n;
     }
   }
-  let d = _(s), r = Object.entries(u).map(([t, f]) => j({ allowReserved: e, name: s === "deepObject" ? `${l}[${t}]` : t, value: f })).join(d);
-  return s === "label" || s === "matrix" ? d + r : r;
+  let s = z(d), a = Object.entries(u).map(([l, n]) => j({ allowReserved: e, name: d === "deepObject" ? `${r}[${l}]` : l, value: n })).join(s);
+  return d === "label" || d === "matrix" ? s + a : a;
 }, k = ({ path: e, url: c }) => {
-  let l = c, s = c.match(P);
-  if (s) for (let u of s) {
-    let d = !1, r = u.substring(1, u.length - 1), t = "simple";
-    r.endsWith("*") && (d = !0, r = r.substring(0, r.length - 1)), r.startsWith(".") ? (r = r.substring(1), t = "label") : r.startsWith(";") && (r = r.substring(1), t = "matrix");
-    let f = e[r];
-    if (f == null) continue;
-    if (Array.isArray(f)) {
-      l = l.replace(u, x({ explode: d, name: r, style: t, value: f }));
+  let r = c, d = c.match(q);
+  if (d) for (let u of d) {
+    let s = !1, a = u.substring(1, u.length - 1), l = "simple";
+    a.endsWith("*") && (s = !0, a = a.substring(0, a.length - 1)), a.startsWith(".") ? (a = a.substring(1), l = "label") : a.startsWith(";") && (a = a.substring(1), l = "matrix");
+    let n = e[a];
+    if (n == null) continue;
+    if (Array.isArray(n)) {
+      r = r.replace(u, U({ explode: s, name: a, style: l, value: n }));
       continue;
     }
-    if (typeof f == "object") {
-      l = l.replace(u, I({ explode: d, name: r, style: t, value: f }));
+    if (typeof n == "object") {
+      r = r.replace(u, O({ explode: s, name: a, style: l, value: n }));
       continue;
     }
-    if (t === "matrix") {
-      l = l.replace(u, `;${j({ name: r, value: f })}`);
+    if (l === "matrix") {
+      r = r.replace(u, `;${j({ name: a, value: n })}`);
       continue;
     }
-    let b = encodeURIComponent(t === "label" ? `.${f}` : f);
-    l = l.replace(u, b);
+    let b = encodeURIComponent(l === "label" ? `.${n}` : n);
+    r = r.replace(u, b);
   }
-  return l;
-}, A = ({ allowReserved: e, array: c, object: l } = {}) => (s) => {
+  return r;
+}, x = ({ allowReserved: e, array: c, object: r } = {}) => (d) => {
   let u = [];
-  if (s && typeof s == "object") for (let d in s) {
-    let r = s[d];
-    if (r != null) {
-      if (Array.isArray(r)) {
-        u = [...u, x({ allowReserved: e, explode: !0, name: d, style: "form", value: r, ...c })];
+  if (d && typeof d == "object") for (let s in d) {
+    let a = d[s];
+    if (a != null) {
+      if (Array.isArray(a)) {
+        u = [...u, U({ allowReserved: e, explode: !0, name: s, style: "form", value: a, ...c })];
         continue;
       }
-      if (typeof r == "object") {
-        u = [...u, I({ allowReserved: e, explode: !0, name: d, style: "deepObject", value: r, ...l })];
+      if (typeof a == "object") {
+        u = [...u, O({ allowReserved: e, explode: !0, name: s, style: "deepObject", value: a, ...r })];
         continue;
       }
-      u = [...u, j({ allowReserved: e, name: d, value: r })];
+      u = [...u, j({ allowReserved: e, name: s, value: a })];
     }
   }
   return u.join("&");
-}, E = (e) => {
+}, L = (e) => {
   if (e) {
     if (e.startsWith("application/json") || e.endsWith("+json")) return "json";
     if (e === "multipart/form-data") return "formData";
     if (["application/", "audio/", "image/", "video/"].some((c) => e.startsWith(c))) return "blob";
     if (e.startsWith("text/")) return "text";
   }
-}, B = ({ baseUrl: e, path: c, query: l, querySerializer: s, url: u }) => {
-  let d = u.startsWith("/") ? u : `/${u}`, r = e + d;
-  c && (r = k({ path: c, url: r }));
-  let t = l ? s(l) : "";
-  return t.startsWith("?") && (t = t.substring(1)), t && (r += `?${t}`), r;
-}, U = (e, c) => {
-  var s;
-  let l = { ...e, ...c };
-  return (s = l.baseUrl) != null && s.endsWith("/") && (l.baseUrl = l.baseUrl.substring(0, l.baseUrl.length - 1)), l.headers = $(e.headers, c.headers), l;
-}, $ = (...e) => {
+}, D = ({ baseUrl: e, path: c, query: r, querySerializer: d, url: u }) => {
+  let s = u.startsWith("/") ? u : `/${u}`, a = e + s;
+  c && (a = k({ path: c, url: a }));
+  let l = r ? d(r) : "";
+  return l.startsWith("?") && (l = l.substring(1)), l && (a += `?${l}`), a;
+}, v = (e, c) => {
+  var d;
+  let r = { ...e, ...c };
+  return (d = r.baseUrl) != null && d.endsWith("/") && (r.baseUrl = r.baseUrl.substring(0, r.baseUrl.length - 1)), r.headers = T(e.headers, c.headers), r;
+}, T = (...e) => {
   let c = new Headers();
-  for (let l of e) {
-    if (!l || typeof l != "object") continue;
-    let s = l instanceof Headers ? l.entries() : Object.entries(l);
-    for (let [u, d] of s) if (d === null) c.delete(u);
-    else if (Array.isArray(d)) for (let r of d) c.append(u, r);
-    else d !== void 0 && c.set(u, typeof d == "object" ? JSON.stringify(d) : d);
+  for (let r of e) {
+    if (!r || typeof r != "object") continue;
+    let d = r instanceof Headers ? r.entries() : Object.entries(r);
+    for (let [u, s] of d) if (s === null) c.delete(u);
+    else if (Array.isArray(s)) for (let a of s) c.append(u, a);
+    else s !== void 0 && c.set(u, typeof s == "object" ? JSON.stringify(s) : s);
   }
   return c;
-}, v = class {
+}, C = class {
   constructor() {
-    C(this, "_fns");
+    I(this, "_fns");
     this._fns = [];
   }
   clear() {
@@ -159,268 +159,283 @@ var P = /\{[^{}]+\}/g, j = ({ allowReserved: e, name: c, value: l }) => {
   use(e) {
     this._fns = [...this._fns, e];
   }
-}, L = () => ({ error: new v(), request: new v(), response: new v() }), W = { bodySerializer: (e) => JSON.stringify(e) }, N = A({ allowReserved: !1, array: { explode: !0, style: "form" }, object: { explode: !0, style: "deepObject" } }), D = { "Content-Type": "application/json" }, O = (e = {}) => ({ ...W, baseUrl: "", fetch: globalThis.fetch, headers: D, parseAs: "auto", querySerializer: N, ...e }), M = (e = {}) => {
-  let c = U(O(), e), l = () => ({ ...c }), s = (r) => (c = U(c, r), l()), u = L(), d = async (r) => {
-    let t = { ...c, ...r, headers: $(c.headers, r.headers) };
-    t.body && t.bodySerializer && (t.body = t.bodySerializer(t.body)), t.body || t.headers.delete("Content-Type");
-    let f = B({ baseUrl: t.baseUrl ?? "", path: t.path, query: t.query, querySerializer: typeof t.querySerializer == "function" ? t.querySerializer : A(t.querySerializer), url: t.url }), b = { redirect: "follow", ...t }, n = new Request(f, b);
-    for (let m of u.request._fns) n = await m(n, t);
-    let R = t.fetch, h = await R(n);
-    for (let m of u.response._fns) h = await m(h, n, t);
-    let g = { request: n, response: h };
-    if (h.ok) {
-      if (h.status === 204 || h.headers.get("Content-Length") === "0") return { data: {}, ...g };
-      if (t.parseAs === "stream") return { data: h.body, ...g };
-      let m = (t.parseAs === "auto" ? E(h.headers.get("Content-Type")) : t.parseAs) ?? "json", w = await h[m]();
-      return m === "json" && t.responseTransformer && (w = await t.responseTransformer(w)), { data: w, ...g };
+}, W = () => ({ error: new C(), request: new C(), response: new C() }), A = (e, c, r) => {
+  typeof r == "string" || r instanceof Blob ? e.append(c, r) : e.append(c, JSON.stringify(r));
+}, _ = { bodySerializer: (e) => {
+  let c = new FormData();
+  return Object.entries(e).forEach(([r, d]) => {
+    d != null && (Array.isArray(d) ? d.forEach((u) => A(c, r, u)) : A(c, r, d));
+  }), c;
+} }, B = { bodySerializer: (e) => JSON.stringify(e) }, M = x({ allowReserved: !1, array: { explode: !0, style: "form" }, object: { explode: !0, style: "deepObject" } }), H = { "Content-Type": "application/json" }, R = (e = {}) => ({ ...B, baseUrl: "", fetch: globalThis.fetch, headers: H, parseAs: "auto", querySerializer: M, ...e }), J = (e = {}) => {
+  let c = v(R(), e), r = () => ({ ...c }), d = (a) => (c = v(c, a), r()), u = W(), s = async (a) => {
+    let l = { ...c, ...a, headers: T(c.headers, a.headers) };
+    l.body && l.bodySerializer && (l.body = l.bodySerializer(l.body)), l.body || l.headers.delete("Content-Type");
+    let n = D({ baseUrl: l.baseUrl ?? "", path: l.path, query: l.query, querySerializer: typeof l.querySerializer == "function" ? l.querySerializer : x(l.querySerializer), url: l.url }), b = { redirect: "follow", ...l }, h = new Request(n, b);
+    for (let m of u.request._fns) h = await m(h, l);
+    let $ = l.fetch, f = await $(h);
+    for (let m of u.response._fns) f = await m(f, h, l);
+    let y = { request: h, response: f };
+    if (f.ok) {
+      if (f.status === 204 || f.headers.get("Content-Length") === "0") return { data: {}, ...y };
+      if (l.parseAs === "stream") return { data: f.body, ...y };
+      let m = (l.parseAs === "auto" ? L(f.headers.get("Content-Type")) : l.parseAs) ?? "json", w = await f[m]();
+      return m === "json" && l.responseTransformer && (w = await l.responseTransformer(w)), { data: w, ...y };
     }
-    let y = await h.text();
+    let g = await f.text();
     try {
-      y = JSON.parse(y);
+      g = JSON.parse(g);
     } catch {
     }
-    let i = y;
-    for (let m of u.error._fns) i = await m(y, h, n, t);
-    if (i = i || {}, t.throwOnError) throw i;
-    return { error: i, ...g };
+    let i = g;
+    for (let m of u.error._fns) i = await m(g, f, h, l);
+    if (i = i || {}, l.throwOnError) throw i;
+    return { error: i, ...y };
   };
-  return { connect: (r) => d({ ...r, method: "CONNECT" }), delete: (r) => d({ ...r, method: "DELETE" }), get: (r) => d({ ...r, method: "GET" }), getConfig: l, head: (r) => d({ ...r, method: "HEAD" }), interceptors: u, options: (r) => d({ ...r, method: "OPTIONS" }), patch: (r) => d({ ...r, method: "PATCH" }), post: (r) => d({ ...r, method: "POST" }), put: (r) => d({ ...r, method: "PUT" }), request: d, setConfig: s, trace: (r) => d({ ...r, method: "TRACE" }) };
+  return { connect: (a) => s({ ...a, method: "CONNECT" }), delete: (a) => s({ ...a, method: "DELETE" }), get: (a) => s({ ...a, method: "GET" }), getConfig: r, head: (a) => s({ ...a, method: "HEAD" }), interceptors: u, options: (a) => s({ ...a, method: "OPTIONS" }), patch: (a) => s({ ...a, method: "PATCH" }), post: (a) => s({ ...a, method: "POST" }), put: (a) => s({ ...a, method: "PUT" }), request: s, setConfig: d, trace: (a) => s({ ...a, method: "TRACE" }) };
 };
-const a = M(O()), G = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+const t = J(R()), V = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/config"
-}), F = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), Z = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/access-tokens"
-}), K = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), K = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/access-tokens/exchange-using-oidc"
-}), Q = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Q = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/access-tokens/me"
-}), V = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), X = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/users"
-}), X = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), Y = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/users"
-}), Y = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), p = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/users/{id}"
-}), Z = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), o = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/users/{id}"
-}), p = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), ee = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/users/{id}/email"
-}), o = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), re = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/users/{id}/password"
-}), ee = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), ae = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/users/{id}/username"
-}), re = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), te = (e) => ((e == null ? void 0 : e.client) ?? t).post({
+  ..._,
   ...e,
+  headers: {
+    "Content-Type": null
+  },
   url: "/api/users/{id}/avatar"
-}), ae = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), le = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/users/{id}"
-}), te = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ce = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/projects"
-}), le = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), ue = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/projects"
-}), ce = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), de = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/projects/{id}"
-}), ue = (e) => ((e == null ? void 0 : e.client) ?? a).patch(
+}), se = (e) => ((e == null ? void 0 : e.client) ?? t).patch(
   {
     ...e,
     url: "/api/projects/{id}"
   }
-), de = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+), ne = (e) => ((e == null ? void 0 : e.client) ?? t).post({
+  ..._,
   ...e,
+  headers: {
+    "Content-Type": null
+  },
   url: "/api/projects/{id}/background-image"
-}), se = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), fe = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/projects/{id}"
-}), fe = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), he = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/projects/{projectId}/managers"
-}), he = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), me = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/project-managers/{id}"
-}), ne = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), be = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/projects/{projectId}/boards"
-}), me = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), ie = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/boards/{id}"
-}), be = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), ye = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/boards/{id}"
-}), ie = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), ge = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/boards/{id}"
-}), ge = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), je = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/boards/{boardId}/memberships"
-}), ye = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), we = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/board-memberships/{id}"
-}), je = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Ce = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/board-memberships/{id}"
-}), we = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), Ie = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/boards/{boardId}/labels"
-}), ve = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), ve = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/labels/{id}"
-}), Ce = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Ae = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/labels/{id}"
-}), Ue = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), Ue = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/boards/{boardId}/lists"
-}), xe = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), Oe = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/lists/{id}"
-}), Ie = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), xe = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/lists/{id}/sort"
-}), Ae = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Te = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/lists/{id}"
-}), $e = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), _e = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/lists/{listId}/cards"
-}), Oe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Re = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/cards/{id}"
-}), Re = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), $e = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/cards/{id}"
-}), Te = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), Se = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/cards/{id}/duplicate"
-}), qe = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Ee = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/cards/{id}"
-}), Pe = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), qe = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/cards/{cardId}/memberships"
-}), ze = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Ne = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/cards/{cardId}/memberships"
-}), Se = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), Pe = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/cards/{cardId}/labels"
-}), _e = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), ze = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/cards/{cardId}/labels/{labelId}"
-}), ke = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), ke = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/cards/{cardId}/tasks"
-}), Ee = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), Le = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/tasks/{id}"
-}), Be = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), De = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/tasks/{id}"
-}), Le = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+}), We = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/cards/{cardId}/attachments"
-}), We = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), Be = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/attachments/{id}"
-}), Ne = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Me = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/attachments/{id}"
-}), De = (e) => ((e == null ? void 0 : e.client) ?? a).get(
+}), He = (e) => ((e == null ? void 0 : e.client) ?? t).get(
   {
     ...e,
     url: "/api/cards/{cardId}/actions"
   }
-), Me = (e) => ((e == null ? void 0 : e.client) ?? a).post({
+), Je = (e) => ((e == null ? void 0 : e.client) ?? t).post({
   ...e,
   url: "/api/cards/{cardId}/comment-actions"
-}), He = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), Fe = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/comment-actions/{id}"
-}), Je = (e) => ((e == null ? void 0 : e.client) ?? a).delete({
+}), Ge = (e) => ((e == null ? void 0 : e.client) ?? t).delete({
   ...e,
   url: "/api/comment-actions/{id}"
-}), Ge = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ve = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/notifications"
-}), Fe = (e) => ((e == null ? void 0 : e.client) ?? a).get({
+}), Ze = (e) => ((e == null ? void 0 : e.client) ?? t).get({
   ...e,
   url: "/api/notifications/{id}"
-}), Ke = (e) => ((e == null ? void 0 : e.client) ?? a).patch({
+}), Ke = (e) => ((e == null ? void 0 : e.client) ?? t).patch({
   ...e,
   url: "/api/notifications/{ids}"
 });
-var H = /* @__PURE__ */ ((e) => (e.s400 = "Bad request", e.s401 = "Unauthorized", e.s404 = "Not found", e.s409 = "Conflict", e.s422 = "Bad request (unprocessable)", e))(H || {});
+var F = /* @__PURE__ */ ((e) => (e.s400 = "E_MISSING_OR_INVALID_PARAMS", e.s401 = "E_UNAUTHORIZED", e.s404 = "E_NOT_FOUND", e.s409 = "E_CONFLICT", e))(F || {});
 export {
-  H as StatusCode,
-  F as authorize,
+  F as StatusCode,
+  Z as authorize,
   K as authorizeOidc,
-  a as client,
-  Le as createAttachment,
-  ne as createBoard,
-  ge as createBoardMembership,
-  $e as createCard,
-  Se as createCardLabel,
-  Pe as createCardMembership,
-  Me as createCommentAction,
-  we as createLabel,
+  t as client,
+  We as createAttachment,
+  be as createBoard,
+  je as createBoardMembership,
+  _e as createCard,
+  Pe as createCardLabel,
+  qe as createCardMembership,
+  Je as createCommentAction,
+  Ie as createLabel,
   Ue as createList,
-  le as createProject,
-  fe as createProjectManager,
+  ue as createProject,
+  he as createProjectManager,
   ke as createTask,
-  X as createUser,
-  Ne as deleteAttachment,
-  ie as deleteBoard,
-  je as deleteBoardMembership,
-  qe as deleteCard,
-  _e as deleteCardLabel,
-  ze as deleteCardMembership,
-  Je as deleteCommentAction,
-  Ce as deleteLabel,
-  Ae as deleteList,
-  se as deleteProject,
-  he as deleteProjectManager,
-  Be as deleteTask,
-  ae as deleteUser,
-  Te as duplicateCard,
-  me as getBoard,
-  Oe as getCard,
-  De as getCardActions,
-  G as getConfig,
-  Fe as getNotification,
-  Ge as getNotifications,
-  ce as getProject,
-  te as getProjects,
-  Y as getUser,
-  V as getUsers,
-  Ie as sortList,
+  Y as createUser,
+  Me as deleteAttachment,
+  ge as deleteBoard,
+  Ce as deleteBoardMembership,
+  Ee as deleteCard,
+  ze as deleteCardLabel,
+  Ne as deleteCardMembership,
+  Ge as deleteCommentAction,
+  Ae as deleteLabel,
+  Te as deleteList,
+  fe as deleteProject,
+  me as deleteProjectManager,
+  De as deleteTask,
+  le as deleteUser,
+  Se as duplicateCard,
+  ie as getBoard,
+  Re as getCard,
+  He as getCardActions,
+  V as getConfig,
+  Ze as getNotification,
+  Ve as getNotifications,
+  de as getProject,
+  ce as getProjects,
+  p as getUser,
+  X as getUsers,
+  xe as sortList,
   Q as unauthorize,
-  We as updateAttachment,
-  be as updateBoard,
-  ye as updateBoardMembership,
-  Re as updateCard,
-  He as updateCommentAction,
+  Be as updateAttachment,
+  ye as updateBoard,
+  we as updateBoardMembership,
+  $e as updateCard,
+  Fe as updateCommentAction,
   ve as updateLabel,
-  xe as updateList,
+  Oe as updateList,
   Ke as updateNotifications,
-  ue as updateProject,
-  de as updateProjectBackgroundImage,
-  Ee as updateTask,
-  Z as updateUser,
-  re as updateUserAvatar,
-  p as updateUserEmail,
-  o as updateUserPassword,
-  ee as updateUserUsername
+  se as updateProject,
+  ne as updateProjectBackgroundImage,
+  Le as updateTask,
+  o as updateUser,
+  te as updateUserAvatar,
+  ee as updateUserEmail,
+  re as updateUserPassword,
+  ae as updateUserUsername
 };

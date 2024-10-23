@@ -852,7 +852,12 @@ export type UpdateAttachmentRequest = {
   path: {
     id: string;
   };
-  body: Partial<Attachment>;
+  body: Partial<
+    Omit<
+      Attachment,
+      'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'
+    >
+  >;
 };
 export type UpdateAttachmentResponse = SingleResponse<Attachment>;
 export type UpdateAttachmentError = UnauthorizedError | NotFoundError;
@@ -918,13 +923,13 @@ export type GetNotificationRequest = {
     id: string;
   };
 };
-export type GetNotificationResponse = ArrayResponse<Notification>;
+export type GetNotificationResponse = SingleResponse<Notification>;
 export type GetNotificationError = UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/notifications/:ids': 'notifications/update'
 export type UpdateNotificationsRequest = {
   path: {
-    ids: string;
+    ids: string[];
   };
   body: Partial<
     Omit<Notification, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>

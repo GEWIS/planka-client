@@ -1,4 +1,4 @@
-import { beforeAll, test, expect, describe } from 'vitest';
+import { beforeEach, test, expect, describe } from 'vitest';
 import {
   authorize,
   Board,
@@ -67,10 +67,15 @@ import {
   updateCommentAction,
   deleteCommentAction,
   getNotifications,
+  Notification,
+  getNotification,
+  updateNotifications,
+  createAttachment,
+  updateAttachment,
+  deleteAttachment,
 } from '../src';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import exp = require('node:constants');
 
 let globalUser = {} as User;
 let globalProject = {} as Project;
@@ -81,31 +86,33 @@ let globalLabel = {} as Label;
 let globalList = {} as List;
 let globalCard = {} as Card;
 let globalCardMembership = {} as CardMembership;
-let globalCardlabel = {} as CardLabel;
+let globalCardLabel = {} as CardLabel;
 let globalTask = {} as Task;
-const globalAttachment = {} as Attachment;
+let globalAttachment = {} as Attachment;
 const globalAction = {} as Action;
 let globalComment = {} as Comment;
-const globalNotification = {} as Notification;
+let globalNotification = {} as Notification;
 
-beforeAll(() => {
-  test('GET /api/access-tokens', async () => {
-    const accessTokenResponse = await authorize({
-      body: {
-        emailOrUsername: 'demo',
-        password: 'demo',
-      },
-    });
-    const accessToken = accessTokenResponse.data.item;
-
-    client.setConfig({
-      baseUrl: 'http://localhost:3000',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-  });
+beforeEach(async () => {
+  await setAccessToken('demo', 'demo');
 });
+
+async function setAccessToken(emailOrUsername: string, password: string) {
+  const accessTokenResponse = await authorize({
+    body: {
+      emailOrUsername: emailOrUsername,
+      password: password,
+    },
+  });
+  const accessToken = accessTokenResponse.data.item;
+
+  client.setConfig({
+    baseUrl: 'http://localhost:3000',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
 
 describe('Config', () => {
   client.setConfig({
@@ -135,19 +142,13 @@ describe('Authorization', () => {
   });
 
   test('GET /api/access-tokens', async () => {
-    const accessTokenResponse = await authorize({
+    await authorize({
       body: {
         emailOrUsername: 'demo',
         password: 'demo',
       },
-    });
-    const accessToken = accessTokenResponse.data.item;
-
-    client.setConfig({
-      baseUrl: 'http://localhost:3000',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
     });
   });
 });
@@ -791,7 +792,7 @@ describe('Cards', () => {
       const label = res.data.item;
       expect(label.cardId).to.equal(globalCard.id);
       expect(label.labelId).to.equal(globalLabel.id);
-      globalCardlabel = label;
+      globalCardLabel = label;
     });
   });
 
@@ -838,6 +839,26 @@ describe('Cards', () => {
     });
   });
 
+  test('POST /api/cards/:cardId/attachments', async () => {
+    const imagePath = path.join(__dirname, 'gewis.jpg');
+    const fileBuffer = fs.readFileSync(imagePath);
+    const file = new File([fileBuffer], 'gewis.jpg', { type: 'image/jpeg' });
+
+    await createAttachment({
+      path: {
+        cardId: globalCard.id,
+      },
+      body: {
+        file: file,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const attachment = res.data.item;
+      expect(attachment.name).to.equal('gewis.jpg');
+      globalAttachment = attachment;
+    });
+  });
+
   test('GET /api/cards/:cardId/actions', async () => {
     await getCardActions({
       path: {
@@ -868,6 +889,26 @@ describe('Cards', () => {
   });
 });
 
+describe('Attachments', () => {
+  test('PATCH /api/attachments/:id', async () => {
+    await updateAttachment({
+      path: {
+        id: globalAttachment.id,
+      },
+      body: {
+        name: 'GEWIS',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const attachment = res.data.item;
+      expect(attachment.name).to.equal('GEWIS');
+      globalAttachment.name = attachment.name;
+      globalAttachment.updatedAt = attachment.updatedAt;
+      expect(JSON.stringify(attachment)).to.equal(JSON.stringify(globalAttachment));
+    });
+  });
+});
+
 describe('Comments', () => {
   test('PATCH /api/comment-actions/:id', async () => {
     await updateCommentAction({
@@ -890,15 +931,67 @@ describe('Comments', () => {
 
 describe('Notifications', () => {
   test('GET /api/notifications', async () => {
+    // We log in as the test user -- should have a single notification
+    await setAccessToken('john@doe.dev', 'fo52SMQcoJgWja');
+
     await getNotifications({}).then((res) => {
       expect(res.error).to.equal(undefined);
       const notifications = res.data.items;
-      expect(notifications.length).to.equal(0);
+      expect(notifications.length).to.equal(1);
+      globalNotification = notifications[0];
+    });
+  });
+
+  test('GET /api/notifications/:id', async () => {
+    // We log in as the test user -- should have a single notification
+    await setAccessToken('john@doe.dev', 'fo52SMQcoJgWja');
+
+    await getNotification({
+      path: {
+        id: globalNotification.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const notification = res.data.item;
+      expect(JSON.stringify(globalNotification)).to.equal(JSON.stringify(notification));
+    });
+  });
+
+  test('PATCH /api/notifications/:ids', async () => {
+    // We log in as the test user -- should have a single notification
+    await setAccessToken('john@doe.dev', 'fo52SMQcoJgWja');
+
+    await updateNotifications({
+      path: {
+        ids: [globalNotification.id],
+      },
+      body: {
+        isRead: true,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const notification = res.data.items[0];
+      expect(notification.isRead).to.equal(true);
+      globalNotification.isRead = notification.isRead;
+      globalNotification.updatedAt = notification.updatedAt;
+      expect(JSON.stringify(notification)).to.equal(JSON.stringify(globalNotification));
     });
   });
 });
 
 describe('Delete', () => {
+  test('DELETE /api/attachments/:id', async () => {
+    await deleteAttachment({
+      path: {
+        id: globalAttachment.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const attachment = res.data.item;
+      expect(JSON.stringify(attachment)).to.equal(JSON.stringify(globalAttachment));
+    });
+  });
+
   test('DELETE /api/comment-actions/:id', async () => {
     await deleteCommentAction({
       path: {
@@ -927,12 +1020,12 @@ describe('Delete', () => {
     await deleteCardLabel({
       path: {
         cardId: globalCard.id,
-        labelId: globalCardlabel.labelId,
+        labelId: globalCardLabel.labelId,
       },
     }).then((res) => {
       expect(res.error).to.equal(undefined);
       const label = res.data.item;
-      expect(JSON.stringify(label)).to.equal(JSON.stringify(globalCardlabel));
+      expect(JSON.stringify(label)).to.equal(JSON.stringify(globalCardLabel));
     });
   });
 
@@ -959,6 +1052,8 @@ describe('Delete', () => {
     }).then((res) => {
       expect(res.error).to.equal(undefined);
       const card = res.data.item;
+      // Card has been updated because we added cover attachment
+      globalCard.updatedAt = card.updatedAt;
       expect(JSON.stringify(card)).to.equal(JSON.stringify(globalCard));
     });
   });
@@ -1029,6 +1124,7 @@ describe('Delete', () => {
         id: globalUser.id,
       },
     }).then((res) => {
+      expect(res.error).to.equal(undefined);
       const user = res.data.item;
       expect(user.deletedAt).to.not.equal(null);
       globalUser.deletedAt = user.deletedAt;
@@ -1043,6 +1139,7 @@ describe('Delete', () => {
         id: globalProject.id,
       },
     }).then((res) => {
+      expect(res.error).to.equal(undefined);
       const project = res.data.item;
       expect(JSON.stringify(project)).to.equal(JSON.stringify(globalProject));
     });
