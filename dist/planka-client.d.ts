@@ -145,7 +145,7 @@ export declare type Card = {
     name: string;
     description?: string;
     dueDate?: Date;
-    stopWatch?: StopWatch;
+    isDueDateCompleted?: boolean;
     boardId: string;
     listId: string;
     coverAttachmentId?: string;
@@ -196,7 +196,7 @@ export declare type CreateAttachmentRequest = {
         cardId: string;
     };
     body: {
-        text: string;
+        file: File;
     };
 };
 
@@ -220,7 +220,7 @@ export declare type CreateBoardMembershipRequest = {
     };
 };
 
-export declare type CreateBoardMembershipResponse = SingleResponse<Board>;
+export declare type CreateBoardMembershipResponse = SingleResponse<BoardMembership>;
 
 export declare type CreateBoardRequest = {
     path: {
@@ -304,6 +304,7 @@ export declare type CreateLabelRequest = {
         boardId: string;
     };
     body: {
+        name: string;
         position: number;
         color: LabelColor;
     };
@@ -527,13 +528,13 @@ export declare type DeleteTaskError = UnauthorizedError | NotFoundError;
 
 export declare type DeleteTaskRequest = {
     path: {
-        taskId: string;
+        id: string;
     };
 };
 
 export declare type DeleteTaskResponse = SingleResponse<Task>;
 
-export declare const deleteUser: <ThrowOnError extends boolean = false>(options: Options<DeleteUserRequest, ThrowOnError>) => RequestResult<void, DeleteUserError, ThrowOnError>;
+export declare const deleteUser: <ThrowOnError extends boolean = false>(options: Options<DeleteUserRequest, ThrowOnError>) => RequestResult<DeleteUserResponse, DeleteUserError, ThrowOnError>;
 
 export declare type DeleteUserError = UnauthorizedError | NotFoundError;
 
@@ -541,10 +542,9 @@ export declare type DeleteUserRequest = {
     path: {
         id: string;
     };
-    body: User;
 };
 
-export declare type DeleteUserResponse = void;
+export declare type DeleteUserResponse = SingleResponse<User>;
 
 export declare const duplicateCard: <ThrowOnError extends boolean = false>(options: Options<DuplicateCardRequest, ThrowOnError>) => RequestResult<DuplicateCardResponse, DuplicateCardError, ThrowOnError>;
 
@@ -629,9 +629,6 @@ export declare type GetProjectRequest = {
     path: {
         id: string;
     };
-    body: {
-        name: string;
-    };
 };
 
 export declare type GetProjectResponse = SingleResponse<Project>;
@@ -668,13 +665,16 @@ export { Image_2 as Image }
 
 export declare type Include = {
     users: User[];
-    projectManagers: ProjectManager[];
-    boards: Board[];
     boardMemberships: BoardMembership[];
+    labels: Label[];
+    lists: List[];
+    cards: Card[];
     cardMemberships: Card[];
     cardLabels: Label[];
-    actions: Action[];
     tasks: Action[];
+    boards: Board[];
+    actions: Action[];
+    projectManagers: ProjectManager[];
 };
 
 export declare type Label = {
@@ -688,6 +688,8 @@ export declare type Label = {
 };
 
 export declare type LabelColor = 'berry-red' | 'pumpkin-orange' | 'lagoon-blue' | 'pink-tulip' | 'light-mud' | 'orange-peel' | 'bright-moss' | 'antique-blue' | 'dark-granite' | 'lagune-blue' | 'sunny-grass' | 'morning-sky' | 'light-orange' | 'midnight-blue' | 'tank-green' | 'gun-metal' | 'wet-moss' | 'red-burgundy' | 'light-concrete' | 'apricot-red' | 'desert-sand' | 'navy-blue' | 'egg-yellow' | 'coral-green' | 'light-cocoa';
+
+export declare type Language = 'ar-YE' | 'bg-BG' | 'cs-CZ' | 'da-DK' | 'de-DE' | 'en-GB' | 'en-US' | 'es-ES' | 'fa-IR' | 'fr-FR' | 'hu-HU' | 'id-ID' | 'it-IT' | 'ja-JP' | 'ko-KR' | 'nl-NL' | 'pl-PL' | 'pt-BR' | 'ro-RO' | 'ru-RU' | 'sk-SK' | 'sv-SE' | 'tr-TR' | 'uk-UA' | 'uz-UZ' | 'zh-CN' | 'zh-TW';
 
 export declare type List = {
     id: string;
@@ -747,22 +749,21 @@ export declare type SortListRequest = {
     path: {
         id: string;
     };
+    body: {
+        type: SortType;
+    };
 };
 
 export declare type SortListResponse = SingleResponse<List>;
 
-export declare enum StatusCode {
-    s400 = "Bad request",
-    s401 = "Unauthorized",
-    s404 = "Not found",
-    s409 = "Conflict",
-    s422 = "Bad request (unprocessable)"
-}
+export declare type SortType = 'name_asc' | 'dueDate_asc' | 'createdAt_asc' | 'createdAt_desc';
 
-export declare type StopWatch = {
-    startedAt?: Date;
-    total: number;
-};
+export declare enum StatusCode {
+    s400 = "E_MISSING_OR_INVALID_PARAMS",
+    s401 = "E_UNAUTHORIZED",
+    s404 = "E_NOT_FOUND",
+    s409 = "E_CONFLICT"
+}
 
 export declare type Task = {
     id: string;
@@ -811,7 +812,6 @@ export declare type UpdateBoardMembershipRequest = {
     };
     body: {
         role: Role;
-        canComment: boolean;
     };
 };
 
@@ -821,7 +821,7 @@ export declare type UpdateBoardRequest = {
     path: {
         id: string;
     };
-    body: Partial<Board>;
+    body: Partial<Omit<Board, 'createdAt' | 'updatedAt' | 'id' | 'projectId'>>;
 };
 
 export declare type UpdateBoardResponse = SingleResponse<Board>;
@@ -834,7 +834,7 @@ export declare type UpdateCardRequest = {
     path: {
         id: string;
     };
-    body: Partial<Card>;
+    body: Partial<Omit<Card, 'createdAt' | 'updatedAt' | 'id' | 'creatorUserId' | 'isSubscribed'>>;
 };
 
 export declare type UpdateCardResponse = SingleResponse<Card>;
@@ -862,7 +862,7 @@ export declare type UpdateLabelRequest = {
     path: {
         id: string;
     };
-    body: Partial<Label>;
+    body: Partial<Omit<Label, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
 };
 
 export declare type UpdateLabelResponse = SingleResponse<Label>;
@@ -875,7 +875,7 @@ export declare type UpdateListRequest = {
     path: {
         id: string;
     };
-    body: Partial<List>;
+    body: Partial<Omit<List, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
 };
 
 export declare type UpdateListResponse = SingleResponse<List>;
@@ -888,7 +888,7 @@ export declare type UpdateNotificationsRequest = {
     path: {
         ids: string;
     };
-    body: Partial<Notification_2>;
+    body: Partial<Omit<Notification_2, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>>;
 };
 
 export declare type UpdateNotificationsResponse = ArrayResponse<Notification_2>;
@@ -916,7 +916,7 @@ export declare type UpdateProjectRequest = {
     path: {
         id: string;
     };
-    body: Partial<Project>;
+    body: Partial<Omit<Project, 'createdAt' | 'updatedAt' | 'id' | 'backgroundImage'>>;
 };
 
 export declare type UpdateProjectResponse = SingleResponse<Project>;
@@ -927,9 +927,9 @@ export declare type UpdateTaskError = UnauthorizedError | NotFoundError;
 
 export declare type UpdateTaskRequest = {
     path: {
-        taskId: string;
+        id: string;
     };
-    body: Partial<Task>;
+    body: Partial<Omit<Task, 'createdAt' | 'updatedAt' | 'id' | 'cardId'>>;
 };
 
 export declare type UpdateTaskResponse = SingleResponse<Task>;
@@ -987,7 +987,7 @@ export declare type UpdateUserRequest = {
     path: {
         id: string;
     };
-    body: Partial<User>;
+    body: Partial<Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>>;
 };
 
 export declare type UpdateUserResponse = SingleResponse<User>;
@@ -1009,13 +1009,13 @@ export declare type UpdateUserUsernameResponse = SingleResponse<User>;
 
 export declare type User = {
     id: string;
-    email?: string;
+    email: string;
     isAdmin: boolean;
-    name?: string;
-    username?: string;
+    name: string;
+    username: string;
     phone?: string;
     organization?: string;
-    language?: string;
+    language?: Language;
     subscribeToOwnCards: boolean;
     avatarUrl?: string;
     createdAt: Date;
