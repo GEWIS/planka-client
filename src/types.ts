@@ -1,10 +1,3 @@
-export enum StatusCode {
-  s400 = 'E_MISSING_OR_INVALID_PARAMS',
-  s401 = 'E_UNAUTHORIZED',
-  s404 = 'E_NOT_FOUND',
-  s409 = 'E_CONFLICT',
-}
-
 /**
  * Authentication
  */
@@ -348,7 +341,12 @@ export type Include = {
  * Most errors are roughly the same, so they are types singly
  */
 export type HttpError = {
-  code: string;
+  code:
+    | 'E_MISSING_OR_INVALID_PARAMS'
+    | 'E_UNAUTHORIZED'
+    | 'E_NOT_FOUND'
+    | 'E_CONFLICT'
+    | 'E_UNPROCESSABLE_ENTITY';
   message?: string;
   problems?: string[];
 };
@@ -817,6 +815,24 @@ export type DeleteAttachmentRequest = {
 };
 export type DeleteAttachmentResponse = SingleResponse<Attachment>;
 
+// 'GET /attachments/:id/download/:filename'
+export type GetAttachmentRequest = {
+  path: {
+    id: string;
+    filename: string;
+  };
+};
+export type GetAttachmentResponse = Blob;
+
+// 'GET /attachments/:id/download/thumbnails/cover-256.:extension'
+export type GetAttachmentThumbnailRequest = {
+  path: {
+    id: string;
+    extension: string;
+  };
+};
+export type GetAttachmentThumbnailResponse = Blob;
+
 // 'GET /api/cards/:cardId/actions': 'actions/index'
 export type GetCardActionsRequest = {
   path: {
@@ -876,42 +892,3 @@ export type UpdateNotificationsRequest = {
   >;
 };
 export type UpdateNotificationsResponse = ArrayResponse<Notification>;
-
-// TODO - these still need to be implemented
-export type $OpenApiTs = {
-  // 'GET /attachments/:id/download/:filename': {
-  //    action: 'attachments/download',
-  //    skipAssets: false,
-  // },
-  '/attachments/{attachmentId}/download/{filename}': {
-    get: {
-      req: {
-        attachmentId: string;
-        filename: string;
-      };
-      // res: {
-      //   200: File;
-      //   401: UnauthorizedError;
-      //   404: NotFoundError;
-      // };
-    };
-  };
-
-  // 'GET /attachments/:id/download/thumbnails/cover-256.:extension': {
-  //    action: 'attachments/download-thumbnail',
-  //    skipAssets: false,
-  // },
-  '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
-    get: {
-      req: {
-        attachmentId: string;
-        extension: string;
-      };
-      // res: {
-      //   200: File;
-      //   401: UnauthorizedError;
-      //   404: NotFoundError;
-      // };
-    };
-  };
-};

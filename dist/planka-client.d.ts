@@ -4,35 +4,9 @@ import { Options } from '@hey-api/client-fetch';
 import { RequestOptionsBase } from '@hey-api/client-fetch';
 import { RequestResult } from '@hey-api/client-fetch';
 
-export declare type $OpenApiTs = {
-    '/attachments/{attachmentId}/download/{filename}': {
-        get: {
-            req: {
-                attachmentId: string;
-                filename: string;
-            };
-            res: {
-                200: File;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-    '/attachments/{attachmentId}/download/thumbnails/cover-256.{extension}': {
-        get: {
-            req: {
-                attachmentId: string;
-                extension: string;
-            };
-            res: {
-                200: File;
-                401: UnauthorizedError;
-                404: NotFoundError;
-            };
-        };
-    };
-};
-
+/**
+ * Authentication
+ */
 export declare type AccessTokenOidcRequest = {
     code: string;
     nonce: string;
@@ -62,6 +36,9 @@ export declare type ArrayResponse<T> = {
     included?: Partial<Include>;
 };
 
+/**
+ * Attachments
+ */
 export declare type Attachment = {
     id: string;
     name: string;
@@ -74,13 +51,22 @@ export declare type Attachment = {
     image?: Image_2;
 };
 
-export declare const authorize: <ThrowOnError extends boolean = false>(options: Options<AuthorizeRequest, ThrowOnError>) => RequestResult<AuthorizeResponse, BadRequestError, ThrowOnError>;
+/**
+ * Create access token
+ * 'POST /api/access-tokens': 'access-tokens/create'
+ * @param options
+ */
+export declare const authorize: <ThrowOnError extends boolean = false>(options: Options<AuthorizeRequest, ThrowOnError>) => RequestResult<AuthorizeResponse, HttpError, ThrowOnError>;
 
-export declare type AuthorizeError = BadRequestError;
+export declare type AuthorizeError = HttpError;
 
-export declare const authorizeOidc: <ThrowOnError extends boolean = false>(options: Options<AuthorizeOidcRequest, ThrowOnError>) => RequestResult<AuthorizeOidcResponse, AuthorizeOidcError, ThrowOnError>;
-
-export declare type AuthorizeOidcError = BadRequestError | UnauthorizedError;
+/**
+ * Exchange access token using oidc
+ * 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
+ * TODO -- this endpoint needs a written test
+ * @param options
+ */
+export declare const authorizeOidc: <ThrowOnError extends boolean = false>(options: Options<AuthorizeOidcRequest, ThrowOnError>) => RequestResult<AuthorizeOidcResponse, HttpError, ThrowOnError>;
 
 export declare type AuthorizeOidcRequest = {
     body: AccessTokenOidcRequest;
@@ -108,15 +94,9 @@ export declare type BackgroundImage = {
 
 export declare type BackgroundType = 'gradient' | 'image';
 
-export declare type BadRequestError = BaseError & {
-    problems: string[];
-};
-
-export declare type BaseError = {
-    code: string;
-    message: string;
-};
-
+/**
+ * Boards
+ */
 export declare type Board = {
     id: string;
     createdAt: Date;
@@ -126,6 +106,9 @@ export declare type Board = {
     projectId: string;
 };
 
+/**
+ * Board memberships
+ */
 export declare type BoardMembership = {
     id: string;
     createdAt: Date;
@@ -136,6 +119,9 @@ export declare type BoardMembership = {
     userId: string;
 };
 
+/**
+ * Cards
+ */
 export declare type Card = {
     id: string;
     createdAt: Date;
@@ -172,6 +158,9 @@ export declare const client: Client<Request, Response, unknown, RequestOptionsBa
 headers: Headers;
 }>;
 
+/**
+ * Comments
+ */
 declare type Comment_2 = {
     id: string;
     createdAt: Date;
@@ -185,11 +174,12 @@ export { Comment_2 as Comment }
 
 export declare type CommentType = 'commentCard';
 
-export declare type ConflictError = BaseError;
-
-export declare const createAttachment: <ThrowOnError extends boolean = false>(options: Options<CreateAttachmentRequest, ThrowOnError>) => RequestResult<CreateAttachmentResponse, CreateAttachmentError, ThrowOnError>;
-
-export declare type CreateAttachmentError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create attachment
+ * 'POST /api/cards/:cardId/attachments': 'attachments/create'
+ * @param options
+ */
+export declare const createAttachment: <ThrowOnError extends boolean = false>(options: Options<CreateAttachmentRequest, ThrowOnError>) => RequestResult<CreateAttachmentResponse, HttpError, ThrowOnError>;
 
 export declare type CreateAttachmentRequest = {
     path: {
@@ -202,13 +192,19 @@ export declare type CreateAttachmentRequest = {
 
 export declare type CreateAttachmentResponse = SingleResponse<Attachment>;
 
-export declare const createBoard: <ThrowOnError extends boolean = false>(options: Options<CreateBoardRequest, ThrowOnError>) => RequestResult<CreateBoardResponse, CreateBoardError, ThrowOnError>;
+/**
+ * Create board
+ * 'POST /api/projects/:projectId/boards': 'boards/create'
+ * @param options
+ */
+export declare const createBoard: <ThrowOnError extends boolean = false>(options: Options<CreateBoardRequest, ThrowOnError>) => RequestResult<CreateBoardResponse, HttpError, ThrowOnError>;
 
-export declare type CreateBoardError = BadRequestError | UnauthorizedError | NotFoundError;
-
-export declare const createBoardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateBoardMembershipRequest, ThrowOnError>) => RequestResult<CreateBoardMembershipResponse, CreateBoardMembershipError, ThrowOnError>;
-
-export declare type CreateBoardMembershipError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+/**
+ * Create board membership
+ * 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
+ * @param options
+ */
+export declare const createBoardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateBoardMembershipRequest, ThrowOnError>) => RequestResult<CreateBoardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type CreateBoardMembershipRequest = {
     path: {
@@ -234,13 +230,19 @@ export declare type CreateBoardRequest = {
 
 export declare type CreateBoardResponse = SingleResponse<Board>;
 
-export declare const createCard: <ThrowOnError extends boolean = false>(options: Options<CreateCardRequest, ThrowOnError>) => RequestResult<CreateCardResponse, CreateCardError, ThrowOnError>;
+/**
+ * Create card
+ * 'POST /api/lists/:listId/cards': 'cards/create'
+ * @param options
+ */
+export declare const createCard: <ThrowOnError extends boolean = false>(options: Options<CreateCardRequest, ThrowOnError>) => RequestResult<CreateCardResponse, HttpError, ThrowOnError>;
 
-export declare type CreateCardError = BadRequestError | UnauthorizedError | NotFoundError | UnprocessableError;
-
-export declare const createCardLabel: <ThrowOnError extends boolean = false>(options: Options<CreateCardLabelRequest, ThrowOnError>) => RequestResult<CreateCardLabelResponse, CreateCardLabelError, ThrowOnError>;
-
-export declare type CreateCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create card label
+ * 'POST /api/cards/:cardId/labels': 'card-labels/create'
+ * @param options
+ */
+export declare const createCardLabel: <ThrowOnError extends boolean = false>(options: Options<CreateCardLabelRequest, ThrowOnError>) => RequestResult<CreateCardLabelResponse, HttpError, ThrowOnError>;
 
 export declare type CreateCardLabelRequest = {
     path: {
@@ -253,9 +255,12 @@ export declare type CreateCardLabelRequest = {
 
 export declare type CreateCardLabelResponse = SingleResponse<CardLabel>;
 
-export declare const createCardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateCardMembershipRequest, ThrowOnError>) => RequestResult<CreateCardMembershipResponse, CreateCardMembershipError, ThrowOnError>;
-
-export declare type CreateCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create card membership
+ * 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
+ * @param options
+ */
+export declare const createCardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateCardMembershipRequest, ThrowOnError>) => RequestResult<CreateCardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type CreateCardMembershipRequest = {
     path: {
@@ -280,9 +285,12 @@ export declare type CreateCardRequest = {
 
 export declare type CreateCardResponse = SingleResponse<Card>;
 
-export declare const createCommentAction: <ThrowOnError extends boolean = false>(options: Options<CreateCommentActionRequest, ThrowOnError>) => RequestResult<CreateCommentActionResponse, CreateCommentActionError, ThrowOnError>;
-
-export declare type CreateCommentActionError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create comment action
+ * 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
+ * @param options
+ */
+export declare const createCommentAction: <ThrowOnError extends boolean = false>(options: Options<CreateCommentActionRequest, ThrowOnError>) => RequestResult<CreateCommentActionResponse, HttpError, ThrowOnError>;
 
 export declare type CreateCommentActionRequest = {
     path: {
@@ -295,9 +303,12 @@ export declare type CreateCommentActionRequest = {
 
 export declare type CreateCommentActionResponse = SingleResponse<Comment_2>;
 
-export declare const createLabel: <ThrowOnError extends boolean = false>(options: Options<CreateLabelRequest, ThrowOnError>) => RequestResult<CreateLabelResponse, CreateLabelError, ThrowOnError>;
-
-export declare type CreateLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create label
+ * 'POST /api/boards/:boardId/labels': 'labels/create'
+ * @param options
+ */
+export declare const createLabel: <ThrowOnError extends boolean = false>(options: Options<CreateLabelRequest, ThrowOnError>) => RequestResult<CreateLabelResponse, HttpError, ThrowOnError>;
 
 export declare type CreateLabelRequest = {
     path: {
@@ -312,9 +323,12 @@ export declare type CreateLabelRequest = {
 
 export declare type CreateLabelResponse = SingleResponse<Label>;
 
-export declare const createList: <ThrowOnError extends boolean = false>(options: Options<CreateListRequest, ThrowOnError>) => RequestResult<CreateListResponse, CreateListError, ThrowOnError>;
-
-export declare type CreateListError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create list
+ * 'POST /api/boards/:boardId/lists': 'lists/create'
+ * @param options
+ */
+export declare const createList: <ThrowOnError extends boolean = false>(options: Options<CreateListRequest, ThrowOnError>) => RequestResult<CreateListResponse, HttpError, ThrowOnError>;
 
 export declare type CreateListRequest = {
     path: {
@@ -328,13 +342,19 @@ export declare type CreateListRequest = {
 
 export declare type CreateListResponse = SingleResponse<List>;
 
-export declare const createProject: <ThrowOnError extends boolean = false>(options: Options<CreateProjectRequest, ThrowOnError>) => RequestResult<CreateProjectResponse, CreateProjectError, ThrowOnError>;
+/**
+ * Create project
+ * 'POST /api/projects': 'projects/create'
+ * @param options
+ */
+export declare const createProject: <ThrowOnError extends boolean = false>(options: Options<CreateProjectRequest, ThrowOnError>) => RequestResult<CreateProjectResponse, HttpError, ThrowOnError>;
 
-export declare type CreateProjectError = BadRequestError | UnauthorizedError;
-
-export declare const createProjectManager: <ThrowOnError extends boolean = false>(options: Options<CreateProjectManagerRequest, ThrowOnError>) => RequestResult<CreateProjectManagerResponse, CreateProjectManagerError, ThrowOnError>;
-
-export declare type CreateProjectManagerError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create project manager
+ * 'POST /api/projects/:projectId/managers': 'project-managers/create'
+ * @param options
+ */
+export declare const createProjectManager: <ThrowOnError extends boolean = false>(options: Options<CreateProjectManagerRequest, ThrowOnError>) => RequestResult<CreateProjectManagerResponse, HttpError, ThrowOnError>;
 
 export declare type CreateProjectManagerRequest = {
     path: {
@@ -355,9 +375,12 @@ export declare type CreateProjectRequest = {
 
 export declare type CreateProjectResponse = SingleResponse<Project>;
 
-export declare const createTask: <ThrowOnError extends boolean = false>(options: Options<CreateTaskRequest, ThrowOnError>) => RequestResult<CreateTaskResponse, CreateTaskError, ThrowOnError>;
-
-export declare type CreateTaskError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Create task
+ * 'POST /api/cards/:cardId/tasks': 'tasks/create'
+ * @param options
+ */
+export declare const createTask: <ThrowOnError extends boolean = false>(options: Options<CreateTaskRequest, ThrowOnError>) => RequestResult<CreateTaskResponse, HttpError, ThrowOnError>;
 
 export declare type CreateTaskRequest = {
     path: {
@@ -371,9 +394,12 @@ export declare type CreateTaskRequest = {
 
 export declare type CreateTaskResponse = SingleResponse<Task>;
 
-export declare const createUser: <ThrowOnError extends boolean = false>(options: Options<CreateUserRequest, ThrowOnError>) => RequestResult<CreateUserResponse, CreateUserError, ThrowOnError>;
-
-export declare type CreateUserError = BadRequestError | UnauthorizedError | ConflictError;
+/**
+ * Create user
+ * 'POST /api/users': 'users/create'
+ * @param options
+ */
+export declare const createUser: <ThrowOnError extends boolean = false>(options: Options<CreateUserRequest, ThrowOnError>) => RequestResult<CreateUserResponse, HttpError, ThrowOnError>;
 
 export declare type CreateUserRequest = {
     body: {
@@ -386,9 +412,12 @@ export declare type CreateUserRequest = {
 
 export declare type CreateUserResponse = SingleResponse<User>;
 
-export declare const deleteAttachment: <ThrowOnError extends boolean = false>(options: Options<DeleteAttachmentRequest, ThrowOnError>) => RequestResult<DeleteAttachmentResponse, DeleteAttachmentError, ThrowOnError>;
-
-export declare type DeleteAttachmentError = UnauthorizedError | NotFoundError;
+/**
+ * Delete attachment
+ * 'DELETE /api/attachments/:id': 'attachments/delete'
+ * @param options
+ */
+export declare const deleteAttachment: <ThrowOnError extends boolean = false>(options: Options<DeleteAttachmentRequest, ThrowOnError>) => RequestResult<DeleteAttachmentResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteAttachmentRequest = {
     path: {
@@ -398,13 +427,19 @@ export declare type DeleteAttachmentRequest = {
 
 export declare type DeleteAttachmentResponse = SingleResponse<Attachment>;
 
-export declare const deleteBoard: <ThrowOnError extends boolean = false>(options: Options<DeleteBoardRequest, ThrowOnError>) => RequestResult<DeleteBoardResponse, DeleteBoardError, ThrowOnError>;
+/**
+ * Delete board
+ * 'DELETE /api/boards/:id': 'boards/delete'
+ * @param options
+ */
+export declare const deleteBoard: <ThrowOnError extends boolean = false>(options: Options<DeleteBoardRequest, ThrowOnError>) => RequestResult<DeleteBoardResponse, HttpError, ThrowOnError>;
 
-export declare type DeleteBoardError = UnauthorizedError | NotFoundError;
-
-export declare const deleteBoardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteBoardMembershipRequest, ThrowOnError>) => RequestResult<DeleteBoardMembershipResponse, DeleteBoardMembershipError, ThrowOnError>;
-
-export declare type DeleteBoardMembershipError = UnauthorizedError | NotFoundError;
+/**
+ * Delete board membership
+ * 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
+ * @param options
+ */
+export declare const deleteBoardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteBoardMembershipRequest, ThrowOnError>) => RequestResult<DeleteBoardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteBoardMembershipRequest = {
     path: {
@@ -422,13 +457,19 @@ export declare type DeleteBoardRequest = {
 
 export declare type DeleteBoardResponse = SingleResponse<void>;
 
-export declare const deleteCard: <ThrowOnError extends boolean = false>(options: Options<DeleteCardRequest, ThrowOnError>) => RequestResult<DeleteCardResponse, DeleteCardError, ThrowOnError>;
+/**
+ * Delete card
+ * 'DELETE /api/cards/:id': 'cards/delete'
+ * @param options
+ */
+export declare const deleteCard: <ThrowOnError extends boolean = false>(options: Options<DeleteCardRequest, ThrowOnError>) => RequestResult<DeleteCardResponse, HttpError, ThrowOnError>;
 
-export declare type DeleteCardError = UnauthorizedError | NotFoundError;
-
-export declare const deleteCardLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteCardLabelRequest, ThrowOnError>) => RequestResult<DeleteCardLabelResponse, DeleteCardLabelError, ThrowOnError>;
-
-export declare type DeleteCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Delete card label
+ * 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
+ * @param options
+ */
+export declare const deleteCardLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteCardLabelRequest, ThrowOnError>) => RequestResult<DeleteCardLabelResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteCardLabelRequest = {
     path: {
@@ -439,9 +480,12 @@ export declare type DeleteCardLabelRequest = {
 
 export declare type DeleteCardLabelResponse = SingleResponse<CardLabel>;
 
-export declare const deleteCardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteCardMembershipRequest, ThrowOnError>) => RequestResult<DeleteCardMembershipResponse, DeleteCardMembershipError, ThrowOnError>;
-
-export declare type DeleteCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Delete card membership
+ * 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
+ * @param options
+ */
+export declare const deleteCardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteCardMembershipRequest, ThrowOnError>) => RequestResult<DeleteCardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteCardMembershipRequest = {
     path: {
@@ -462,9 +506,12 @@ export declare type DeleteCardRequest = {
 
 export declare type DeleteCardResponse = SingleResponse<Card>;
 
-export declare const deleteCommentAction: <ThrowOnError extends boolean = false>(options: Options<DeleteCommentActionRequest, ThrowOnError>) => RequestResult<DeleteCommentActionResponse, DeleteCommentActionError, ThrowOnError>;
-
-export declare type DeleteCommentActionError = UnauthorizedError | NotFoundError;
+/**
+ * Delete comment action
+ * 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
+ * @param options
+ */
+export declare const deleteCommentAction: <ThrowOnError extends boolean = false>(options: Options<DeleteCommentActionRequest, ThrowOnError>) => RequestResult<DeleteCommentActionResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteCommentActionRequest = {
     path: {
@@ -474,9 +521,12 @@ export declare type DeleteCommentActionRequest = {
 
 export declare type DeleteCommentActionResponse = SingleResponse<Comment_2>;
 
-export declare const deleteLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteLabelRequest, ThrowOnError>) => RequestResult<DeleteLabelResponse, DeleteLabelError, ThrowOnError>;
-
-export declare type DeleteLabelError = UnauthorizedError | NotFoundError;
+/**
+ * Delete label
+ * 'DELETE /api/labels/:id': 'labels/delete'
+ * @param options
+ */
+export declare const deleteLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteLabelRequest, ThrowOnError>) => RequestResult<DeleteLabelResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteLabelRequest = {
     path: {
@@ -486,9 +536,12 @@ export declare type DeleteLabelRequest = {
 
 export declare type DeleteLabelResponse = SingleResponse<Label>;
 
-export declare const deleteList: <ThrowOnError extends boolean = false>(options: Options<DeleteListRequest, ThrowOnError>) => RequestResult<DeleteListResponse, DeleteListError, ThrowOnError>;
-
-export declare type DeleteListError = UnauthorizedError | NotFoundError;
+/**
+ * Delete list
+ * 'DELETE /api/lists/:id': 'lists/delete'
+ * @param options
+ */
+export declare const deleteList: <ThrowOnError extends boolean = false>(options: Options<DeleteListRequest, ThrowOnError>) => RequestResult<DeleteListResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteListRequest = {
     path: {
@@ -498,13 +551,19 @@ export declare type DeleteListRequest = {
 
 export declare type DeleteListResponse = SingleResponse<List>;
 
-export declare const deleteProject: <ThrowOnError extends boolean = false>(options: Options<DeleteProjectRequest, ThrowOnError>) => RequestResult<DeleteProjectResponse, DeleteProjectError, ThrowOnError>;
+/**
+ * Delete project
+ * 'DELETE /api/projects/:id': 'projects/delete'
+ * @param options
+ */
+export declare const deleteProject: <ThrowOnError extends boolean = false>(options: Options<DeleteProjectRequest, ThrowOnError>) => RequestResult<DeleteProjectResponse, HttpError, ThrowOnError>;
 
-export declare type DeleteProjectError = UnauthorizeError | NotFoundError;
-
-export declare const deleteProjectManager: <ThrowOnError extends boolean = false>(options: Options<DeleteProjectManagerRequest, ThrowOnError>) => RequestResult<DeleteProjectManagerResponse, DeleteProjectManagerError, ThrowOnError>;
-
-export declare type DeleteProjectManagerError = BadRequestError | UnauthorizedError;
+/**
+ * Delete project manager
+ * 'DELETE /api/project-managers/:id': 'project-managers/delete'
+ * @param options
+ */
+export declare const deleteProjectManager: <ThrowOnError extends boolean = false>(options: Options<DeleteProjectManagerRequest, ThrowOnError>) => RequestResult<DeleteProjectManagerResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteProjectManagerRequest = {
     path: {
@@ -522,9 +581,12 @@ export declare type DeleteProjectRequest = {
 
 export declare type DeleteProjectResponse = SingleResponse<Project>;
 
-export declare const deleteTask: <ThrowOnError extends boolean = false>(options: Options<DeleteTaskRequest, ThrowOnError>) => RequestResult<DeleteTaskResponse, DeleteTaskError, ThrowOnError>;
-
-export declare type DeleteTaskError = UnauthorizedError | NotFoundError;
+/**
+ * Delete task
+ * 'DELETE /api/tasks/:id': 'tasks/delete'
+ * @param options
+ */
+export declare const deleteTask: <ThrowOnError extends boolean = false>(options: Options<DeleteTaskRequest, ThrowOnError>) => RequestResult<DeleteTaskResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteTaskRequest = {
     path: {
@@ -534,9 +596,12 @@ export declare type DeleteTaskRequest = {
 
 export declare type DeleteTaskResponse = SingleResponse<Task>;
 
-export declare const deleteUser: <ThrowOnError extends boolean = false>(options: Options<DeleteUserRequest, ThrowOnError>) => RequestResult<DeleteUserResponse, DeleteUserError, ThrowOnError>;
-
-export declare type DeleteUserError = UnauthorizedError | NotFoundError;
+/**
+ * Delete user
+ * 'DELETE /api/users/:id': 'users/delete'
+ * @param options
+ */
+export declare const deleteUser: <ThrowOnError extends boolean = false>(options: Options<DeleteUserRequest, ThrowOnError>) => RequestResult<DeleteUserResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteUserRequest = {
     path: {
@@ -546,9 +611,12 @@ export declare type DeleteUserRequest = {
 
 export declare type DeleteUserResponse = SingleResponse<User>;
 
-export declare const duplicateCard: <ThrowOnError extends boolean = false>(options: Options<DuplicateCardRequest, ThrowOnError>) => RequestResult<DuplicateCardResponse, DuplicateCardError, ThrowOnError>;
-
-export declare type DuplicateCardError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Duplicate card
+ * 'POST /api/cards/:id/duplicate': 'cards/duplicate'
+ * @param options
+ */
+export declare const duplicateCard: <ThrowOnError extends boolean = false>(options: Options<DuplicateCardRequest, ThrowOnError>) => RequestResult<DuplicateCardResponse, HttpError, ThrowOnError>;
 
 export declare type DuplicateCardRequest = {
     path: {
@@ -561,9 +629,46 @@ export declare type DuplicateCardRequest = {
 
 export declare type DuplicateCardResponse = SingleResponse<Card>;
 
-export declare const getBoard: <ThrowOnError extends boolean = false>(options: Options<GetBoardRequest, ThrowOnError>) => RequestResult<GetBoardResponse, GetBoardError, ThrowOnError>;
+/**
+ * Get attachment
+ * 'GET /attachments/:id/download/:filename'
+ * Note: this endpoint requires access token to be passed as a cookie, not as bearer token
+ * @param options
+ */
+export declare const getAttachment: <ThrowOnError extends boolean = false>(options: Options<GetAttachmentRequest, ThrowOnError>) => RequestResult<Blob, HttpError, ThrowOnError>;
 
-export declare type GetBoardError = UnauthorizeError | NotFoundError;
+export declare type GetAttachmentRequest = {
+    path: {
+        id: string;
+        filename: string;
+    };
+};
+
+export declare type GetAttachmentResponse = Blob;
+
+/**
+ * Get attachment thumbnail
+ * 'GET /attachments/:id/download/thumbnails/cover-256.:extension'
+ * Note: this endpoint requires access token to be passed as a cookie, not as bearer token
+ * @param options
+ */
+export declare const getAttachmentThumbnail: <ThrowOnError extends boolean = false>(options: Options<GetAttachmentThumbnailRequest, ThrowOnError>) => RequestResult<Blob, HttpError, ThrowOnError>;
+
+export declare type GetAttachmentThumbnailRequest = {
+    path: {
+        id: string;
+        extension: string;
+    };
+};
+
+export declare type GetAttachmentThumbnailResponse = Blob;
+
+/**
+ * Get board
+ * 'GET /api/boards/:id': 'boards/show'
+ * @param options
+ */
+export declare const getBoard: <ThrowOnError extends boolean = false>(options: Options<GetBoardRequest, ThrowOnError>) => RequestResult<GetBoardResponse, HttpError, ThrowOnError>;
 
 export declare type GetBoardRequest = {
     path: {
@@ -573,11 +678,19 @@ export declare type GetBoardRequest = {
 
 export declare type GetBoardResponse = SingleResponse<Board>;
 
-export declare const getCard: <ThrowOnError extends boolean = false>(options: Options<GetCardRequest, ThrowOnError>) => RequestResult<GetCardResponse, GetCardError, ThrowOnError>;
+/**
+ * Get card
+ * 'GET /api/cards/:id': 'cards/show'
+ * @param options
+ */
+export declare const getCard: <ThrowOnError extends boolean = false>(options: Options<GetCardRequest, ThrowOnError>) => RequestResult<GetCardResponse, HttpError, ThrowOnError>;
 
-export declare const getCardActions: <ThrowOnError extends boolean = false>(options: Options<GetCardActionsRequest, ThrowOnError>) => RequestResult<GetCardActionsResponse, GetCardActionsError, ThrowOnError>;
-
-export declare type GetCardActionsError = UnauthorizedError | NotFoundError;
+/**
+ * Get card actions
+ * 'GET /api/cards/:cardId/actions': 'actions/index'
+ * @param options
+ */
+export declare const getCardActions: <ThrowOnError extends boolean = false>(options: Options<GetCardActionsRequest, ThrowOnError>) => RequestResult<GetCardActionsResponse, HttpError, ThrowOnError>;
 
 export declare type GetCardActionsRequest = {
     path: {
@@ -587,8 +700,6 @@ export declare type GetCardActionsRequest = {
 
 export declare type GetCardActionsResponse = ArrayResponse<Action>;
 
-export declare type GetCardError = UnauthorizedError | NotFoundError;
-
 export declare type GetCardRequest = {
     path: {
         id: string;
@@ -597,15 +708,24 @@ export declare type GetCardRequest = {
 
 export declare type GetCardResponse = SingleResponse<Card>;
 
+/**
+ * Get config
+ * 'GET /api/config': 'show-config'
+ * @param options
+ */
 export declare const getConfig: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetConfigResponse, unknown, ThrowOnError>;
 
-export declare type GetConfigError = unknown;
-
+/**
+ * All types necessary to provide to the hey-api client
+ */
 export declare type GetConfigResponse = SingleResponse<Oidc>;
 
-export declare const getNotification: <ThrowOnError extends boolean = false>(options: Options<GetNotificationRequest, ThrowOnError>) => RequestResult<GetNotificationResponse, GetNotificationError, ThrowOnError>;
-
-export declare type GetNotificationError = UnauthorizedError | NotFoundError;
+/**
+ * Get notification
+ * 'GET /api/notifications/:id': 'notifications/show'
+ * @param options
+ */
+export declare const getNotification: <ThrowOnError extends boolean = false>(options: Options<GetNotificationRequest, ThrowOnError>) => RequestResult<GetNotificationResponse, HttpError, ThrowOnError>;
 
 export declare type GetNotificationRequest = {
     path: {
@@ -615,15 +735,21 @@ export declare type GetNotificationRequest = {
 
 export declare type GetNotificationResponse = SingleResponse<Notification_2>;
 
-export declare const getNotifications: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetNotificationsResponse, GetNotificationsError, ThrowOnError>;
-
-export declare type GetNotificationsError = UnauthorizedError | NotFoundError;
+/**
+ * Get notifications
+ * 'GET /api/notifications': 'notifications/index'
+ * @param options
+ */
+export declare const getNotifications: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetNotificationsResponse, HttpError, ThrowOnError>;
 
 export declare type GetNotificationsResponse = ArrayResponse<Notification_2>;
 
-export declare const getProject: <ThrowOnError extends boolean = false>(options: Options<GetProjectRequest, ThrowOnError>) => RequestResult<GetProjectResponse, GetProjectError, ThrowOnError>;
-
-export declare type GetProjectError = BadRequestError | UnauthorizedError | NotFoundError;
+/**
+ * Get project
+ * 'GET /api/projects/:id': 'projects/show'
+ * @param options
+ */
+export declare const getProject: <ThrowOnError extends boolean = false>(options: Options<GetProjectRequest, ThrowOnError>) => RequestResult<GetProjectResponse, HttpError, ThrowOnError>;
 
 export declare type GetProjectRequest = {
     path: {
@@ -633,15 +759,21 @@ export declare type GetProjectRequest = {
 
 export declare type GetProjectResponse = SingleResponse<Project>;
 
-export declare const getProjects: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetProjectsResponse, BaseError, ThrowOnError>;
-
-export declare type GetProjectsError = UnauthorizedError;
+/**
+ * Get projects
+ * 'GET /api/projects': 'projects/index'
+ * @param options
+ */
+export declare const getProjects: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetProjectsResponse, HttpError, ThrowOnError>;
 
 export declare type GetProjectsResponse = ArrayResponse<Project>;
 
-export declare const getUser: <ThrowOnError extends boolean = false>(options: Options<GetUserRequest, ThrowOnError>) => RequestResult<GetUserResponse, GetUserError, ThrowOnError>;
-
-export declare type GetUserError = UnauthorizedError | NotFoundError;
+/**
+ * Get user
+ * 'GET /api/users/:id': 'users/show'
+ * @param options
+ */
+export declare const getUser: <ThrowOnError extends boolean = false>(options: Options<GetUserRequest, ThrowOnError>) => RequestResult<GetUserResponse, HttpError, ThrowOnError>;
 
 export declare type GetUserRequest = {
     path: {
@@ -651,11 +783,23 @@ export declare type GetUserRequest = {
 
 export declare type GetUserResponse = SingleResponse<User>;
 
-export declare const getUsers: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetUsersResponse, BaseError, ThrowOnError>;
-
-export declare type GetUsersError = UnauthorizedError;
+/**
+ * Get users
+ * 'GET /api/users': 'users/index'
+ * @param options
+ */
+export declare const getUsers: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetUsersResponse, HttpError, ThrowOnError>;
 
 export declare type GetUsersResponse = ArrayResponse<User>;
+
+/**
+ * Most errors are roughly the same, so they are types singly
+ */
+export declare type HttpError = {
+    code: 'E_MISSING_OR_INVALID_PARAMS' | 'E_UNAUTHORIZED' | 'E_NOT_FOUND' | 'E_CONFLICT' | 'E_UNPROCESSABLE_ENTITY';
+    message?: string;
+    problems?: string[];
+};
 
 declare type Image_2 = {
     width: number;
@@ -677,6 +821,9 @@ export declare type Include = {
     projectManagers: ProjectManager[];
 };
 
+/**
+ * Labels
+ */
 export declare type Label = {
     id: string;
     createdAt: Date;
@@ -691,6 +838,9 @@ export declare type LabelColor = 'berry-red' | 'pumpkin-orange' | 'lagoon-blue' 
 
 export declare type Language = 'ar-YE' | 'bg-BG' | 'cs-CZ' | 'da-DK' | 'de-DE' | 'en-GB' | 'en-US' | 'es-ES' | 'fa-IR' | 'fr-FR' | 'hu-HU' | 'id-ID' | 'it-IT' | 'ja-JP' | 'ko-KR' | 'nl-NL' | 'pl-PL' | 'pt-BR' | 'ro-RO' | 'ru-RU' | 'sk-SK' | 'sv-SE' | 'tr-TR' | 'uk-UA' | 'uz-UZ' | 'zh-CN' | 'zh-TW';
 
+/**
+ * Lists
+ */
 export declare type List = {
     id: string;
     createdAt: Date;
@@ -700,8 +850,9 @@ export declare type List = {
     boardId: string;
 };
 
-export declare type NotFoundError = Omit<BaseError, 'message'>;
-
+/**
+ * Notifications
+ */
 declare type Notification_2 = {
     id: string;
     createdAt: Date;
@@ -717,6 +868,9 @@ export declare type Oidc = {
     oidc: string;
 };
 
+/**
+ * Projects
+ */
 export declare type Project = {
     id: string;
     createdAt: Date;
@@ -736,14 +890,20 @@ export declare type ProjectManager = {
 
 export declare type Role = 'editor' | 'viewer';
 
+/**
+ * Responses are given as single or array, and can include other data types
+ */
 export declare type SingleResponse<T> = {
     item: T;
     included?: Partial<Include>;
 };
 
-export declare const sortList: <ThrowOnError extends boolean = false>(options: Options<SortListRequest, ThrowOnError>) => RequestResult<SortListResponse, SortListError, ThrowOnError>;
-
-export declare type SortListError = UnauthorizedError | NotFoundError;
+/**
+ * Sort list
+ * 'POST /api/lists/:id/sort': 'lists/sort'
+ * @param options
+ */
+export declare const sortList: <ThrowOnError extends boolean = false>(options: Options<SortListRequest, ThrowOnError>) => RequestResult<SortListResponse, HttpError, ThrowOnError>;
 
 export declare type SortListRequest = {
     path: {
@@ -758,13 +918,6 @@ export declare type SortListResponse = SingleResponse<List>;
 
 export declare type SortType = 'name_asc' | 'dueDate_asc' | 'createdAt_asc' | 'createdAt_desc';
 
-export declare enum StatusCode {
-    s400 = "E_MISSING_OR_INVALID_PARAMS",
-    s401 = "E_UNAUTHORIZED",
-    s404 = "E_NOT_FOUND",
-    s409 = "E_CONFLICT"
-}
-
 export declare type Task = {
     id: string;
     createdAt: Date;
@@ -775,19 +928,21 @@ export declare type Task = {
     cardId: string;
 };
 
-export declare const unauthorize: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<UnauthorizeResponse, BaseError, ThrowOnError>;
-
-export declare type UnauthorizedError = BaseError;
-
-export declare type UnauthorizeError = UnauthorizedError;
+/**
+ * Delete access token
+ * 'DELETE /api/access-tokens/me': 'access-tokens/delete'
+ * @param options
+ */
+export declare const unauthorize: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<UnauthorizeResponse, HttpError, ThrowOnError>;
 
 export declare type UnauthorizeResponse = SingleResponse<string>;
 
-export declare type UnprocessableError = BaseError;
-
-export declare const updateAttachment: <ThrowOnError extends boolean = false>(options: Options<UpdateAttachmentRequest, ThrowOnError>) => RequestResult<UpdateAttachmentResponse, UpdateAttachmentError, ThrowOnError>;
-
-export declare type UpdateAttachmentError = UnauthorizedError | NotFoundError;
+/**
+ * Update attachment
+ * 'PATCH /api/attachments/:id': 'attachments/update'
+ * @param options
+ */
+export declare const updateAttachment: <ThrowOnError extends boolean = false>(options: Options<UpdateAttachmentRequest, ThrowOnError>) => RequestResult<UpdateAttachmentResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateAttachmentRequest = {
     path: {
@@ -798,13 +953,19 @@ export declare type UpdateAttachmentRequest = {
 
 export declare type UpdateAttachmentResponse = SingleResponse<Attachment>;
 
-export declare const updateBoard: <ThrowOnError extends boolean = false>(options: Options<UpdateBoardRequest, ThrowOnError>) => RequestResult<UpdateBoardResponse, UpdateBoardError, ThrowOnError>;
+/**
+ * Update board
+ * 'PATCH /api/boards/:id': 'boards/update'
+ * @param options
+ */
+export declare const updateBoard: <ThrowOnError extends boolean = false>(options: Options<UpdateBoardRequest, ThrowOnError>) => RequestResult<UpdateBoardResponse, HttpError, ThrowOnError>;
 
-export declare type UpdateBoardError = UnauthorizedError | NotFoundError;
-
-export declare const updateBoardMembership: <ThrowOnError extends boolean = false>(options: Options<UpdateBoardMembershipRequest, ThrowOnError>) => RequestResult<UpdateBoardMembershipResponse, UpdateBoardMembershipError, ThrowOnError>;
-
-export declare type UpdateBoardMembershipError = UnauthorizedError | NotFoundError;
+/**
+ * Update board membership
+ * 'PATCH /api/board-memberships/:id': 'board-memberships/update'
+ * @param options
+ */
+export declare const updateBoardMembership: <ThrowOnError extends boolean = false>(options: Options<UpdateBoardMembershipRequest, ThrowOnError>) => RequestResult<UpdateBoardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateBoardMembershipRequest = {
     path: {
@@ -826,9 +987,12 @@ export declare type UpdateBoardRequest = {
 
 export declare type UpdateBoardResponse = SingleResponse<Board>;
 
-export declare const updateCard: <ThrowOnError extends boolean = false>(options: Options<UpdateCardRequest, ThrowOnError>) => RequestResult<UpdateCardResponse, UpdateCardError, ThrowOnError>;
-
-export declare type UpdateCardError = UnauthorizedError | NotFoundError;
+/**
+ * Update card
+ * 'PATCH /api/cards/:id': 'cards/update'
+ * @param options
+ */
+export declare const updateCard: <ThrowOnError extends boolean = false>(options: Options<UpdateCardRequest, ThrowOnError>) => RequestResult<UpdateCardResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateCardRequest = {
     path: {
@@ -839,9 +1003,12 @@ export declare type UpdateCardRequest = {
 
 export declare type UpdateCardResponse = SingleResponse<Card>;
 
-export declare const updateCommentAction: <ThrowOnError extends boolean = false>(options: Options<UpdateCommentActionRequest, ThrowOnError>) => RequestResult<UpdateCommentActionResponse, UpdateCommentActionError, ThrowOnError>;
-
-export declare type UpdateCommentActionError = UnauthorizedError | NotFoundError;
+/**
+ * Update comment action
+ * 'PATCH /api/comment-actions/:id': 'comment-actions/update'
+ * @param options
+ */
+export declare const updateCommentAction: <ThrowOnError extends boolean = false>(options: Options<UpdateCommentActionRequest, ThrowOnError>) => RequestResult<UpdateCommentActionResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateCommentActionRequest = {
     path: {
@@ -854,9 +1021,12 @@ export declare type UpdateCommentActionRequest = {
 
 export declare type UpdateCommentActionResponse = SingleResponse<Comment_2>;
 
-export declare const updateLabel: <ThrowOnError extends boolean = false>(options: Options<UpdateLabelRequest, ThrowOnError>) => RequestResult<UpdateLabelResponse, UpdateLabelError, ThrowOnError>;
-
-export declare type UpdateLabelError = UnauthorizedError | NotFoundError;
+/**
+ * Update label
+ * 'PATCH /api/labels/:id': 'labels/update'
+ * @param options
+ */
+export declare const updateLabel: <ThrowOnError extends boolean = false>(options: Options<UpdateLabelRequest, ThrowOnError>) => RequestResult<UpdateLabelResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateLabelRequest = {
     path: {
@@ -867,9 +1037,12 @@ export declare type UpdateLabelRequest = {
 
 export declare type UpdateLabelResponse = SingleResponse<Label>;
 
-export declare const updateList: <ThrowOnError extends boolean = false>(options: Options<UpdateListRequest, ThrowOnError>) => RequestResult<UpdateListResponse, UpdateListError, ThrowOnError>;
-
-export declare type UpdateListError = UnauthorizedError | NotFoundError;
+/**
+ * Update list
+ * 'PATCH /api/lists/:id': 'lists/update'
+ * @param options
+ */
+export declare const updateList: <ThrowOnError extends boolean = false>(options: Options<UpdateListRequest, ThrowOnError>) => RequestResult<UpdateListResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateListRequest = {
     path: {
@@ -880,9 +1053,12 @@ export declare type UpdateListRequest = {
 
 export declare type UpdateListResponse = SingleResponse<List>;
 
-export declare const updateNotifications: <ThrowOnError extends boolean = false>(options: Options<UpdateNotificationsRequest, ThrowOnError>) => RequestResult<UpdateNotificationsResponse, NotFoundError, ThrowOnError>;
-
-export declare type UpdateNotificationsError = NotFoundError;
+/**
+ * Update notifications
+ * 'PATCH /api/notifications/:ids': 'notifications/update'
+ * @param options
+ */
+export declare const updateNotifications: <ThrowOnError extends boolean = false>(options: Options<UpdateNotificationsRequest, ThrowOnError>) => RequestResult<UpdateNotificationsResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateNotificationsRequest = {
     path: {
@@ -893,11 +1069,19 @@ export declare type UpdateNotificationsRequest = {
 
 export declare type UpdateNotificationsResponse = ArrayResponse<Notification_2>;
 
-export declare const updateProject: <ThrowOnError extends boolean = false>(options: Options<UpdateProjectRequest, ThrowOnError>) => RequestResult<UpdateProjectResponse, UpdateProjectError, ThrowOnError>;
+/**
+ * Update project
+ * 'PATCH /api/projects/:id': 'projects/update'
+ * @param options
+ */
+export declare const updateProject: <ThrowOnError extends boolean = false>(options: Options<UpdateProjectRequest, ThrowOnError>) => RequestResult<UpdateProjectResponse, HttpError, ThrowOnError>;
 
-export declare const updateProjectBackgroundImage: <ThrowOnError extends boolean = false>(options: Options<UpdateProjectBackgroundImageRequest, ThrowOnError>) => RequestResult<UpdateProjectBackgroundImageResponse, UpdateProjectBackgroundImageError, ThrowOnError>;
-
-export declare type UpdateProjectBackgroundImageError = BadRequestError | UnauthorizedError | NotFoundError | UnprocessableError;
+/**
+ * Update project background image
+ * 'POST /api/projects/:id/background-image': 'projects/update-background-image'
+ * @param options
+ */
+export declare const updateProjectBackgroundImage: <ThrowOnError extends boolean = false>(options: Options<UpdateProjectBackgroundImageRequest, ThrowOnError>) => RequestResult<UpdateProjectBackgroundImageResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateProjectBackgroundImageRequest = {
     path: {
@@ -910,8 +1094,6 @@ export declare type UpdateProjectBackgroundImageRequest = {
 
 export declare type UpdateProjectBackgroundImageResponse = SingleResponse<Project>;
 
-export declare type UpdateProjectError = UnauthorizeError | NotFoundError;
-
 export declare type UpdateProjectRequest = {
     path: {
         id: string;
@@ -921,9 +1103,12 @@ export declare type UpdateProjectRequest = {
 
 export declare type UpdateProjectResponse = SingleResponse<Project>;
 
-export declare const updateTask: <ThrowOnError extends boolean = false>(options: Options<UpdateTaskRequest, ThrowOnError>) => RequestResult<UpdateTaskResponse, UpdateTaskError, ThrowOnError>;
-
-export declare type UpdateTaskError = UnauthorizedError | NotFoundError;
+/**
+ * Update task
+ * 'PATCH /api/tasks/:id': 'tasks/update'
+ * @param options
+ */
+export declare const updateTask: <ThrowOnError extends boolean = false>(options: Options<UpdateTaskRequest, ThrowOnError>) => RequestResult<UpdateTaskResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateTaskRequest = {
     path: {
@@ -934,11 +1119,19 @@ export declare type UpdateTaskRequest = {
 
 export declare type UpdateTaskResponse = SingleResponse<Task>;
 
-export declare const updateUser: <ThrowOnError extends boolean = false>(options: Options<UpdateUserRequest, ThrowOnError>) => RequestResult<UpdateUserResponse, UpdateUserError, ThrowOnError>;
+/**
+ * Update user
+ * 'PATCH /api/users/:id': 'users/update'
+ * @param options
+ */
+export declare const updateUser: <ThrowOnError extends boolean = false>(options: Options<UpdateUserRequest, ThrowOnError>) => RequestResult<UpdateUserResponse, HttpError, ThrowOnError>;
 
-export declare const updateUserAvatar: <ThrowOnError extends boolean = false>(options: Options<UpdateUserAvatarRequest, ThrowOnError>) => RequestResult<UpdateUserAvatarResponse, UpdateUserAvatarError, ThrowOnError>;
-
-export declare type UpdateUserAvatarError = BadRequestError | UnauthorizedError | NotFoundError | UnprocessableError;
+/**
+ * Update user avatar
+ * 'POST /api/users/:id/avatar': 'users/update-avatar'
+ * @param options
+ */
+export declare const updateUserAvatar: <ThrowOnError extends boolean = false>(options: Options<UpdateUserAvatarRequest, ThrowOnError>) => RequestResult<UpdateUserAvatarResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserAvatarRequest = {
     path: {
@@ -951,9 +1144,12 @@ export declare type UpdateUserAvatarRequest = {
 
 export declare type UpdateUserAvatarResponse = SingleResponse<User>;
 
-export declare const updateUserEmail: <ThrowOnError extends boolean = false>(options: Options<UpdateUserEmailRequest, ThrowOnError>) => RequestResult<UpdateUserEmailResponse, UpdateUserEmailError, ThrowOnError>;
-
-export declare type UpdateUserEmailError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+/**
+ * Update user email
+ * 'PATCH /api/users/:id/email': 'users/update-email'
+ * @param options
+ */
+export declare const updateUserEmail: <ThrowOnError extends boolean = false>(options: Options<UpdateUserEmailRequest, ThrowOnError>) => RequestResult<UpdateUserEmailResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserEmailRequest = {
     path: {
@@ -966,11 +1162,12 @@ export declare type UpdateUserEmailRequest = {
 
 export declare type UpdateUserEmailResponse = SingleResponse<User>;
 
-export declare type UpdateUserError = BadRequestError | UnauthorizedError | NotFoundError;
-
-export declare const updateUserPassword: <ThrowOnError extends boolean = false>(options: Options<UpdateUserPasswordRequest, ThrowOnError>) => RequestResult<UpdateUserPasswordResponse, UpdateUserPasswordError, ThrowOnError>;
-
-export declare type UpdateUserPasswordError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+/**
+ * Update user password
+ * 'PATCH /api/users/:id/password': 'users/update-password'
+ * @param options
+ */
+export declare const updateUserPassword: <ThrowOnError extends boolean = false>(options: Options<UpdateUserPasswordRequest, ThrowOnError>) => RequestResult<UpdateUserPasswordResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserPasswordRequest = {
     path: {
@@ -992,9 +1189,12 @@ export declare type UpdateUserRequest = {
 
 export declare type UpdateUserResponse = SingleResponse<User>;
 
-export declare const updateUserUsername: <ThrowOnError extends boolean = false>(options: Options<UpdateUserUsernameRequest, ThrowOnError>) => RequestResult<UpdateUserUsernameResponse, UpdateUserUsernameError, ThrowOnError>;
-
-export declare type UpdateUserUsernameError = BadRequestError | UnauthorizedError | NotFoundError | ConflictError;
+/**
+ * Update user username
+ * 'PATCH /api/users/:id/username': 'users/update-username'
+ * @param options
+ */
+export declare const updateUserUsername: <ThrowOnError extends boolean = false>(options: Options<UpdateUserUsernameRequest, ThrowOnError>) => RequestResult<UpdateUserUsernameResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserUsernameRequest = {
     path: {
@@ -1007,6 +1207,9 @@ export declare type UpdateUserUsernameRequest = {
 
 export declare type UpdateUserUsernameResponse = SingleResponse<User>;
 
+/**
+ * Users
+ */
 export declare type User = {
     id: string;
     email: string;

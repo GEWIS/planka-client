@@ -64,6 +64,10 @@ import {
   DeleteUserResponse,
   DuplicateCardRequest,
   DuplicateCardResponse,
+  GetAttachmentRequest,
+  GetAttachmentResponse,
+  GetAttachmentThumbnailRequest,
+  GetAttachmentThumbnailResponse,
   GetBoardRequest,
   GetBoardResponse,
   GetCardActionsRequest,
@@ -120,7 +124,11 @@ import {
 
 export const client = createClient(createConfig());
 
-// 'GET /api/config': 'show-config'
+/**
+ * Get config
+ * 'GET /api/config': 'show-config'
+ * @param options
+ */
 export const getConfig = <ThrowOnError extends boolean = false>(
   options: Options<unknown, ThrowOnError>,
 ) => {
@@ -130,7 +138,11 @@ export const getConfig = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/access-tokens': 'access-tokens/create'
+/**
+ * Create access token
+ * 'POST /api/access-tokens': 'access-tokens/create'
+ * @param options
+ */
 export const authorize = <ThrowOnError extends boolean = false>(
   options: Options<AuthorizeRequest, ThrowOnError>,
 ) => {
@@ -140,8 +152,12 @@ export const authorize = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
-// TODO -- this function needs to be tested
+/**
+ * Exchange access token using oidc
+ * 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
+ * TODO -- this endpoint needs a written test
+ * @param options
+ */
 export const authorizeOidc = <ThrowOnError extends boolean = false>(
   options: Options<AuthorizeOidcRequest, ThrowOnError>,
 ) => {
@@ -151,7 +167,11 @@ export const authorizeOidc = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/access-tokens/me': 'access-tokens/delete'
+/**
+ * Delete access token
+ * 'DELETE /api/access-tokens/me': 'access-tokens/delete'
+ * @param options
+ */
 export const unauthorize = <ThrowOnError extends boolean = false>(
   options: Options<unknown, ThrowOnError>,
 ) => {
@@ -161,7 +181,11 @@ export const unauthorize = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/users': 'users/index'
+/**
+ * Get users
+ * 'GET /api/users': 'users/index'
+ * @param options
+ */
 export const getUsers = <ThrowOnError extends boolean = false>(
   options: Options<unknown, ThrowOnError>,
 ) => {
@@ -171,7 +195,11 @@ export const getUsers = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/users': 'users/create'
+/**
+ * Create user
+ * 'POST /api/users': 'users/create'
+ * @param options
+ */
 export const createUser = <ThrowOnError extends boolean = false>(
   options: Options<CreateUserRequest, ThrowOnError>,
 ) => {
@@ -181,7 +209,11 @@ export const createUser = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/users/:id': 'users/show'
+/**
+ * Get user
+ * 'GET /api/users/:id': 'users/show'
+ * @param options
+ */
 export const getUser = <ThrowOnError extends boolean = false>(
   options: Options<GetUserRequest, ThrowOnError>,
 ) => {
@@ -191,7 +223,11 @@ export const getUser = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/users/:id': 'users/update'
+/**
+ * Update user
+ * 'PATCH /api/users/:id': 'users/update'
+ * @param options
+ */
 export const updateUser = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserRequest, ThrowOnError>,
 ) => {
@@ -201,7 +237,11 @@ export const updateUser = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/users/:id/email': 'users/update-email'
+/**
+ * Update user email
+ * 'PATCH /api/users/:id/email': 'users/update-email'
+ * @param options
+ */
 export const updateUserEmail = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserEmailRequest, ThrowOnError>,
 ) => {
@@ -211,7 +251,11 @@ export const updateUserEmail = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/users/:id/password': 'users/update-password'
+/**
+ * Update user password
+ * 'PATCH /api/users/:id/password': 'users/update-password'
+ * @param options
+ */
 export const updateUserPassword = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserPasswordRequest, ThrowOnError>,
 ) => {
@@ -221,7 +265,11 @@ export const updateUserPassword = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/users/:id/username': 'users/update-username'
+/**
+ * Update user username
+ * 'PATCH /api/users/:id/username': 'users/update-username'
+ * @param options
+ */
 export const updateUserUsername = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserUsernameRequest, ThrowOnError>,
 ) => {
@@ -231,7 +279,11 @@ export const updateUserUsername = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/users/:id/avatar': 'users/update-avatar'
+/**
+ * Update user avatar
+ * 'POST /api/users/:id/avatar': 'users/update-avatar'
+ * @param options
+ */
 export const updateUserAvatar = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserAvatarRequest, ThrowOnError>,
 ) => {
@@ -245,7 +297,11 @@ export const updateUserAvatar = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/users/:id': 'users/delete'
+/**
+ * Delete user
+ * 'DELETE /api/users/:id': 'users/delete'
+ * @param options
+ */
 export const deleteUser = <ThrowOnError extends boolean = false>(
   options: Options<DeleteUserRequest, ThrowOnError>,
 ) => {
@@ -255,7 +311,11 @@ export const deleteUser = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/projects': 'projects/index'
+/**
+ * Get projects
+ * 'GET /api/projects': 'projects/index'
+ * @param options
+ */
 export const getProjects = <ThrowOnError extends boolean = false>(
   options: Options<unknown, ThrowOnError>,
 ) => {
@@ -265,7 +325,11 @@ export const getProjects = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/projects': 'projects/create'
+/**
+ * Create project
+ * 'POST /api/projects': 'projects/create'
+ * @param options
+ */
 export const createProject = <ThrowOnError extends boolean = false>(
   options: Options<CreateProjectRequest, ThrowOnError>,
 ) => {
@@ -275,7 +339,11 @@ export const createProject = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/projects/:id': 'projects/show'
+/**
+ * Get project
+ * 'GET /api/projects/:id': 'projects/show'
+ * @param options
+ */
 export const getProject = <ThrowOnError extends boolean = false>(
   options: Options<GetProjectRequest, ThrowOnError>,
 ) => {
@@ -285,7 +353,11 @@ export const getProject = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/projects/:id': 'projects/update'
+/**
+ * Update project
+ * 'PATCH /api/projects/:id': 'projects/update'
+ * @param options
+ */
 export const updateProject = <ThrowOnError extends boolean = false>(
   options: Options<UpdateProjectRequest, ThrowOnError>,
 ) => {
@@ -295,7 +367,11 @@ export const updateProject = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/projects/:id/background-image': 'projects/update-background-image'
+/**
+ * Update project background image
+ * 'POST /api/projects/:id/background-image': 'projects/update-background-image'
+ * @param options
+ */
 export const updateProjectBackgroundImage = <ThrowOnError extends boolean = false>(
   options: Options<UpdateProjectBackgroundImageRequest, ThrowOnError>,
 ) => {
@@ -313,7 +389,11 @@ export const updateProjectBackgroundImage = <ThrowOnError extends boolean = fals
   });
 };
 
-// 'DELETE /api/projects/:id': 'projects/delete'
+/**
+ * Delete project
+ * 'DELETE /api/projects/:id': 'projects/delete'
+ * @param options
+ */
 export const deleteProject = <ThrowOnError extends boolean = false>(
   options: Options<DeleteProjectRequest, ThrowOnError>,
 ) => {
@@ -323,7 +403,11 @@ export const deleteProject = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/projects/:projectId/managers': 'project-managers/create'
+/**
+ * Create project manager
+ * 'POST /api/projects/:projectId/managers': 'project-managers/create'
+ * @param options
+ */
 export const createProjectManager = <ThrowOnError extends boolean = false>(
   options: Options<CreateProjectManagerRequest, ThrowOnError>,
 ) => {
@@ -333,7 +417,11 @@ export const createProjectManager = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/project-managers/:id': 'project-managers/delete'
+/**
+ * Delete project manager
+ * 'DELETE /api/project-managers/:id': 'project-managers/delete'
+ * @param options
+ */
 export const deleteProjectManager = <ThrowOnError extends boolean = false>(
   options: Options<DeleteProjectManagerRequest, ThrowOnError>,
 ) => {
@@ -343,7 +431,11 @@ export const deleteProjectManager = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/projects/:projectId/boards': 'boards/create'
+/**
+ * Create board
+ * 'POST /api/projects/:projectId/boards': 'boards/create'
+ * @param options
+ */
 export const createBoard = <ThrowOnError extends boolean = false>(
   options: Options<CreateBoardRequest, ThrowOnError>,
 ) => {
@@ -353,7 +445,11 @@ export const createBoard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/boards/:id': 'boards/show'
+/**
+ * Get board
+ * 'GET /api/boards/:id': 'boards/show'
+ * @param options
+ */
 export const getBoard = <ThrowOnError extends boolean = false>(
   options: Options<GetBoardRequest, ThrowOnError>,
 ) => {
@@ -363,7 +459,11 @@ export const getBoard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/boards/:id': 'boards/update'
+/**
+ * Update board
+ * 'PATCH /api/boards/:id': 'boards/update'
+ * @param options
+ */
 export const updateBoard = <ThrowOnError extends boolean = false>(
   options: Options<UpdateBoardRequest, ThrowOnError>,
 ) => {
@@ -373,7 +473,11 @@ export const updateBoard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/boards/:id': 'boards/delete'
+/**
+ * Delete board
+ * 'DELETE /api/boards/:id': 'boards/delete'
+ * @param options
+ */
 export const deleteBoard = <ThrowOnError extends boolean = false>(
   options: Options<DeleteBoardRequest, ThrowOnError>,
 ) => {
@@ -383,7 +487,11 @@ export const deleteBoard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
+/**
+ * Create board membership
+ * 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
+ * @param options
+ */
 export const createBoardMembership = <ThrowOnError extends boolean = false>(
   options: Options<CreateBoardMembershipRequest, ThrowOnError>,
 ) => {
@@ -393,7 +501,11 @@ export const createBoardMembership = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/board-memberships/:id': 'board-memberships/update'
+/**
+ * Update board membership
+ * 'PATCH /api/board-memberships/:id': 'board-memberships/update'
+ * @param options
+ */
 export const updateBoardMembership = <ThrowOnError extends boolean = false>(
   options: Options<UpdateBoardMembershipRequest, ThrowOnError>,
 ) => {
@@ -403,7 +515,11 @@ export const updateBoardMembership = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
+/**
+ * Delete board membership
+ * 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
+ * @param options
+ */
 export const deleteBoardMembership = <ThrowOnError extends boolean = false>(
   options: Options<DeleteBoardMembershipRequest, ThrowOnError>,
 ) => {
@@ -415,7 +531,11 @@ export const deleteBoardMembership = <ThrowOnError extends boolean = false>(
   );
 };
 
-// 'POST /api/boards/:boardId/labels': 'labels/create'
+/**
+ * Create label
+ * 'POST /api/boards/:boardId/labels': 'labels/create'
+ * @param options
+ */
 export const createLabel = <ThrowOnError extends boolean = false>(
   options: Options<CreateLabelRequest, ThrowOnError>,
 ) => {
@@ -425,7 +545,11 @@ export const createLabel = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/labels/:id': 'labels/update'
+/**
+ * Update label
+ * 'PATCH /api/labels/:id': 'labels/update'
+ * @param options
+ */
 export const updateLabel = <ThrowOnError extends boolean = false>(
   options: Options<UpdateLabelRequest, ThrowOnError>,
 ) => {
@@ -435,7 +559,11 @@ export const updateLabel = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/labels/:id': 'labels/delete'
+/**
+ * Delete label
+ * 'DELETE /api/labels/:id': 'labels/delete'
+ * @param options
+ */
 export const deleteLabel = <ThrowOnError extends boolean = false>(
   options: Options<DeleteLabelRequest, ThrowOnError>,
 ) => {
@@ -445,7 +573,11 @@ export const deleteLabel = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/boards/:boardId/lists': 'lists/create'
+/**
+ * Create list
+ * 'POST /api/boards/:boardId/lists': 'lists/create'
+ * @param options
+ */
 export const createList = <ThrowOnError extends boolean = false>(
   options: Options<CreateListRequest, ThrowOnError>,
 ) => {
@@ -455,7 +587,11 @@ export const createList = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/lists/:id': 'lists/update'
+/**
+ * Update list
+ * 'PATCH /api/lists/:id': 'lists/update'
+ * @param options
+ */
 export const updateList = <ThrowOnError extends boolean = false>(
   options: Options<UpdateListRequest, ThrowOnError>,
 ) => {
@@ -465,7 +601,11 @@ export const updateList = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/lists/:id/sort': 'lists/sort'
+/**
+ * Sort list
+ * 'POST /api/lists/:id/sort': 'lists/sort'
+ * @param options
+ */
 export const sortList = <ThrowOnError extends boolean = false>(
   options: Options<SortListRequest, ThrowOnError>,
 ) => {
@@ -475,7 +615,11 @@ export const sortList = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/lists/:id': 'lists/delete'
+/**
+ * Delete list
+ * 'DELETE /api/lists/:id': 'lists/delete'
+ * @param options
+ */
 export const deleteList = <ThrowOnError extends boolean = false>(
   options: Options<DeleteListRequest, ThrowOnError>,
 ) => {
@@ -485,7 +629,11 @@ export const deleteList = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/lists/:listId/cards': 'cards/create'
+/**
+ * Create card
+ * 'POST /api/lists/:listId/cards': 'cards/create'
+ * @param options
+ */
 export const createCard = <ThrowOnError extends boolean = false>(
   options: Options<CreateCardRequest, ThrowOnError>,
 ) => {
@@ -495,7 +643,11 @@ export const createCard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/cards/:id': 'cards/show'
+/**
+ * Get card
+ * 'GET /api/cards/:id': 'cards/show'
+ * @param options
+ */
 export const getCard = <ThrowOnError extends boolean = false>(
   options: Options<GetCardRequest, ThrowOnError>,
 ) => {
@@ -505,7 +657,11 @@ export const getCard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/cards/:id': 'cards/update'
+/**
+ * Update card
+ * 'PATCH /api/cards/:id': 'cards/update'
+ * @param options
+ */
 export const updateCard = <ThrowOnError extends boolean = false>(
   options: Options<UpdateCardRequest, ThrowOnError>,
 ) => {
@@ -515,7 +671,11 @@ export const updateCard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/cards/:id/duplicate': 'cards/duplicate'
+/**
+ * Duplicate card
+ * 'POST /api/cards/:id/duplicate': 'cards/duplicate'
+ * @param options
+ */
 export const duplicateCard = <ThrowOnError extends boolean = false>(
   options: Options<DuplicateCardRequest, ThrowOnError>,
 ) => {
@@ -525,7 +685,11 @@ export const duplicateCard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/cards/:id': 'cards/delete'
+/**
+ * Delete card
+ * 'DELETE /api/cards/:id': 'cards/delete'
+ * @param options
+ */
 export const deleteCard = <ThrowOnError extends boolean = false>(
   options: Options<DeleteCardRequest, ThrowOnError>,
 ) => {
@@ -535,7 +699,11 @@ export const deleteCard = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
+/**
+ * Create card membership
+ * 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
+ * @param options
+ */
 export const createCardMembership = <ThrowOnError extends boolean = false>(
   options: Options<CreateCardMembershipRequest, ThrowOnError>,
 ) => {
@@ -545,7 +713,11 @@ export const createCardMembership = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
+/**
+ * Delete card membership
+ * 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
+ * @param options
+ */
 export const deleteCardMembership = <ThrowOnError extends boolean = false>(
   options: Options<DeleteCardMembershipRequest, ThrowOnError>,
 ) => {
@@ -555,7 +727,11 @@ export const deleteCardMembership = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/cards/:cardId/labels': 'card-labels/create'
+/**
+ * Create card label
+ * 'POST /api/cards/:cardId/labels': 'card-labels/create'
+ * @param options
+ */
 export const createCardLabel = <ThrowOnError extends boolean = false>(
   options: Options<CreateCardLabelRequest, ThrowOnError>,
 ) => {
@@ -565,7 +741,11 @@ export const createCardLabel = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
+/**
+ * Delete card label
+ * 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
+ * @param options
+ */
 export const deleteCardLabel = <ThrowOnError extends boolean = false>(
   options: Options<DeleteCardLabelRequest, ThrowOnError>,
 ) => {
@@ -575,7 +755,11 @@ export const deleteCardLabel = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/cards/:cardId/tasks': 'tasks/create'
+/**
+ * Create task
+ * 'POST /api/cards/:cardId/tasks': 'tasks/create'
+ * @param options
+ */
 export const createTask = <ThrowOnError extends boolean = false>(
   options: Options<CreateTaskRequest, ThrowOnError>,
 ) => {
@@ -585,7 +769,11 @@ export const createTask = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/tasks/:id': 'tasks/update'
+/**
+ * Update task
+ * 'PATCH /api/tasks/:id': 'tasks/update'
+ * @param options
+ */
 export const updateTask = <ThrowOnError extends boolean = false>(
   options: Options<UpdateTaskRequest, ThrowOnError>,
 ) => {
@@ -595,7 +783,11 @@ export const updateTask = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/tasks/:id': 'tasks/delete'
+/**
+ * Delete task
+ * 'DELETE /api/tasks/:id': 'tasks/delete'
+ * @param options
+ */
 export const deleteTask = <ThrowOnError extends boolean = false>(
   options: Options<DeleteTaskRequest, ThrowOnError>,
 ) => {
@@ -605,7 +797,11 @@ export const deleteTask = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/cards/:cardId/attachments': 'attachments/create'
+/**
+ * Create attachment
+ * 'POST /api/cards/:cardId/attachments': 'attachments/create'
+ * @param options
+ */
 export const createAttachment = <ThrowOnError extends boolean = false>(
   options: Options<CreateAttachmentRequest, ThrowOnError>,
 ) => {
@@ -619,7 +815,11 @@ export const createAttachment = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/attachments/:id': 'attachments/update'
+/**
+ * Update attachment
+ * 'PATCH /api/attachments/:id': 'attachments/update'
+ * @param options
+ */
 export const updateAttachment = <ThrowOnError extends boolean = false>(
   options: Options<UpdateAttachmentRequest, ThrowOnError>,
 ) => {
@@ -629,7 +829,11 @@ export const updateAttachment = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/attachments/:id': 'attachments/delete'
+/**
+ * Delete attachment
+ * 'DELETE /api/attachments/:id': 'attachments/delete'
+ * @param options
+ */
 export const deleteAttachment = <ThrowOnError extends boolean = false>(
   options: Options<DeleteAttachmentRequest, ThrowOnError>,
 ) => {
@@ -639,7 +843,41 @@ export const deleteAttachment = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/cards/:cardId/actions': 'actions/index'
+/**
+ * Get attachment
+ * 'GET /attachments/:id/download/:filename'
+ * Note: this endpoint requires access token to be passed as a cookie, not as bearer token
+ * @param options
+ */
+export const getAttachment = <ThrowOnError extends boolean = false>(
+  options: Options<GetAttachmentRequest, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<GetAttachmentResponse, HttpError, ThrowOnError>({
+    ...options,
+    url: '/attachments/{id}/download/{filename}',
+  });
+};
+
+/**
+ * Get attachment thumbnail
+ * 'GET /attachments/:id/download/thumbnails/cover-256.:extension'
+ * Note: this endpoint requires access token to be passed as a cookie, not as bearer token
+ * @param options
+ */
+export const getAttachmentThumbnail = <ThrowOnError extends boolean = false>(
+  options: Options<GetAttachmentThumbnailRequest, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<GetAttachmentThumbnailResponse, HttpError, ThrowOnError>({
+    ...options,
+    url: '/attachments/{id}/download/thumbnails/cover-256.{extension}',
+  });
+};
+
+/**
+ * Get card actions
+ * 'GET /api/cards/:cardId/actions': 'actions/index'
+ * @param options
+ */
 export const getCardActions = <ThrowOnError extends boolean = false>(
   options: Options<GetCardActionsRequest, ThrowOnError>,
 ) => {
@@ -649,7 +887,11 @@ export const getCardActions = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
+/**
+ * Create comment action
+ * 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
+ * @param options
+ */
 export const createCommentAction = <ThrowOnError extends boolean = false>(
   options: Options<CreateCommentActionRequest, ThrowOnError>,
 ) => {
@@ -659,7 +901,11 @@ export const createCommentAction = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/comment-actions/:id': 'comment-actions/update'
+/**
+ * Update comment action
+ * 'PATCH /api/comment-actions/:id': 'comment-actions/update'
+ * @param options
+ */
 export const updateCommentAction = <ThrowOnError extends boolean = false>(
   options: Options<UpdateCommentActionRequest, ThrowOnError>,
 ) => {
@@ -669,7 +915,11 @@ export const updateCommentAction = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
+/**
+ * Delete comment action
+ * 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
+ * @param options
+ */
 export const deleteCommentAction = <ThrowOnError extends boolean = false>(
   options: Options<DeleteCommentActionRequest, ThrowOnError>,
 ) => {
@@ -679,7 +929,11 @@ export const deleteCommentAction = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/notifications': 'notifications/index'
+/**
+ * Get notifications
+ * 'GET /api/notifications': 'notifications/index'
+ * @param options
+ */
 export const getNotifications = <ThrowOnError extends boolean = false>(
   options: Options<unknown, ThrowOnError>,
 ) => {
@@ -689,7 +943,11 @@ export const getNotifications = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'GET /api/notifications/:id': 'notifications/show'
+/**
+ * Get notification
+ * 'GET /api/notifications/:id': 'notifications/show'
+ * @param options
+ */
 export const getNotification = <ThrowOnError extends boolean = false>(
   options: Options<GetNotificationRequest, ThrowOnError>,
 ) => {
@@ -699,7 +957,11 @@ export const getNotification = <ThrowOnError extends boolean = false>(
   });
 };
 
-// 'PATCH /api/notifications/:ids': 'notifications/update'
+/**
+ * Update notifications
+ * 'PATCH /api/notifications/:ids': 'notifications/update'
+ * @param options
+ */
 export const updateNotifications = <ThrowOnError extends boolean = false>(
   options: Options<UpdateNotificationsRequest, ThrowOnError>,
 ) => {
