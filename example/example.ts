@@ -18,6 +18,7 @@ const accessTokenResponse = await authorize({
   },
 });
 const accessToken = accessTokenResponse.data.item;
+console.log(accessToken);
 
 client.setConfig({
   baseUrl: 'http://localhost:3000',

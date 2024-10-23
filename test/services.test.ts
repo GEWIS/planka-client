@@ -30,7 +30,6 @@ import {
   List,
   Project,
   ProjectManager,
-  StatusCode,
   unauthorize,
   updateBoard,
   updateBoardMembership,
@@ -72,6 +71,8 @@ import {
   createAttachment,
   updateAttachment,
   deleteAttachment,
+  getAttachment,
+  getAttachmentThumbnail,
 } from '../src';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -108,6 +109,7 @@ async function setAccessToken(emailOrUsername: string, password: string) {
     baseUrl: 'http://localhost:3000',
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      Cookie: `accessToken=${accessToken}`,
     },
   });
 }
@@ -134,7 +136,7 @@ describe('Authorization', () => {
     await unauthorize({});
 
     await getUsers({}).then((res) => {
-      expect(res.error.code).to.equal(StatusCode.s401);
+      expect(res.error.code).to.equal('E_UNAUTHORIZED');
       expect(res.error.message).to.equal('Access token is missing, invalid or expired');
     });
   });
@@ -872,6 +874,34 @@ describe('Attachments', () => {
       expect(JSON.stringify(attachment)).to.equal(JSON.stringify(globalAttachment));
     });
   });
+
+  test('GET /attachments/:id/download/:filename', () => {
+    getAttachment({
+      path: {
+        id: globalAttachment.id,
+        filename: globalAttachment.name,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      // Size and type of the stored image
+      expect(res.data.size).to.equal(11909);
+      expect(res.data.type).to.equal('image/jpeg');
+    });
+  });
+
+  test('GET /attachments/:id/download/thumbnails/cover-256.:extension', () => {
+    getAttachmentThumbnail({
+      path: {
+        id: globalAttachment.id,
+        extension: 'png',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      // Size and type of the stored image
+      expect(res.data.size).to.equal(13071);
+      expect(res.data.type).to.equal('image/jpeg');
+    });
+  });
 });
 
 describe('Comments', () => {
@@ -916,7 +946,6 @@ describe('Comments', () => {
         cardId: globalCard.id,
       },
     }).then((res) => {
-      console.log(res.data.items);
       expect(res.error).to.equal(undefined);
       const actions = res.data.items;
       expect(actions.length).to.equal(1);
