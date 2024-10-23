@@ -3,14 +3,20 @@ import {
   authorize,
   Board,
   BoardMembership,
+  Card,
+  CardLabel,
+  CardMembership,
   client,
   createBoard,
   createBoardMembership,
+  createLabel,
   createProject,
   createProjectManager,
   createUser,
   deleteBoard,
   deleteBoardMembership,
+  deleteLabel,
+  deleteList,
   deleteProject,
   deleteProjectManager,
   deleteUser,
@@ -20,12 +26,15 @@ import {
   getProjects,
   getUser,
   getUsers,
+  Label,
+  List,
   Project,
   ProjectManager,
   StatusCode,
   unauthorize,
   updateBoard,
   updateBoardMembership,
+  updateLabel,
   updateProject,
   updateProjectBackgroundImage,
   updateUser,
@@ -34,15 +43,50 @@ import {
   updateUserPassword,
   updateUserUsername,
   User,
+  Task,
+  Attachment,
+  Action,
+  Comment,
+  createList,
+  updateList,
+  sortList,
+  createCard,
+  deleteCard,
+  updateCard,
+  duplicateCard,
+  getCard,
+  createCardMembership,
+  deleteCardMembership,
+  createCardLabel,
+  deleteCardLabel,
+  createTask,
+  updateTask,
+  deleteTask,
+  getCardActions,
+  createCommentAction,
+  updateCommentAction,
+  deleteCommentAction,
+  getNotifications,
 } from '../src';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import exp = require('node:constants');
 
 let globalUser = {} as User;
 let globalProject = {} as Project;
 let globalManager = {} as ProjectManager;
 let globalBoard = {} as Board;
-let globalMembership = {} as BoardMembership;
+let globalBoardMembership = {} as BoardMembership;
+let globalLabel = {} as Label;
+let globalList = {} as List;
+let globalCard = {} as Card;
+let globalCardMembership = {} as CardMembership;
+let globalCardlabel = {} as CardLabel;
+let globalTask = {} as Task;
+const globalAttachment = {} as Attachment;
+const globalAction = {} as Action;
+let globalComment = {} as Comment;
+const globalNotification = {} as Notification;
 
 beforeAll(() => {
   test('GET /api/access-tokens', async () => {
@@ -440,14 +484,14 @@ describe('Memberships', () => {
       expect(membership.boardId).to.equal(globalBoard.id);
       expect(membership.userId).to.equal(globalUser.id);
       expect(membership.role).to.equal('editor');
-      globalMembership = membership;
+      globalBoardMembership = membership;
     });
   });
 
   test('PATCH /api/board-memberships/:id', async () => {
     await updateBoardMembership({
       path: {
-        id: globalMembership.id,
+        id: globalBoardMembership.id,
       },
       body: {
         role: 'editor',
@@ -456,14 +500,493 @@ describe('Memberships', () => {
       expect(res.error).to.equal(undefined);
       const membership = res.data.item;
       expect(membership.role).to.equal('editor');
-      globalMembership.role = membership.role;
-      globalMembership.updatedAt = membership.updatedAt;
-      expect(JSON.stringify(membership)).to.equal(JSON.stringify(globalMembership));
+      globalBoardMembership.role = membership.role;
+      globalBoardMembership.updatedAt = membership.updatedAt;
+      expect(JSON.stringify(membership)).to.equal(JSON.stringify(globalBoardMembership));
+    });
+  });
+});
+
+describe('Labels', () => {
+  test('POST /api/boards/:boardId/labels', async () => {
+    await createLabel({
+      path: {
+        boardId: globalBoard.id,
+      },
+      body: {
+        name: 'Test Label',
+        position: 1,
+        color: 'pink-tulip',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const label = res.data.item;
+      expect(label.name).to.equal('Test Label');
+      expect(label.position).to.equal(1);
+      expect(label.color).to.equal('pink-tulip');
+      globalLabel = label;
+    });
+  });
+
+  test('PATCH /api/labels/:id', async () => {
+    await updateLabel({
+      path: {
+        id: globalLabel.id,
+      },
+      body: {
+        name: 'Test Label Updated',
+        position: 2,
+        color: 'antique-blue',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const label = res.data.item;
+      expect(label.name).to.equal('Test Label Updated');
+      globalLabel.name = label.name;
+      expect(label.position).to.equal(2);
+      globalLabel.position = label.position;
+      expect(label.color).to.equal('antique-blue');
+      globalLabel.color = label.color;
+      globalLabel.updatedAt = label.updatedAt;
+      globalLabel = label;
+    });
+  });
+});
+
+describe('Lists', () => {
+  test('POST /api/boards/:boardId/lists', async () => {
+    await createList({
+      path: {
+        boardId: globalBoard.id,
+      },
+      body: {
+        name: 'Test List',
+        position: 1,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const list = res.data.item;
+      expect(list.name).to.equal('Test List');
+      expect(list.position).to.equal(1);
+      globalList = list;
+    });
+  });
+
+  test('PATCH /api/lists/:id', async () => {
+    await updateList({
+      path: {
+        id: globalList.id,
+      },
+      body: {
+        name: 'Test List Updated',
+        position: 2,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const list = res.data.item;
+      expect(list.name).to.equal('Test List Updated');
+      globalList.name = list.name;
+      expect(list.position).to.equal(2);
+      globalList.position = list.position;
+      globalList.updatedAt = list.updatedAt;
+      globalList = list;
+    });
+  });
+});
+
+describe('Cards', () => {
+  test('POST /api/lists/:listId/cards', async () => {
+    await createCard({
+      path: {
+        listId: globalList.id,
+      },
+      body: {
+        name: 'Test Card',
+        position: 1,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const card = res.data.item;
+      expect(card.name).to.equal('Test Card');
+      expect(card.position).to.equal(1);
+      globalCard = card;
+    });
+  });
+
+  let duplicatedCard = {} as Card;
+  test('POST /api/cards/:id/duplicate', async () => {
+    await duplicateCard({
+      path: {
+        id: globalCard.id,
+      },
+      body: {
+        position: 3,
+      },
+    }).then(async (res) => {
+      expect(res.error).to.equal(undefined);
+      const card = res.data.item;
+      expect(card.id).to.not.equal(globalCard.id);
+      expect(card.createdAt).to.not.equal(globalCard.createdAt);
+      expect(card.updatedAt).to.equal(null);
+      expect(card.position).to.not.equal(globalCard.position);
+      expect(card.position).to.equal(3);
+      expect(card.name).to.equal(globalCard.name);
+      expect(card.description).to.equal(globalCard.description);
+      expect(card.dueDate).to.equal(globalCard.dueDate);
+      expect(card.isDueDateCompleted).to.equal(globalCard.isDueDateCompleted);
+      expect(card.boardId).to.equal(globalCard.boardId);
+      expect(card.listId).to.equal(globalCard.listId);
+      expect(card.coverAttachmentId).to.equal(null);
+      duplicatedCard = card;
+
+      // Check if there is an actual duplicate card in the same list
+      await getBoard({
+        path: {
+          id: globalBoard.id,
+        },
+      }).then((boardRes) => {
+        const boardCards = boardRes.data.included.cards;
+        // This field is only returned for GET and DUPLICATE
+        card.isSubscribed = false;
+        const maskedGlobalCard = structuredClone(globalCard);
+        maskedGlobalCard.isSubscribed = false;
+        expect(JSON.stringify(maskedGlobalCard)).to.equal(JSON.stringify(boardCards[0]));
+        expect(JSON.stringify(card)).to.equal(JSON.stringify(boardCards[1]));
+        expect(boardCards[0].listId).to.equal(boardCards[1].listId);
+      });
+    });
+  });
+
+  // Test is in a bit of unusual order, but required to check the sort
+  test('POST /api/lists/:id/sort', async () => {
+    const sortBoard = await getBoard({
+      path: {
+        id: globalBoard.id,
+      },
+    });
+    const originalCards = sortBoard.data.included.cards;
+
+    await sortList({
+      path: {
+        id: globalList.id,
+      },
+      body: {
+        type: 'createdAt_desc',
+      },
+    }).then(async (res) => {
+      expect(res.error).to.equal(undefined);
+      const sortedCards = res.data.included.cards;
+      expect(originalCards[0].id).to.equal(sortedCards[1].id);
+      expect(originalCards[1].id).to.equal(sortedCards[0].id);
+      globalCard = sortedCards[1];
+    });
+  });
+
+  test('PATCH /api/cards/:id', async () => {
+    const cardBoard = await createBoard({
+      path: {
+        projectId: globalProject.id,
+      },
+      body: {
+        position: 123,
+        name: 'Card Board',
+      },
+    });
+    const cardBoardList = await createList({
+      path: {
+        boardId: cardBoard.data.item.id,
+      },
+      body: {
+        position: 123,
+        name: 'Card List',
+      },
+    });
+
+    const dueDate = new Date();
+    await updateCard({
+      path: {
+        id: duplicatedCard.id,
+      },
+      body: {
+        name: 'Updated Test Card',
+        position: 2,
+        description: 'Test Description',
+        dueDate: dueDate,
+        isDueDateCompleted: true,
+        // Stopwatch is cannot be set by API
+        // Can also move to other board/list
+        listId: cardBoardList.data.item.id,
+        boardId: cardBoard.data.item.id,
+        coverAttachmentId: '123',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const card = res.data.item;
+      expect(card.name).to.equal('Updated Test Card');
+      duplicatedCard.name = card.name;
+      expect(card.position).to.equal(2);
+      duplicatedCard.position = card.position;
+      expect(card.description).to.equal('Test Description');
+      duplicatedCard.description = card.description;
+      expect(card.dueDate).to.equal(dueDate.toISOString());
+      duplicatedCard.dueDate = card.dueDate;
+      expect(card.isDueDateCompleted).to.equal(true);
+      duplicatedCard.isDueDateCompleted = card.isDueDateCompleted;
+      expect(card.coverAttachmentId).to.equal('123');
+      duplicatedCard.coverAttachmentId = card.coverAttachmentId;
+      expect(card.boardId).to.equal(cardBoard.data.item.id);
+      duplicatedCard.boardId = card.boardId;
+      expect(card.listId).to.equal(cardBoardList.data.item.id);
+      duplicatedCard.listId = card.listId;
+
+      duplicatedCard.updatedAt = card.updatedAt;
+      // Value is set as we used DUPLICATE card
+      card.isSubscribed = false;
+      expect(JSON.stringify(card)).to.equal(JSON.stringify(duplicatedCard));
+    });
+  });
+
+  test('GET /api/cards/:id', async () => {
+    await getCard({
+      path: {
+        id: duplicatedCard.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const card = res.data.item;
+      // This field is only returned for GET and DUPLICATE
+      const maskedGlobalCard = structuredClone(duplicatedCard);
+      maskedGlobalCard.isSubscribed = false;
+      expect(JSON.stringify(card)).to.equal(JSON.stringify(maskedGlobalCard));
+    });
+  });
+
+  test('POST /api/cards/:cardId/memberships', async () => {
+    await createCardMembership({
+      path: {
+        cardId: globalCard.id,
+      },
+      body: {
+        userId: globalUser.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const membership = res.data.item;
+      expect(membership.cardId).to.equal(globalCard.id);
+      expect(membership.userId).to.equal(globalUser.id);
+      globalCardMembership = membership;
+    });
+  });
+
+  test('POST /api/cards/:cardId/labels', async () => {
+    await createCardLabel({
+      path: {
+        cardId: globalCard.id,
+      },
+      body: {
+        labelId: globalLabel.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const label = res.data.item;
+      expect(label.cardId).to.equal(globalCard.id);
+      expect(label.labelId).to.equal(globalLabel.id);
+      globalCardlabel = label;
+    });
+  });
+
+  test('POST /api/cards/:cardId/tasks', async () => {
+    await createTask({
+      path: {
+        cardId: globalCard.id,
+      },
+      body: {
+        position: 1,
+        name: 'Test Task',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const task = res.data.item;
+      expect(task.cardId).to.equal(globalCard.id);
+      expect(task.position).to.equal(1);
+      expect(task.name).to.equal('Test Task');
+      globalTask = task;
+    });
+  });
+
+  test('PATCH /api/tasks/:id', async () => {
+    await updateTask({
+      path: {
+        id: globalTask.id,
+      },
+      body: {
+        name: 'Updated Test Task',
+        position: 2,
+        isCompleted: true,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const task = res.data.item;
+      expect(task.name).to.equal('Updated Test Task');
+      globalTask.name = task.name;
+      expect(task.position).to.equal(2);
+      globalTask.position = task.position;
+      expect(task.isCompleted).to.equal(true);
+      globalTask.isCompleted = task.isCompleted;
+      globalTask.updatedAt = task.updatedAt;
+      expect(JSON.stringify(task)).to.equal(JSON.stringify(globalTask));
+    });
+  });
+
+  test('GET /api/cards/:cardId/actions', async () => {
+    await getCardActions({
+      path: {
+        cardId: globalCard.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const actions = res.data.items;
+      expect(actions.length).to.equal(0);
+    });
+  });
+
+  test('POST /api/cards/:cardId/comment-actions', async () => {
+    await createCommentAction({
+      path: {
+        cardId: globalCard.id,
+      },
+      body: {
+        text: 'Test Comment Action',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const comment = res.data.item;
+      expect(comment.cardId).to.equal(globalCard.id);
+      expect(comment.data.text).to.equal('Test Comment Action');
+      globalComment = comment;
+    });
+  });
+});
+
+describe('Comments', () => {
+  test('PATCH /api/comment-actions/:id', async () => {
+    await updateCommentAction({
+      path: {
+        id: globalComment.id,
+      },
+      body: {
+        text: 'Updated Test Comment Action',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const comment = res.data.item;
+      expect(comment.data.text).to.equal('Updated Test Comment Action');
+      globalComment.data.text = comment.data.text;
+      globalComment.updatedAt = comment.updatedAt;
+      expect(JSON.stringify(comment)).to.equal(JSON.stringify(globalComment));
+    });
+  });
+});
+
+describe('Notifications', () => {
+  test('GET /api/notifications', async () => {
+    await getNotifications({}).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const notifications = res.data.items;
+      expect(notifications.length).to.equal(0);
     });
   });
 });
 
 describe('Delete', () => {
+  test('DELETE /api/comment-actions/:id', async () => {
+    await deleteCommentAction({
+      path: {
+        id: globalComment.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const comment = res.data.item;
+      expect(JSON.stringify(comment)).to.equal(JSON.stringify(globalComment));
+    });
+  });
+
+  test('DELETE /api/tasks/:id', async () => {
+    await deleteTask({
+      path: {
+        id: globalTask.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const task = res.data.item;
+      expect(JSON.stringify(task)).to.equal(JSON.stringify(globalTask));
+    });
+  });
+
+  test('DELETE /api/cards/:cardId/labels/:labelId', async () => {
+    await deleteCardLabel({
+      path: {
+        cardId: globalCard.id,
+        labelId: globalCardlabel.labelId,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const label = res.data.item;
+      expect(JSON.stringify(label)).to.equal(JSON.stringify(globalCardlabel));
+    });
+  });
+
+  test('DELETE /api/cards/:cardId/memberships', async () => {
+    await deleteCardMembership({
+      path: {
+        cardId: globalCard.id,
+      },
+      body: {
+        userId: globalUser.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const membership = res.data.item;
+      expect(JSON.stringify(membership)).to.equal(JSON.stringify(globalCardMembership));
+    });
+  });
+
+  test('DELETE /api/cards/:id', async () => {
+    await deleteCard({
+      path: {
+        id: globalCard.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const card = res.data.item;
+      expect(JSON.stringify(card)).to.equal(JSON.stringify(globalCard));
+    });
+  });
+
+  test('DELETE /api/lists/:id', async () => {
+    await deleteList({
+      path: {
+        id: globalList.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const list = res.data.item;
+      expect(JSON.stringify(list)).to.equal(JSON.stringify(globalList));
+    });
+  });
+
+  test('DELETE /api/labels/:id', async () => {
+    await deleteLabel({
+      path: {
+        id: globalLabel.id,
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const label = res.data.item;
+      expect(JSON.stringify(label)).to.equal(JSON.stringify(globalLabel));
+    });
+  });
+
   test('DELETE /api/project-managers/:id', async () => {
     await deleteProjectManager({
       path: {
@@ -477,20 +1000,18 @@ describe('Delete', () => {
   });
 
   test('DELETE /api/board-memberships/:id', async () => {
-    console.log(globalManager);
     await deleteBoardMembership({
       path: {
-        id: globalMembership.id,
+        id: globalBoardMembership.id,
       },
     }).then((res) => {
       expect(res.error).to.equal(undefined);
       const membership = res.data.item;
-      expect(JSON.stringify(membership)).to.equal(JSON.stringify(globalMembership));
+      expect(JSON.stringify(membership)).to.equal(JSON.stringify(globalBoardMembership));
     });
   });
 
   test('DELETE /api/boards/:id', async () => {
-    console.log(globalBoard);
     await deleteBoard({
       path: {
         id: globalBoard.id,

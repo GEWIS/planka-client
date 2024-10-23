@@ -4,7 +4,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "vite build",
-    "test": "vitest",
+    "test": "vitest run",
     "example": "tsx example/example.ts",
     "release-major": "release-it --ci major --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
     "release": "release-it --ci minor --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
