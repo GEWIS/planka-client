@@ -45,7 +45,6 @@ import {
   User,
   Task,
   Attachment,
-  Action,
   Comment,
   createList,
   updateList,
@@ -89,7 +88,6 @@ let globalCardMembership = {} as CardMembership;
 let globalCardLabel = {} as CardLabel;
 let globalTask = {} as Task;
 let globalAttachment = {} as Attachment;
-const globalAction = {} as Action;
 let globalComment = {} as Comment;
 let globalNotification = {} as Notification;
 
@@ -467,9 +465,7 @@ describe('Board', () => {
       expect(JSON.stringify(board)).to.equal(JSON.stringify(globalBoard));
     });
   });
-});
 
-describe('Memberships', () => {
   test('POST /api/boards/:boardId/memberships', async () => {
     await createBoardMembership({
       path: {
@@ -506,9 +502,7 @@ describe('Memberships', () => {
       expect(JSON.stringify(membership)).to.equal(JSON.stringify(globalBoardMembership));
     });
   });
-});
 
-describe('Labels', () => {
   test('POST /api/boards/:boardId/labels', async () => {
     await createLabel({
       path: {
@@ -838,7 +832,9 @@ describe('Cards', () => {
       expect(JSON.stringify(task)).to.equal(JSON.stringify(globalTask));
     });
   });
+});
 
+describe('Attachments', () => {
   test('POST /api/cards/:cardId/attachments', async () => {
     const imagePath = path.join(__dirname, 'gewis.jpg');
     const fileBuffer = fs.readFileSync(imagePath);
@@ -859,37 +855,6 @@ describe('Cards', () => {
     });
   });
 
-  test('GET /api/cards/:cardId/actions', async () => {
-    await getCardActions({
-      path: {
-        cardId: globalCard.id,
-      },
-    }).then((res) => {
-      expect(res.error).to.equal(undefined);
-      const actions = res.data.items;
-      expect(actions.length).to.equal(0);
-    });
-  });
-
-  test('POST /api/cards/:cardId/comment-actions', async () => {
-    await createCommentAction({
-      path: {
-        cardId: globalCard.id,
-      },
-      body: {
-        text: 'Test Comment Action',
-      },
-    }).then((res) => {
-      expect(res.error).to.equal(undefined);
-      const comment = res.data.item;
-      expect(comment.cardId).to.equal(globalCard.id);
-      expect(comment.data.text).to.equal('Test Comment Action');
-      globalComment = comment;
-    });
-  });
-});
-
-describe('Attachments', () => {
   test('PATCH /api/attachments/:id', async () => {
     await updateAttachment({
       path: {
@@ -910,6 +875,23 @@ describe('Attachments', () => {
 });
 
 describe('Comments', () => {
+  test('POST /api/cards/:cardId/comment-actions', async () => {
+    await createCommentAction({
+      path: {
+        cardId: globalCard.id,
+      },
+      body: {
+        text: 'Test Comment Action',
+      },
+    }).then((res) => {
+      expect(res.error).to.equal(undefined);
+      const comment = res.data.item;
+      expect(comment.cardId).to.equal(globalCard.id);
+      expect(comment.data.text).to.equal('Test Comment Action');
+      globalComment = comment;
+    });
+  });
+
   test('PATCH /api/comment-actions/:id', async () => {
     await updateCommentAction({
       path: {
@@ -925,6 +907,20 @@ describe('Comments', () => {
       globalComment.data.text = comment.data.text;
       globalComment.updatedAt = comment.updatedAt;
       expect(JSON.stringify(comment)).to.equal(JSON.stringify(globalComment));
+    });
+  });
+
+  test('GET /api/cards/:cardId/actions', async () => {
+    await getCardActions({
+      path: {
+        cardId: globalCard.id,
+      },
+    }).then((res) => {
+      console.log(res.data.items);
+      expect(res.error).to.equal(undefined);
+      const actions = res.data.items;
+      expect(actions.length).to.equal(1);
+      expect(actions[0].data.text).to.equal('Updated Test Comment Action');
     });
   });
 });

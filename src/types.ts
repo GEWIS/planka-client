@@ -5,8 +5,8 @@ export enum StatusCode {
   s409 = 'E_CONFLICT',
 }
 
-/*
-  All schemas
+/**
+ * Authentication
  */
 export type AccessTokenOidcRequest = {
   code: string;
@@ -18,228 +18,13 @@ export type AccessTokenRequest = {
   password: string;
 };
 
-export type Action = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  type: CommentType;
-  data: ActionText;
-  cardId: string;
-  userId: string;
-};
-
-export type ActionText = {
-  text: string;
-};
-
-export type Attachment = {
-  id: string;
-  name: string;
-  cardId: string;
-  url: string;
-  createUserId: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  coverUrl?: string;
-  image?: Image;
-};
-
-export type Background = {
-  type: BackgroundType;
-  name?: BackgroundGradient;
-};
-
-export type BackgroundGradient =
-  | 'old-lime'
-  | 'ocean-dive'
-  | 'tzepesch-style'
-  | 'jungle-mesh'
-  | 'strawberry-dust'
-  | 'purple-rose'
-  | 'sun-scream'
-  | 'warm-rust'
-  | 'sky-change'
-  | 'green-eyes'
-  | 'blue-xchange'
-  | 'blood-orange'
-  | 'sour-peel'
-  | 'green-ninja'
-  | 'algae-green'
-  | 'coral-reef'
-  | 'steel-grey'
-  | 'heat-waves'
-  | 'velvet-lounge'
-  | 'purple-rain'
-  | 'blue-steel'
-  | 'blueish-curve'
-  | 'prism-light'
-  | 'green-mist'
-  | 'red-curtain';
-
-export type BackgroundImage = {
-  url?: string;
-  coverUrl?: string;
-};
-
-export type BackgroundType = 'gradient' | 'image';
-
-export type Board = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  position: number;
-  name: string;
-  projectId: string;
-};
-
-export type BoardMembership = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  role: Role;
-  canComment?: boolean;
-  boardId: string;
-  userId: string;
-};
-
-export type Card = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  creatorUserId: string;
-  position: number;
-  name: string;
-  description?: string;
-  dueDate?: Date;
-  isDueDateCompleted?: boolean;
-  boardId: string;
-  listId: string;
-  coverAttachmentId?: string;
-  isSubscribed: boolean;
-};
-
-export type CardLabel = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  cardId: string;
-  labelId?: string;
-};
-
-export type CardMembership = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  cardId: string;
-  userId: string;
-};
-
-export type Comment = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  cardId: string;
-  userId: string;
-  data: ActionText;
-  type: CommentType;
-};
-
-export type CommentType = 'commentCard';
-
-export type Image = {
-  width: number;
-  height: number;
-};
-
-export type Label = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  position: number;
-  name: string;
-  color: LabelColor;
-  boardId: string;
-};
-
-export type LabelColor =
-  | 'berry-red'
-  | 'pumpkin-orange'
-  | 'lagoon-blue'
-  | 'pink-tulip'
-  | 'light-mud'
-  | 'orange-peel'
-  | 'bright-moss'
-  | 'antique-blue'
-  | 'dark-granite'
-  | 'lagune-blue'
-  | 'sunny-grass'
-  | 'morning-sky'
-  | 'light-orange'
-  | 'midnight-blue'
-  | 'tank-green'
-  | 'gun-metal'
-  | 'wet-moss'
-  | 'red-burgundy'
-  | 'light-concrete'
-  | 'apricot-red'
-  | 'desert-sand'
-  | 'navy-blue'
-  | 'egg-yellow'
-  | 'coral-green'
-  | 'light-cocoa';
-
-export type List = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  position: number;
-  name: string;
-  boardId: string;
-};
-
-export type Notification = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  isRead: boolean;
-  userId: string;
-  cardId: string;
-  actionId: string;
-};
-
 export type Oidc = {
   oidc: string;
 };
 
-export type Project = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  name: string;
-  background?: Background;
-  backgroundImage?: BackgroundImage;
-};
-
-export type ProjectManager = {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  projectId: string;
-  userId: string;
-};
-
-export type Role = 'editor' | 'viewer';
-
-export type Task = {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  position: number;
-  name: string;
-  isCompleted: boolean;
-  cardId: string;
-};
-
+/**
+ * Users
+ */
 export type User = {
   id: string;
   email: string;
@@ -285,8 +70,255 @@ export type Language =
   | 'zh-CN'
   | 'zh-TW';
 
-/*
-  Wrappers for types above
+/**
+ * Projects
+ */
+export type Project = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  name: string;
+  background?: Background;
+  backgroundImage?: BackgroundImage;
+};
+
+export type Background = {
+  type: BackgroundType;
+  name?: BackgroundGradient;
+};
+
+export type BackgroundGradient =
+  | 'old-lime'
+  | 'ocean-dive'
+  | 'tzepesch-style'
+  | 'jungle-mesh'
+  | 'strawberry-dust'
+  | 'purple-rose'
+  | 'sun-scream'
+  | 'warm-rust'
+  | 'sky-change'
+  | 'green-eyes'
+  | 'blue-xchange'
+  | 'blood-orange'
+  | 'sour-peel'
+  | 'green-ninja'
+  | 'algae-green'
+  | 'coral-reef'
+  | 'steel-grey'
+  | 'heat-waves'
+  | 'velvet-lounge'
+  | 'purple-rain'
+  | 'blue-steel'
+  | 'blueish-curve'
+  | 'prism-light'
+  | 'green-mist'
+  | 'red-curtain';
+
+export type BackgroundImage = {
+  url?: string;
+  coverUrl?: string;
+};
+
+export type BackgroundType = 'gradient' | 'image';
+
+export type ProjectManager = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  projectId: string;
+  userId: string;
+};
+
+/**
+ * Boards
+ */
+export type Board = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  position: number;
+  name: string;
+  projectId: string;
+};
+
+/**
+ * Board memberships
+ */
+export type BoardMembership = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  role: Role;
+  canComment?: boolean;
+  boardId: string;
+  userId: string;
+};
+
+export type Role = 'editor' | 'viewer';
+
+/**
+ * Labels
+ */
+export type Label = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  position: number;
+  name: string;
+  color: LabelColor;
+  boardId: string;
+};
+
+export type LabelColor =
+  | 'berry-red'
+  | 'pumpkin-orange'
+  | 'lagoon-blue'
+  | 'pink-tulip'
+  | 'light-mud'
+  | 'orange-peel'
+  | 'bright-moss'
+  | 'antique-blue'
+  | 'dark-granite'
+  | 'lagune-blue'
+  | 'sunny-grass'
+  | 'morning-sky'
+  | 'light-orange'
+  | 'midnight-blue'
+  | 'tank-green'
+  | 'gun-metal'
+  | 'wet-moss'
+  | 'red-burgundy'
+  | 'light-concrete'
+  | 'apricot-red'
+  | 'desert-sand'
+  | 'navy-blue'
+  | 'egg-yellow'
+  | 'coral-green'
+  | 'light-cocoa';
+
+/**
+ * Lists
+ */
+export type List = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  position: number;
+  name: string;
+  boardId: string;
+};
+
+export type SortType = 'name_asc' | 'dueDate_asc' | 'createdAt_asc' | 'createdAt_desc';
+
+/**
+ * Cards
+ */
+export type Card = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  creatorUserId: string;
+  position: number;
+  name: string;
+  description?: string;
+  dueDate?: Date;
+  isDueDateCompleted?: boolean;
+  boardId: string;
+  listId: string;
+  coverAttachmentId?: string;
+  isSubscribed: boolean;
+};
+
+export type CardMembership = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  cardId: string;
+  userId: string;
+};
+
+export type CardLabel = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  cardId: string;
+  labelId?: string;
+};
+
+export type Task = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  position: number;
+  name: string;
+  isCompleted: boolean;
+  cardId: string;
+};
+
+export type Action = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  type: CommentType;
+  data: ActionText;
+  cardId: string;
+  userId: string;
+};
+
+/**
+ * Attachments
+ */
+export type Attachment = {
+  id: string;
+  name: string;
+  cardId: string;
+  url: string;
+  createUserId: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  coverUrl?: string;
+  image?: Image;
+};
+
+export type Image = {
+  width: number;
+  height: number;
+};
+
+/**
+ * Comments
+ */
+export type Comment = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  cardId: string;
+  userId: string;
+  data: ActionText;
+  type: CommentType;
+};
+
+export type ActionText = {
+  text: string;
+};
+
+export type CommentType = 'commentCard';
+
+/**
+ * Notifications
+ */
+export type Notification = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  isRead: boolean;
+  userId: string;
+  cardId: string;
+  actionId: string;
+};
+
+/**
+ * Responses are given as single or array, and can include other data types
  */
 export type SingleResponse<T> = {
   item: T;
@@ -312,53 +344,40 @@ export type Include = {
   projectManagers: ProjectManager[];
 };
 
-export type SortType = 'name_asc' | 'dueDate_asc' | 'createdAt_asc' | 'createdAt_desc';
-
-/*
-  All type of possible errors
+/**
+ * Most errors are roughly the same, so they are types singly
  */
-export type BaseError = {
+export type HttpError = {
   code: string;
-  message: string;
+  message?: string;
+  problems?: string[];
 };
 
-export type BadRequestError = BaseError & {
-  problems: string[];
-};
-
-export type UnauthorizedError = BaseError;
-
-export type ConflictError = BaseError;
-
-export type NotFoundError = Omit<BaseError, 'message'>;
-
-export type UnprocessableError = BaseError;
+/**
+ * All types necessary to provide to the hey-api client
+ */
 
 // 'GET /api/config': 'show-config'
 export type GetConfigResponse = SingleResponse<Oidc>;
-export type GetConfigError = unknown;
 
 // 'POST /api/access-tokens': 'access-tokens/create'
 export type AuthorizeRequest = {
   body: AccessTokenRequest;
 };
 export type AuthorizeResponse = SingleResponse<string>;
-export type AuthorizeError = BadRequestError;
+export type AuthorizeError = HttpError;
 
 // 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
 export type AuthorizeOidcRequest = {
   body: AccessTokenOidcRequest;
 };
 export type AuthorizeOidcResponse = SingleResponse<string>;
-export type AuthorizeOidcError = BadRequestError | UnauthorizedError;
 
 // 'DELETE /api/access-tokens/me': 'access-tokens/delete'
 export type UnauthorizeResponse = SingleResponse<string>;
-export type UnauthorizeError = UnauthorizedError;
 
 // 'GET /api/users': 'users/index'
 export type GetUsersResponse = ArrayResponse<User>;
-export type GetUsersError = UnauthorizedError;
 
 // 'POST /api/users': 'users/create'
 export type CreateUserRequest = {
@@ -370,7 +389,6 @@ export type CreateUserRequest = {
   };
 };
 export type CreateUserResponse = SingleResponse<User>;
-export type CreateUserError = BadRequestError | UnauthorizedError | ConflictError;
 
 // 'GET /api/users/:id': 'users/show'
 export type GetUserRequest = {
@@ -379,7 +397,6 @@ export type GetUserRequest = {
   };
 };
 export type GetUserResponse = SingleResponse<User>;
-export type GetUserError = UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/users/:id/email': 'users/update-email'
 export type UpdateUserRequest = {
@@ -391,7 +408,6 @@ export type UpdateUserRequest = {
   >;
 };
 export type UpdateUserResponse = SingleResponse<User>;
-export type UpdateUserError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/users/:id/email': 'users/update-email'
 export type UpdateUserEmailRequest = {
@@ -403,11 +419,6 @@ export type UpdateUserEmailRequest = {
   };
 };
 export type UpdateUserEmailResponse = SingleResponse<User>;
-export type UpdateUserEmailError =
-  | BadRequestError
-  | UnauthorizedError
-  | NotFoundError
-  | ConflictError;
 
 // 'PATCH /api/users/:id/password': 'users/update-password'
 export type UpdateUserPasswordRequest = {
@@ -419,11 +430,6 @@ export type UpdateUserPasswordRequest = {
   };
 };
 export type UpdateUserPasswordResponse = SingleResponse<User>;
-export type UpdateUserPasswordError =
-  | BadRequestError
-  | UnauthorizedError
-  | NotFoundError
-  | ConflictError;
 
 // 'PATCH /api/users/:id/username': 'users/update-username'
 export type UpdateUserUsernameRequest = {
@@ -435,11 +441,6 @@ export type UpdateUserUsernameRequest = {
   };
 };
 export type UpdateUserUsernameResponse = SingleResponse<User>;
-export type UpdateUserUsernameError =
-  | BadRequestError
-  | UnauthorizedError
-  | NotFoundError
-  | ConflictError;
 
 // 'PATCH /api/users/:id/username': 'users/update-username'
 export type UpdateUserAvatarRequest = {
@@ -451,11 +452,6 @@ export type UpdateUserAvatarRequest = {
   };
 };
 export type UpdateUserAvatarResponse = SingleResponse<User>;
-export type UpdateUserAvatarError =
-  | BadRequestError
-  | UnauthorizedError
-  | NotFoundError
-  | UnprocessableError;
 
 // 'DELETE /api/users/:id': 'users/delete'
 export type DeleteUserRequest = {
@@ -464,11 +460,9 @@ export type DeleteUserRequest = {
   };
 };
 export type DeleteUserResponse = SingleResponse<User>;
-export type DeleteUserError = UnauthorizedError | NotFoundError;
 
 // 'GET /api/projects': 'projects/index'
 export type GetProjectsResponse = ArrayResponse<Project>;
-export type GetProjectsError = UnauthorizedError;
 
 // 'POST /api/projects': 'projects/create'
 export type CreateProjectRequest = {
@@ -477,7 +471,6 @@ export type CreateProjectRequest = {
   };
 };
 export type CreateProjectResponse = SingleResponse<Project>;
-export type CreateProjectError = BadRequestError | UnauthorizedError;
 
 // 'GET /api/projects/:id': 'projects/show'
 export type GetProjectRequest = {
@@ -486,7 +479,6 @@ export type GetProjectRequest = {
   };
 };
 export type GetProjectResponse = SingleResponse<Project>;
-export type GetProjectError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'POST /api/projects/:id/background-image': 'projects/update-background-image'
 export type UpdateProjectBackgroundImageRequest = {
@@ -498,11 +490,6 @@ export type UpdateProjectBackgroundImageRequest = {
   };
 };
 export type UpdateProjectBackgroundImageResponse = SingleResponse<Project>;
-export type UpdateProjectBackgroundImageError =
-  | BadRequestError
-  | UnauthorizedError
-  | NotFoundError
-  | UnprocessableError;
 
 // 'PATCH /api/projects/:id': 'projects/update'
 export type UpdateProjectRequest = {
@@ -512,7 +499,6 @@ export type UpdateProjectRequest = {
   body: Partial<Omit<Project, 'createdAt' | 'updatedAt' | 'id' | 'backgroundImage'>>;
 };
 export type UpdateProjectResponse = SingleResponse<Project>;
-export type UpdateProjectError = UnauthorizeError | NotFoundError;
 
 // 'DELETE /api/projects/:id': 'projects/delete'
 export type DeleteProjectRequest = {
@@ -521,7 +507,6 @@ export type DeleteProjectRequest = {
   };
 };
 export type DeleteProjectResponse = SingleResponse<Project>;
-export type DeleteProjectError = UnauthorizeError | NotFoundError;
 
 // 'POST /api/projects/:projectId/managers': 'project-managers/create'
 export type CreateProjectManagerRequest = {
@@ -533,7 +518,6 @@ export type CreateProjectManagerRequest = {
   };
 };
 export type CreateProjectManagerResponse = SingleResponse<ProjectManager>;
-export type CreateProjectManagerError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/project-managers/:id': 'project-managers/delete'
 export type DeleteProjectManagerRequest = {
@@ -542,7 +526,6 @@ export type DeleteProjectManagerRequest = {
   };
 };
 export type DeleteProjectManagerResponse = SingleResponse<ProjectManager>;
-export type DeleteProjectManagerError = BadRequestError | UnauthorizedError;
 
 // 'POST /api/projects/:projectId/boards': 'boards/create'
 export type CreateBoardRequest = {
@@ -555,7 +538,6 @@ export type CreateBoardRequest = {
   };
 };
 export type CreateBoardResponse = SingleResponse<Board>;
-export type CreateBoardError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'GET /api/boards/:id': 'boards/show'
 export type GetBoardRequest = {
@@ -564,7 +546,6 @@ export type GetBoardRequest = {
   };
 };
 export type GetBoardResponse = SingleResponse<Board>;
-export type GetBoardError = UnauthorizeError | NotFoundError;
 
 // 'PATCH /api/boards/:id': 'boards/update'
 export type UpdateBoardRequest = {
@@ -574,7 +555,6 @@ export type UpdateBoardRequest = {
   body: Partial<Omit<Board, 'createdAt' | 'updatedAt' | 'id' | 'projectId'>>;
 };
 export type UpdateBoardResponse = SingleResponse<Board>;
-export type UpdateBoardError = UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/boards/:id': 'boards/delete'
 export type DeleteBoardRequest = {
@@ -583,7 +563,6 @@ export type DeleteBoardRequest = {
   };
 };
 export type DeleteBoardResponse = SingleResponse<void>;
-export type DeleteBoardError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
 export type CreateBoardMembershipRequest = {
@@ -596,11 +575,6 @@ export type CreateBoardMembershipRequest = {
   };
 };
 export type CreateBoardMembershipResponse = SingleResponse<BoardMembership>;
-export type CreateBoardMembershipError =
-  | BadRequestError
-  | UnauthorizedError
-  | NotFoundError
-  | ConflictError;
 
 // 'PATCH /api/board-memberships/:id': 'board-memberships/update'
 export type UpdateBoardMembershipRequest = {
@@ -612,7 +586,6 @@ export type UpdateBoardMembershipRequest = {
   };
 };
 export type UpdateBoardMembershipResponse = SingleResponse<BoardMembership>;
-export type UpdateBoardMembershipError = UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
 export type DeleteBoardMembershipRequest = {
@@ -621,7 +594,6 @@ export type DeleteBoardMembershipRequest = {
   };
 };
 export type DeleteBoardMembershipResponse = SingleResponse<BoardMembership>;
-export type DeleteBoardMembershipError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/boards/:boardId/labels': 'labels/create'
 export type CreateLabelRequest = {
@@ -635,7 +607,6 @@ export type CreateLabelRequest = {
   };
 };
 export type CreateLabelResponse = SingleResponse<Label>;
-export type CreateLabelError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/labels/:id': 'labels/update'
 export type UpdateLabelRequest = {
@@ -645,7 +616,6 @@ export type UpdateLabelRequest = {
   body: Partial<Omit<Label, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
 };
 export type UpdateLabelResponse = SingleResponse<Label>;
-export type UpdateLabelError = UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/labels/:id': 'labels/delete'
 export type DeleteLabelRequest = {
@@ -654,7 +624,6 @@ export type DeleteLabelRequest = {
   };
 };
 export type DeleteLabelResponse = SingleResponse<Label>;
-export type DeleteLabelError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/boards/:boardId/lists': 'lists/create'
 export type CreateListRequest = {
@@ -667,7 +636,6 @@ export type CreateListRequest = {
   };
 };
 export type CreateListResponse = SingleResponse<List>;
-export type CreateListError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/lists/:id': 'lists/update'
 export type UpdateListRequest = {
@@ -677,7 +645,6 @@ export type UpdateListRequest = {
   body: Partial<Omit<List, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
 };
 export type UpdateListResponse = SingleResponse<List>;
-export type UpdateListError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/lists/:id/sort': 'lists/sort'
 export type SortListRequest = {
@@ -689,7 +656,6 @@ export type SortListRequest = {
   };
 };
 export type SortListResponse = SingleResponse<List>;
-export type SortListError = UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/lists/:id': 'lists/delete'
 export type DeleteListRequest = {
@@ -698,7 +664,6 @@ export type DeleteListRequest = {
   };
 };
 export type DeleteListResponse = SingleResponse<List>;
-export type DeleteListError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/lists/:listId/cards': 'cards/create'
 export type CreateCardRequest = {
@@ -711,11 +676,6 @@ export type CreateCardRequest = {
   };
 };
 export type CreateCardResponse = SingleResponse<Card>;
-export type CreateCardError =
-  | BadRequestError
-  | UnauthorizedError
-  | NotFoundError
-  | UnprocessableError;
 
 // 'GET /api/cards/:id': 'cards/show'
 export type GetCardRequest = {
@@ -724,7 +684,6 @@ export type GetCardRequest = {
   };
 };
 export type GetCardResponse = SingleResponse<Card>;
-export type GetCardError = UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/cards/:id': 'cards/update'
 export type UpdateCardRequest = {
@@ -734,7 +693,6 @@ export type UpdateCardRequest = {
   body: Partial<Omit<Card, 'createdAt' | 'updatedAt' | 'id' | 'creatorUserId' | 'isSubscribed'>>;
 };
 export type UpdateCardResponse = SingleResponse<Card>;
-export type UpdateCardError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/cards/:id/duplicate': 'cards/duplicate'
 export type DuplicateCardRequest = {
@@ -746,7 +704,6 @@ export type DuplicateCardRequest = {
   };
 };
 export type DuplicateCardResponse = SingleResponse<Card>;
-export type DuplicateCardError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/cards/:id': 'cards/delete'
 export type DeleteCardRequest = {
@@ -755,7 +712,6 @@ export type DeleteCardRequest = {
   };
 };
 export type DeleteCardResponse = SingleResponse<Card>;
-export type DeleteCardError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
 export type CreateCardMembershipRequest = {
@@ -767,7 +723,6 @@ export type CreateCardMembershipRequest = {
   };
 };
 export type CreateCardMembershipResponse = SingleResponse<CardMembership>;
-export type CreateCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
 export type DeleteCardMembershipRequest = {
@@ -779,7 +734,6 @@ export type DeleteCardMembershipRequest = {
   };
 };
 export type DeleteCardMembershipResponse = SingleResponse<CardMembership>;
-export type DeleteCardMembershipError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'POST /api/cards/:cardId/labels': 'card-labels/create'
 export type CreateCardLabelRequest = {
@@ -791,7 +745,6 @@ export type CreateCardLabelRequest = {
   };
 };
 export type CreateCardLabelResponse = SingleResponse<CardLabel>;
-export type CreateCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
 export type DeleteCardLabelRequest = {
@@ -801,7 +754,6 @@ export type DeleteCardLabelRequest = {
   };
 };
 export type DeleteCardLabelResponse = SingleResponse<CardLabel>;
-export type DeleteCardLabelError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'POST /api/cards/:cardId/tasks': 'tasks/create'
 export type CreateTaskRequest = {
@@ -814,7 +766,6 @@ export type CreateTaskRequest = {
   };
 };
 export type CreateTaskResponse = SingleResponse<Task>;
-export type CreateTaskError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/tasks/:id': 'tasks/update'
 export type UpdateTaskRequest = {
@@ -824,7 +775,6 @@ export type UpdateTaskRequest = {
   body: Partial<Omit<Task, 'createdAt' | 'updatedAt' | 'id' | 'cardId'>>;
 };
 export type UpdateTaskResponse = SingleResponse<Task>;
-export type UpdateTaskError = UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/tasks/:id': 'tasks/delete'
 export type DeleteTaskRequest = {
@@ -833,7 +783,6 @@ export type DeleteTaskRequest = {
   };
 };
 export type DeleteTaskResponse = SingleResponse<Task>;
-export type DeleteTaskError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/cards/:cardId/attachments': 'attachments/create'
 export type CreateAttachmentRequest = {
@@ -845,7 +794,6 @@ export type CreateAttachmentRequest = {
   };
 };
 export type CreateAttachmentResponse = SingleResponse<Attachment>;
-export type CreateAttachmentError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/attachments/:id': 'attachments/update'
 export type UpdateAttachmentRequest = {
@@ -860,7 +808,6 @@ export type UpdateAttachmentRequest = {
   >;
 };
 export type UpdateAttachmentResponse = SingleResponse<Attachment>;
-export type UpdateAttachmentError = UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/attachments/:id': 'attachments/delete'
 export type DeleteAttachmentRequest = {
@@ -869,7 +816,6 @@ export type DeleteAttachmentRequest = {
   };
 };
 export type DeleteAttachmentResponse = SingleResponse<Attachment>;
-export type DeleteAttachmentError = UnauthorizedError | NotFoundError;
 
 // 'GET /api/cards/:cardId/actions': 'actions/index'
 export type GetCardActionsRequest = {
@@ -878,7 +824,6 @@ export type GetCardActionsRequest = {
   };
 };
 export type GetCardActionsResponse = ArrayResponse<Action>;
-export type GetCardActionsError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
 export type CreateCommentActionRequest = {
@@ -890,7 +835,6 @@ export type CreateCommentActionRequest = {
   };
 };
 export type CreateCommentActionResponse = SingleResponse<Comment>;
-export type CreateCommentActionError = BadRequestError | UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/comment-actions/:id': 'comment-actions/update'
 export type UpdateCommentActionRequest = {
@@ -902,7 +846,6 @@ export type UpdateCommentActionRequest = {
   };
 };
 export type UpdateCommentActionResponse = SingleResponse<Comment>;
-export type UpdateCommentActionError = UnauthorizedError | NotFoundError;
 
 // 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
 export type DeleteCommentActionRequest = {
@@ -911,11 +854,9 @@ export type DeleteCommentActionRequest = {
   };
 };
 export type DeleteCommentActionResponse = SingleResponse<Comment>;
-export type DeleteCommentActionError = UnauthorizedError | NotFoundError;
 
 // 'GET /api/notifications': 'notifications/index'
 export type GetNotificationsResponse = ArrayResponse<Notification>;
-export type GetNotificationsError = UnauthorizedError | NotFoundError;
 
 // 'GET /api/notifications/:id': 'notifications/show'
 export type GetNotificationRequest = {
@@ -924,7 +865,6 @@ export type GetNotificationRequest = {
   };
 };
 export type GetNotificationResponse = SingleResponse<Notification>;
-export type GetNotificationError = UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/notifications/:ids': 'notifications/update'
 export type UpdateNotificationsRequest = {
@@ -936,7 +876,6 @@ export type UpdateNotificationsRequest = {
   >;
 };
 export type UpdateNotificationsResponse = ArrayResponse<Notification>;
-export type UpdateNotificationsError = NotFoundError;
 
 // TODO - these still need to be implemented
 export type $OpenApiTs = {
@@ -950,12 +889,11 @@ export type $OpenApiTs = {
         attachmentId: string;
         filename: string;
       };
-      res: {
-        // TODO check correctness
-        200: File;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
+      // res: {
+      //   200: File;
+      //   401: UnauthorizedError;
+      //   404: NotFoundError;
+      // };
     };
   };
 
@@ -969,12 +907,11 @@ export type $OpenApiTs = {
         attachmentId: string;
         extension: string;
       };
-      res: {
-        // TODO check correctness
-        200: File;
-        401: UnauthorizedError;
-        404: NotFoundError;
-      };
+      // res: {
+      //   200: File;
+      //   401: UnauthorizedError;
+      //   404: NotFoundError;
+      // };
     };
   };
 };
