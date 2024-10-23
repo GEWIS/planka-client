@@ -613,7 +613,7 @@ export declare type GetNotificationRequest = {
     };
 };
 
-export declare type GetNotificationResponse = ArrayResponse<Notification_2>;
+export declare type GetNotificationResponse = SingleResponse<Notification_2>;
 
 export declare const getNotifications: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetNotificationsResponse, GetNotificationsError, ThrowOnError>;
 
@@ -793,7 +793,7 @@ export declare type UpdateAttachmentRequest = {
     path: {
         id: string;
     };
-    body: Partial<Attachment>;
+    body: Partial<Omit<Attachment, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'>>;
 };
 
 export declare type UpdateAttachmentResponse = SingleResponse<Attachment>;
@@ -886,7 +886,7 @@ export declare type UpdateNotificationsError = NotFoundError;
 
 export declare type UpdateNotificationsRequest = {
     path: {
-        ids: string;
+        ids: string[];
     };
     body: Partial<Omit<Notification_2, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>>;
 };
