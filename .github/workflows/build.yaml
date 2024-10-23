@@ -1,0 +1,80 @@
+name: Test & Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+  statuses: read
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache and restore node_modules
+        id: cache-node
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
+      - run: yarn
+        if: steps.cache-node.outputs.cache-hit != 'true'
+      - run: yarn lint
+      - run: yarn format
+  test:
+    needs: [ lint-and-format ]
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+    steps:
+      - name: Start Planka
+        run: docker compose -f "docker-compose.yml" up -d --build
+      - uses: actions/checkout@v3
+      - name: Cache and restore node_modules
+        id: cache-node
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
+      - run: yarn
+        if: steps.cache-node.outputs.cache-hit != 'true'
+      - run: yarn test
+      - name: Stop Planka
+        if: always()
+        run: docker compose -f "docker-compose.yml" down
+  build:
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache and restore node_modules
+        id: cache-node
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
+      - run: yarn
+        if: steps.cache-node.outputs.cache-hit != 'true'
+      - run: yarn build
+      - name: "Compress out folder"
+        run: tar -zcvf out.tar.gz out/
+      - name: "Upload /out of build"
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: out.tar.gz
+          retention-days: 1
