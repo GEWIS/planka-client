@@ -111,7 +111,7 @@ export type Card = {
   name: string;
   description?: string;
   dueDate?: Date;
-  stopWatch?: StopWatch;
+  isDueDateCompleted?: boolean;
   boardId: string;
   listId: string;
   coverAttachmentId?: string;
@@ -230,11 +230,6 @@ export type ProjectManager = {
 
 export type Role = 'editor' | 'viewer';
 
-export type StopWatch = {
-  startedAt?: Date;
-  total: number;
-};
-
 export type Task = {
   id: string;
   createdAt: Date;
@@ -305,14 +300,19 @@ export type ArrayResponse<T> = {
 
 export type Include = {
   users: User[];
-  projectManagers: ProjectManager[];
-  boards: Board[];
   boardMemberships: BoardMembership[];
+  labels: Label[];
+  lists: List[];
+  cards: Card[];
   cardMemberships: Card[];
   cardLabels: Label[];
-  actions: Action[];
   tasks: Action[];
+  boards: Board[];
+  actions: Action[];
+  projectManagers: ProjectManager[];
 };
+
+export type SortType = 'name_asc' | 'dueDate_asc' | 'createdAt_asc' | 'createdAt_desc';
 
 /*
   All type of possible errors
@@ -571,7 +571,7 @@ export type UpdateBoardRequest = {
   path: {
     id: string;
   };
-  body: Partial<Board>;
+  body: Partial<Omit<Board, 'createdAt' | 'updatedAt' | 'id' | 'projectId'>>;
 };
 export type UpdateBoardResponse = SingleResponse<Board>;
 export type UpdateBoardError = UnauthorizedError | NotFoundError;
@@ -629,6 +629,7 @@ export type CreateLabelRequest = {
     boardId: string;
   };
   body: {
+    name: string;
     position: number;
     color: LabelColor;
   };
@@ -641,7 +642,7 @@ export type UpdateLabelRequest = {
   path: {
     id: string;
   };
-  body: Partial<Label>;
+  body: Partial<Omit<Label, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
 };
 export type UpdateLabelResponse = SingleResponse<Label>;
 export type UpdateLabelError = UnauthorizedError | NotFoundError;
@@ -673,7 +674,7 @@ export type UpdateListRequest = {
   path: {
     id: string;
   };
-  body: Partial<List>;
+  body: Partial<Omit<List, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
 };
 export type UpdateListResponse = SingleResponse<List>;
 export type UpdateListError = UnauthorizedError | NotFoundError;
@@ -682,6 +683,9 @@ export type UpdateListError = UnauthorizedError | NotFoundError;
 export type SortListRequest = {
   path: {
     id: string;
+  };
+  body: {
+    type: SortType;
   };
 };
 export type SortListResponse = SingleResponse<List>;
@@ -727,7 +731,7 @@ export type UpdateCardRequest = {
   path: {
     id: string;
   };
-  body: Partial<Card>;
+  body: Partial<Omit<Card, 'createdAt' | 'updatedAt' | 'id' | 'creatorUserId' | 'isSubscribed'>>;
 };
 export type UpdateCardResponse = SingleResponse<Card>;
 export type UpdateCardError = UnauthorizedError | NotFoundError;
@@ -815,9 +819,9 @@ export type CreateTaskError = BadRequestError | UnauthorizedError | NotFoundErro
 // 'PATCH /api/tasks/:id': 'tasks/update'
 export type UpdateTaskRequest = {
   path: {
-    taskId: string;
+    id: string;
   };
-  body: Partial<Task>;
+  body: Partial<Omit<Task, 'createdAt' | 'updatedAt' | 'id' | 'cardId'>>;
 };
 export type UpdateTaskResponse = SingleResponse<Task>;
 export type UpdateTaskError = UnauthorizedError | NotFoundError;
@@ -825,20 +829,19 @@ export type UpdateTaskError = UnauthorizedError | NotFoundError;
 // 'DELETE /api/tasks/:id': 'tasks/delete'
 export type DeleteTaskRequest = {
   path: {
-    taskId: string;
+    id: string;
   };
 };
 export type DeleteTaskResponse = SingleResponse<Task>;
 export type DeleteTaskError = UnauthorizedError | NotFoundError;
 
 // 'POST /api/cards/:cardId/attachments': 'attachments/create'
-// TODO CHECK
 export type CreateAttachmentRequest = {
   path: {
     cardId: string;
   };
   body: {
-    text: string;
+    file: File;
   };
 };
 export type CreateAttachmentResponse = SingleResponse<Attachment>;
@@ -919,12 +922,13 @@ export type GetNotificationResponse = ArrayResponse<Notification>;
 export type GetNotificationError = UnauthorizedError | NotFoundError;
 
 // 'PATCH /api/notifications/:ids': 'notifications/update'
-// TODO check if correct
 export type UpdateNotificationsRequest = {
   path: {
     ids: string;
   };
-  body: Partial<Notification>;
+  body: Partial<
+    Omit<Notification, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>
+  >;
 };
 export type UpdateNotificationsResponse = ArrayResponse<Notification>;
 export type UpdateNotificationsError = NotFoundError;

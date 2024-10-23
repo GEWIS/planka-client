@@ -716,6 +716,7 @@ export const deleteTask = <ThrowOnError extends boolean = false>(
 };
 
 // 'POST /api/cards/:cardId/attachments': 'attachments/create'
+// TODO check if correct
 export const createAttachment = <ThrowOnError extends boolean = false>(
   options: Options<CreateAttachmentRequest, ThrowOnError>,
 ) => {
@@ -730,6 +731,7 @@ export const createAttachment = <ThrowOnError extends boolean = false>(
 };
 
 // 'PATCH /api/attachments/:id': 'attachments/update'
+// TODO check if correct
 export const updateAttachment = <ThrowOnError extends boolean = false>(
   options: Options<UpdateAttachmentRequest, ThrowOnError>,
 ) => {
@@ -744,6 +746,7 @@ export const updateAttachment = <ThrowOnError extends boolean = false>(
 };
 
 // 'DELETE /api/attachments/:id': 'attachments/delete'
+// TODO check if correct
 export const deleteAttachment = <ThrowOnError extends boolean = false>(
   options: Options<DeleteAttachmentRequest, ThrowOnError>,
 ) => {
@@ -826,6 +829,10 @@ export const getNotifications = <ThrowOnError extends boolean = false>(
 };
 
 // 'GET /api/notifications/:id': 'notifications/show'
+// TODO check this:
+// - admin: make sure to be subscribed to some card
+// - login as global user, comment on card
+// - admin: log back in and check if notification is there
 export const getNotification = <ThrowOnError extends boolean = false>(
   options: Options<GetNotificationRequest, ThrowOnError>,
 ) => {
@@ -840,6 +847,7 @@ export const getNotification = <ThrowOnError extends boolean = false>(
 };
 
 // 'PATCH /api/notifications/:ids': 'notifications/update'
+// TODO can only be checked if previous function is working
 export const updateNotifications = <ThrowOnError extends boolean = false>(
   options: Options<UpdateNotificationsRequest, ThrowOnError>,
 ) => {
