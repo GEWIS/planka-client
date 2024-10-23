@@ -34,5 +34,5 @@ client.setConfig({
 ```
 
 # Testing
-To test the client locally; you can use the included `docker-compose.yml`. Simply run `docker compose up -d` to start a
-local instance of planka, to which you can login with username `demo` and password `demo`.
+- Start Planka with `docker compose up -d`
+- Run tests with `yarn test`

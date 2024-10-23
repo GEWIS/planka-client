@@ -22,10 +22,10 @@ jobs:
     container:
       image: node:20
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Cache and restore node_modules
         id: cache-node
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
@@ -37,11 +37,11 @@ jobs:
     needs: [ lint-and-format ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Start Planka
         run: docker compose -f "docker-compose.yml" up -d --build
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'yarn'
@@ -56,10 +56,10 @@ jobs:
     container:
       image: node:20
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Cache and restore node_modules
         id: cache-node
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
@@ -69,7 +69,7 @@ jobs:
       - name: "Compress out folder"
         run: tar -zcvf dist.tar.gz dist/
       - name: "Upload /out of build"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: dist.tar.gz
