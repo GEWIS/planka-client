@@ -11,24 +11,4 @@ concurrency:
 
 jobs:
   versioning:
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
-
-    outputs:
-      next_version: ${{ steps.semantic.outputs.new_release_version }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          path: .
-
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: GEWIS/actions/.github/workflows/versioning.yml@v0.0.1

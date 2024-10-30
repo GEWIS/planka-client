@@ -17,60 +17,14 @@ permissions:
   statuses: read
 
 jobs:
-  lint-and-format:
-    runs-on: ubuntu-latest
-    container:
-      image: node:20
-    steps:
-      - uses: actions/checkout@v4
-      - name: Cache and restore node_modules
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
-      - run: yarn
-        if: steps.cache-node.outputs.cache-hit != 'true'
-      - run: yarn lint
-      - run: yarn format
-  test:
-    needs: [ lint-and-format ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Start Planka
-        run: docker compose -f "docker-compose.yml" up -d --build
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'yarn'
-      - run: yarn
-      - run: yarn test
-      - name: Stop Planka
-        if: always()
-        run: docker compose -f "docker-compose.yml" down
-  build:
-    needs: [ test ]
-    runs-on: ubuntu-latest
-    container:
-      image: node:20
-    steps:
-      - uses: actions/checkout@v4
-      - name: Cache and restore node_modules
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('./yarn.lock') }}
-      - run: yarn
-        if: steps.cache-node.outputs.cache-hit != 'true'
-      - run: yarn build
-      - name: "Compress out folder"
-        run: tar -zcvf dist.tar.gz dist/
-      - name: "Upload /out of build"
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: dist.tar.gz
-          retention-days: 1
+  build-and-lint:
+    uses: GEWIS/actions/.github/workflows/typescript-lint-and-build.yml@v0.0.1
+    with:
+      node-version: "20.x"
+      package-manager: "yarn"
+      prepare-command: "docker compose -f 'docker-compose.yml' up -d --build"
+      cleanup-command: "docker compose -f 'docker-compose.yml' down"
+      lint: true
+      format: true
+      test: true
+      build: true
