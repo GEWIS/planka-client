@@ -20,7 +20,7 @@ jobs:
   lint-and-format:
     runs-on: ubuntu-latest
     container:
-      image: node:20
+      image: node:22
     steps:
       - uses: actions/checkout@v4
       - name: Cache and restore node_modules
@@ -43,7 +43,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'yarn'
       - run: yarn
       - run: yarn test
@@ -54,7 +54,7 @@ jobs:
     needs: [ test ]
     runs-on: ubuntu-latest
     container:
-      image: node:20
+      image: node:22
     steps:
       - uses: actions/checkout@v4
       - name: Cache and restore node_modules
