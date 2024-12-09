@@ -328,10 +328,10 @@
   dependencies:
     levn "^0.4.1"
 
-"@hey-api/client-fetch@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@hey-api/client-fetch/-/client-fetch-0.4.2.tgz#02924579205dcfd4cb7c33db236007cb617ab30d"
-  integrity sha512-9BqcLTjsM3rWbads3afJkELS86vK7EqJvYgT429EVS9IO/kN75HEka3Ay/k142xCHSfXOuOShMdDam3nbG8wVA==
+"@hey-api/client-fetch@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@hey-api/client-fetch/-/client-fetch-0.5.2.tgz#8e958ed9f2825f1e53bcb2e83b27bf4ba317c65b"
+  integrity sha512-ix8MuuLTME5BWMQ8iCALqWflHtDyuoEwX0b77TQL+VgEXL89cYtjoHxE2bm2DYQQm8qDJXvTS6ju/D6wB6l6Hg==
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"
