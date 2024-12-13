@@ -1,5 +1,5 @@
 # planka-client
-Simple client for Trello generated from the Trello openapi specification using openapi-ts.
+Simple client for Trello generated from the Trello openapi specification using openapi-ts.!!!
 
 # Usage
 1. Add the following dependency to `package.json`.
