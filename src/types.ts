@@ -341,12 +341,7 @@ export type Include = {
  * Most errors are roughly the same, so they are types singly
  */
 export type HttpError = {
-  code:
-    | 'E_MISSING_OR_INVALID_PARAMS'
-    | 'E_UNAUTHORIZED'
-    | 'E_NOT_FOUND'
-    | 'E_CONFLICT'
-    | 'E_UNPROCESSABLE_ENTITY';
+  code: 'E_MISSING_OR_INVALID_PARAMS' | 'E_UNAUTHORIZED' | 'E_NOT_FOUND' | 'E_CONFLICT' | 'E_UNPROCESSABLE_ENTITY';
   message?: string;
   problems?: string[];
 };
@@ -401,9 +396,7 @@ export type UpdateUserRequest = {
   path: {
     id: string;
   };
-  body: Partial<
-    Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>
-  >;
+  body: Partial<Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>>;
 };
 export type UpdateUserResponse = SingleResponse<User>;
 
@@ -798,12 +791,7 @@ export type UpdateAttachmentRequest = {
   path: {
     id: string;
   };
-  body: Partial<
-    Omit<
-      Attachment,
-      'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'
-    >
-  >;
+  body: Partial<Omit<Attachment, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'>>;
 };
 export type UpdateAttachmentResponse = SingleResponse<Attachment>;
 
@@ -887,8 +875,6 @@ export type UpdateNotificationsRequest = {
   path: {
     ids: string[];
   };
-  body: Partial<
-    Omit<Notification, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>
-  >;
+  body: Partial<Omit<Notification, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>>;
 };
 export type UpdateNotificationsResponse = ArrayResponse<Notification>;
