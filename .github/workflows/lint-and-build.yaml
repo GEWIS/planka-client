@@ -1,0 +1,37 @@
+name: Lint and build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-lint:
+    uses: GEWIS/actions/.github/workflows/lint-and-build-yarn.yml@v1
+    with:
+      node-version: "22.x"
+      lint: true
+      format: true
+      build: true
+  test:
+    needs: [ build-and-lint ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start Planka
+        run: docker compose -f "docker-compose.yml" up -d --build
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+      - run: yarn
+      - run: yarn test
+      - name: Stop Planka
+        if: always()
+        run: docker compose -f "docker-compose.yml" down
