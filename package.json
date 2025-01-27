@@ -42,7 +42,7 @@
   "devDependencies": {
     "@gewis/eslint-config-typescript": "^2.2.0",
     "@gewis/prettier-config": "^2.2.0",
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.10.10",
     "eslint": "^9.17.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.1",
