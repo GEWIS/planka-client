@@ -1,4 +1,13 @@
-import { createClient, createConfig, formDataBodySerializer, type Options } from '@hey-api/client-fetch';
+import {
+  type Config,
+  type ClientOptions as DefaultClientOptions,
+  createClient,
+  createConfig,
+  Options as ClientOptions,
+  TDataShape,
+  Client,
+  formDataBodySerializer,
+} from '@hey-api/client-fetch';
 import {
   AuthorizeError,
   AuthorizeOidcRequest,
@@ -117,7 +126,21 @@ import {
   UpdateUserUsernameResponse,
 } from './types';
 
-export const client = createClient(createConfig());
+export type CreateClientOptions = {
+  baseUrl: `${string}://${string}/api` | (string & {});
+};
+
+export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = ClientOptions<
+  TData,
+  ThrowOnError
+> & {
+  client?: Client;
+};
+
+export type CreateClientConfig<T extends DefaultClientOptions = CreateClientOptions> = (
+  override?: Config<DefaultClientOptions & T>,
+) => Config<Required<DefaultClientOptions> & T>;
+export const client = createClient(createConfig<CreateClientOptions>());
 
 /**
  * Get config
