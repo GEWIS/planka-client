@@ -12,8 +12,7 @@
     "lint": "eslint src --max-warnings=1",
     "lint-fix": "eslint src --fix",
     "format": "prettier --check ./src/",
-    "format-fix": "prettier --write ./src/",
-    "prepare": "husky"
+    "format-fix": "prettier --write ./src/"
   },
   "main": "dist/planka-client.umd.cjs",
   "module": "dist/planka-client.js",
