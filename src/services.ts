@@ -1,9 +1,9 @@
 import {
   type Config,
-  type ClientOptions as DefaultClientOptions,
+  type ClientOptions as CFClientOptions,
   createClient,
   createConfig,
-  Options as ClientOptions,
+  Options as CFOptions,
   TDataShape,
   Client,
   formDataBodySerializer,
@@ -78,19 +78,24 @@ import {
   GetCardActionsResponse,
   GetCardRequest,
   GetCardResponse,
+  GetConfigRequest,
   GetConfigResponse,
   GetNotificationRequest,
   GetNotificationResponse,
+  GetNotificationsRequest,
   GetNotificationsResponse,
   GetProjectRequest,
   GetProjectResponse,
+  GetProjectsRequest,
   GetProjectsResponse,
   GetUserRequest,
   GetUserResponse,
+  GetUsersRequest,
   GetUsersResponse,
   HttpError,
   SortListRequest,
   SortListResponse,
+  UnauthorizeRequest,
   UnauthorizeResponse,
   UpdateAttachmentRequest,
   UpdateAttachmentResponse,
@@ -126,28 +131,30 @@ import {
   UpdateUserUsernameResponse,
 } from './types';
 
-export type CreateClientOptions = {
+export type ClientOptions = {
   baseUrl: `${string}://${string}/api` | (string & {});
 };
 
-export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = ClientOptions<
+export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = CFOptions<
   TData,
   ThrowOnError
 > & {
   client?: Client;
+  meta?: Record<string, unknown>;
 };
 
-export type CreateClientConfig<T extends DefaultClientOptions = CreateClientOptions> = (
-  override?: Config<DefaultClientOptions & T>,
-) => Config<Required<DefaultClientOptions> & T>;
-export const client = createClient(createConfig<CreateClientOptions>());
+export type CreateClientConfig<T extends CFClientOptions = ClientOptions> = (
+  override?: Config<CFClientOptions & T>,
+) => Config<Required<CFClientOptions> & T>;
+
+export const client = createClient(createConfig<ClientOptions>());
 
 /**
  * Get config
  * 'GET /api/config': 'show-config'
  * @param options
  */
-export const getConfig = <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => {
+export const getConfig = <ThrowOnError extends boolean = false>(options?: Options<GetConfigRequest, ThrowOnError>) => {
   return (options?.client ?? client).get<GetConfigResponse, unknown, ThrowOnError>({
     ...options,
     url: '/api/config',
@@ -186,7 +193,9 @@ export const authorizeOidc = <ThrowOnError extends boolean = false>(
  * 'DELETE /api/access-tokens/me': 'access-tokens/delete'
  * @param options
  */
-export const unauthorize = <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => {
+export const unauthorize = <ThrowOnError extends boolean = false>(
+  options?: Options<UnauthorizeRequest, ThrowOnError>,
+) => {
   return (options?.client ?? client).delete<UnauthorizeResponse, HttpError, ThrowOnError>({
     ...options,
     url: '/api/access-tokens/me',
@@ -198,7 +207,7 @@ export const unauthorize = <ThrowOnError extends boolean = false>(options: Optio
  * 'GET /api/users': 'users/index'
  * @param options
  */
-export const getUsers = <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => {
+export const getUsers = <ThrowOnError extends boolean = false>(options?: Options<GetUsersRequest, ThrowOnError>) => {
   return (options?.client ?? client).get<GetUsersResponse, HttpError, ThrowOnError>({
     ...options,
     url: '/api/users',
@@ -318,7 +327,9 @@ export const deleteUser = <ThrowOnError extends boolean = false>(options: Option
  * 'GET /api/projects': 'projects/index'
  * @param options
  */
-export const getProjects = <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => {
+export const getProjects = <ThrowOnError extends boolean = false>(
+  options: Options<GetProjectsRequest, ThrowOnError>,
+) => {
   return (options?.client ?? client).get<GetProjectsResponse, HttpError, ThrowOnError>({
     ...options,
     url: '/api/projects',
@@ -902,7 +913,9 @@ export const deleteCommentAction = <ThrowOnError extends boolean = false>(
  * 'GET /api/notifications': 'notifications/index'
  * @param options
  */
-export const getNotifications = <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => {
+export const getNotifications = <ThrowOnError extends boolean = false>(
+  options?: Options<GetNotificationsRequest, ThrowOnError>,
+) => {
   return (options?.client ?? client).get<GetNotificationsResponse, HttpError, ThrowOnError>({
     ...options,
     url: '/api/notifications',
