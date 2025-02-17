@@ -12,7 +12,8 @@
     "lint": "eslint src --max-warnings=1",
     "lint-fix": "eslint src --fix",
     "format": "prettier --check ./src/",
-    "format-fix": "prettier --write ./src/"
+    "format-fix": "prettier --write ./src/",
+    "prepublishOnly": "yarn install --frozen-lockfile && yarn build"
   },
   "main": "dist/planka-client.umd.cjs",
   "module": "dist/planka-client.js",
