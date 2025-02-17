@@ -1,0 +1,17 @@
+.git
+.github
+.husky
+example
+
+test
+.gitignore
+.lintstagedrc.json
+.prettierrc.mjs
+docker-compose.yml
+eslint.config.mjs
+
+
+release.config.js
+tsconfig.json
+vite.config.ts
+yarn.lock
