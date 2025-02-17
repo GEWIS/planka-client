@@ -27,8 +27,11 @@
     }
   },
   "files": [
-    "./",
-    "dist/"
+    "dist/",
+    "src/",
+    "package.json",
+    "LICENSE.txt",
+    "README.md"
   ],
   "author": "Gijs de Man",
   "repository": {
