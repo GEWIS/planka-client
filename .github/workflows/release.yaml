@@ -16,7 +16,7 @@ jobs:
   publish-npm:
     uses: GEWIS/actions/.github/workflows/npm-release.yml@v1
     needs: versioning
-    if: ${{ needs.versioning.outputs.next_version != '' }}
+    if: ${{ needs.versioning.outputs.next-version != '' }}
     with:
       node-version: '22.x'
       version: ${{ needs.versioning.outputs.next_version }}
