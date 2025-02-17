@@ -1,38 +1,63 @@
-# planka-client
-Simple client for Trello generated from the Trello openapi specification using openapi-ts.
+# 🚀 Planka Client 
+![npm version](https://img.shields.io/npm/v/@gewis/planka-client) ![License](https://img.shields.io/github/license/GEWIS/planka-client) ![Build Status](https://img.shields.io/github/actions/workflow/status/GEWIS/planka-client/lint-and-build.yaml)
 
-# Usage
-1. Add the following dependency to `package.json`.
 
-```json
-{
-  "dependencies": {
-    "@gewis/planka-client": "github:GEWIS/planka-client"
-  }
-}
+A simple client for [Planka](https://github.com/plankanban/planka) generated from its OpenAPI specification using [openapi-ts](https://heyapi.dev/openapi-ts/).
+
+## Installation
+
+Add the following dependency to your `package.json`:
+
+```sh
+npm install @gewis/planka-client
 ```
 
-2. Import the desired service and call the desired endpoint. [Heyapi](https://heyapi.dev/openapi-ts/clients/fetch.html#fetch-api)
-provides more information on how to use the client.
+or using Yarn:
+
+```sh
+yarn add @gewis/planka-client
+```
+
+## 📦 Usage
+
+Import the desired service and call the required endpoint. Check out [Heyapi](https://heyapi.dev/openapi-ts/clients/fetch.html#fetch-api) for more details.
 
 ```typescript
 import { client, authorize } from '@gewis/planka-client';
 
 client.setConfig({
   baseUrl: 'https://example.com',
-})
+});
 
 /** Fetch access token with `authorize` or `authorizeOidc` */
-const accessToken = authorize(...)
+const accessToken = authorize(...);
 
 client.setConfig({
   baseUrl: 'https://example.com',
   headers: {
     Authorization: `Bearer ${accessToken}`
   }
-})
+});
 ```
 
-# Testing
-- Start Planka with `docker compose up -d`
-- Run tests with `yarn test`
+## 🧪 Testing
+
+1. Start Planka with:
+
+```sh
+docker compose up -d
+```
+
+2. Run tests:
+
+```sh
+yarn test
+```
+
+## 📄 License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+## 🌟 Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
