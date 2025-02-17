@@ -19,6 +19,6 @@ jobs:
     if: ${{ needs.versioning.outputs.next-version != '' }}
     with:
       node-version: '22.x'
-      version: ${{ needs.versioning.outputs.next_version }}
+      version: ${{ needs.versioning.outputs.next-version }}
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
