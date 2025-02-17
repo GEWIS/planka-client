@@ -351,11 +351,20 @@ export type HttpError = {
  */
 
 // 'GET /api/config': 'show-config'
+export type GetConfigRequest = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/api/config';
+};
 export type GetConfigResponse = SingleResponse<Oidc>;
 
 // 'POST /api/access-tokens': 'access-tokens/create'
 export type AuthorizeRequest = {
   body: AccessTokenRequest;
+  path?: never;
+  query?: never;
+  url: '/api/access-tokens';
 };
 export type AuthorizeResponse = SingleResponse<string>;
 export type AuthorizeError = HttpError;
@@ -363,13 +372,28 @@ export type AuthorizeError = HttpError;
 // 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
 export type AuthorizeOidcRequest = {
   body: AccessTokenOidcRequest;
+  path?: never;
+  query?: never;
+  url: '/api/access-tokens/exchange-using-oidc';
 };
 export type AuthorizeOidcResponse = SingleResponse<string>;
 
 // 'DELETE /api/access-tokens/me': 'access-tokens/delete'
+export type UnauthorizeRequest = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/api/access-tokens/me';
+};
 export type UnauthorizeResponse = SingleResponse<string>;
 
 // 'GET /api/users': 'users/index'
+export type GetUsersRequest = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/api/users';
+};
 export type GetUsersResponse = ArrayResponse<User>;
 
 // 'POST /api/users': 'users/create'
@@ -380,6 +404,9 @@ export type CreateUserRequest = {
     name: string;
     username?: string;
   };
+  path?: never;
+  query?: never;
+  url: '/api/users';
 };
 export type CreateUserResponse = SingleResponse<User>;
 
@@ -388,71 +415,93 @@ export type GetUserRequest = {
   path: {
     id: string;
   };
+  body?: never;
+  query?: never;
+  url: '/api/users/{id}';
 };
 export type GetUserResponse = SingleResponse<User>;
 
 // 'PATCH /api/users/:id/email': 'users/update-email'
 export type UpdateUserRequest = {
+  body: Partial<Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>>;
+  query?: never;
+  url: '/api/users/{id}/email';
 };
 export type UpdateUserResponse = SingleResponse<User>;
 
 // 'PATCH /api/users/:id/email': 'users/update-email'
 export type UpdateUserEmailRequest = {
-  path: {
-    id: string;
-  };
   body: {
     email: string;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/users/{id}/email';
 };
 export type UpdateUserEmailResponse = SingleResponse<User>;
 
 // 'PATCH /api/users/:id/password': 'users/update-password'
 export type UpdateUserPasswordRequest = {
-  path: {
-    id: string;
-  };
   body: {
     password: string;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/users/{id}/password';
 };
 export type UpdateUserPasswordResponse = SingleResponse<User>;
 
 // 'PATCH /api/users/:id/username': 'users/update-username'
 export type UpdateUserUsernameRequest = {
-  path: {
-    id: string;
-  };
   body: {
     username: string;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/users/{id}/username';
 };
 export type UpdateUserUsernameResponse = SingleResponse<User>;
 
 // 'PATCH /api/users/:id/username': 'users/update-username'
 export type UpdateUserAvatarRequest = {
-  path: {
-    id: string;
-  };
   body: {
     file: File;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/users/{id}/avatar';
 };
 export type UpdateUserAvatarResponse = SingleResponse<User>;
 
 // 'DELETE /api/users/:id': 'users/delete'
 export type DeleteUserRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/users/{id}';
 };
 export type DeleteUserResponse = SingleResponse<User>;
 
 // 'GET /api/projects': 'projects/index'
+export type GetProjectsRequest = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/api/projects';
+};
 export type GetProjectsResponse = ArrayResponse<Project>;
 
 // 'POST /api/projects': 'projects/create'
@@ -460,421 +509,534 @@ export type CreateProjectRequest = {
   body: {
     name: string;
   };
+  path?: never;
+  query?: never;
+  url: '/api/projects';
 };
 export type CreateProjectResponse = SingleResponse<Project>;
 
 // 'GET /api/projects/:id': 'projects/show'
 export type GetProjectRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/projects/{id}';
 };
 export type GetProjectResponse = SingleResponse<Project>;
 
 // 'POST /api/projects/:id/background-image': 'projects/update-background-image'
 export type UpdateProjectBackgroundImageRequest = {
-  path: {
-    id: string;
-  };
   body: {
     file: File;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/projects/{id}/background-image';
 };
 export type UpdateProjectBackgroundImageResponse = SingleResponse<Project>;
 
 // 'PATCH /api/projects/:id': 'projects/update'
 export type UpdateProjectRequest = {
+  body: Partial<Omit<Project, 'createdAt' | 'updatedAt' | 'id' | 'backgroundImage'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<Project, 'createdAt' | 'updatedAt' | 'id' | 'backgroundImage'>>;
+  query?: never;
+  url: '/api/projects/{id}';
 };
 export type UpdateProjectResponse = SingleResponse<Project>;
 
 // 'DELETE /api/projects/:id': 'projects/delete'
 export type DeleteProjectRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/projects/{id}';
 };
 export type DeleteProjectResponse = SingleResponse<Project>;
 
 // 'POST /api/projects/:projectId/managers': 'project-managers/create'
 export type CreateProjectManagerRequest = {
-  path: {
-    projectId: string;
-  };
   body: {
     userId: string;
   };
+  path: {
+    projectId: string;
+  };
+  query?: never;
+  url: '/api/projects/{projectId}/managers';
 };
 export type CreateProjectManagerResponse = SingleResponse<ProjectManager>;
 
 // 'DELETE /api/project-managers/:id': 'project-managers/delete'
 export type DeleteProjectManagerRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/project-managers/{id}';
 };
 export type DeleteProjectManagerResponse = SingleResponse<ProjectManager>;
 
 // 'POST /api/projects/:projectId/boards': 'boards/create'
 export type CreateBoardRequest = {
-  path: {
-    projectId: string;
-  };
   body: {
     position: number;
     name: string;
   };
+  path: {
+    projectId: string;
+  };
+  query?: never;
+  url: '/api/projects/{projectId}/boards';
 };
 export type CreateBoardResponse = SingleResponse<Board>;
 
 // 'GET /api/boards/:id': 'boards/show'
 export type GetBoardRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/boards/{id}';
 };
 export type GetBoardResponse = SingleResponse<Board>;
 
 // 'PATCH /api/boards/:id': 'boards/update'
 export type UpdateBoardRequest = {
+  body: Partial<Omit<Board, 'createdAt' | 'updatedAt' | 'id' | 'projectId'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<Board, 'createdAt' | 'updatedAt' | 'id' | 'projectId'>>;
+  query?: never;
+  url: '/api/boards/{id}';
 };
 export type UpdateBoardResponse = SingleResponse<Board>;
 
 // 'DELETE /api/boards/:id': 'boards/delete'
 export type DeleteBoardRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/boards/{id}';
 };
 export type DeleteBoardResponse = SingleResponse<void>;
 
 // 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
 export type CreateBoardMembershipRequest = {
-  path: {
-    boardId: string;
-  };
   body: {
     userId: string;
     role: Role;
   };
+  path: {
+    boardId: string;
+  };
+  query?: never;
+  url: '/api/boards/{boardId}/memberships';
 };
 export type CreateBoardMembershipResponse = SingleResponse<BoardMembership>;
 
 // 'PATCH /api/board-memberships/:id': 'board-memberships/update'
 export type UpdateBoardMembershipRequest = {
-  path: {
-    id: string;
-  };
   body: {
     role: Role;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/board-memberships/{id}';
 };
 export type UpdateBoardMembershipResponse = SingleResponse<BoardMembership>;
 
 // 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
 export type DeleteBoardMembershipRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/board-memberships/{id}';
 };
 export type DeleteBoardMembershipResponse = SingleResponse<BoardMembership>;
 
 // 'POST /api/boards/:boardId/labels': 'labels/create'
 export type CreateLabelRequest = {
-  path: {
-    boardId: string;
-  };
   body: {
     name: string;
     position: number;
     color: LabelColor;
   };
+  path: {
+    boardId: string;
+  };
+  query?: never;
+  url: '/api/boards/{boardId}/labels';
 };
 export type CreateLabelResponse = SingleResponse<Label>;
 
 // 'PATCH /api/labels/:id': 'labels/update'
 export type UpdateLabelRequest = {
+  body: Partial<Omit<Label, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<Label, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
+  query?: never;
+  url: '/api/labels/{id}';
 };
 export type UpdateLabelResponse = SingleResponse<Label>;
 
 // 'DELETE /api/labels/:id': 'labels/delete'
 export type DeleteLabelRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/labels/{id}';
 };
 export type DeleteLabelResponse = SingleResponse<Label>;
 
 // 'POST /api/boards/:boardId/lists': 'lists/create'
 export type CreateListRequest = {
-  path: {
-    boardId: string;
-  };
   body: {
     position: number;
     name: string;
   };
+  path: {
+    boardId: string;
+  };
+  query?: never;
+  url: '/api/boards/{boardId}/lists';
 };
 export type CreateListResponse = SingleResponse<List>;
 
 // 'PATCH /api/lists/:id': 'lists/update'
 export type UpdateListRequest = {
+  body: Partial<Omit<List, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<List, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
+  query?: never;
+  url: '/api/lists/{id}';
 };
 export type UpdateListResponse = SingleResponse<List>;
 
 // 'POST /api/lists/:id/sort': 'lists/sort'
 export type SortListRequest = {
-  path: {
-    id: string;
-  };
   body: {
     type: SortType;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/lists/{id}/sort';
 };
 export type SortListResponse = SingleResponse<List>;
 
 // 'DELETE /api/lists/:id': 'lists/delete'
 export type DeleteListRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/lists/{id}';
 };
 export type DeleteListResponse = SingleResponse<List>;
 
 // 'POST /api/lists/:listId/cards': 'cards/create'
 export type CreateCardRequest = {
-  path: {
-    listId: string;
-  };
   body: {
     name: string;
     position: number;
   };
+  path: {
+    listId: string;
+  };
+  query?: never;
+  url: '/api/lists/{listId}/cards';
 };
 export type CreateCardResponse = SingleResponse<Card>;
 
 // 'GET /api/cards/:id': 'cards/show'
 export type GetCardRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/cards/{id}';
 };
 export type GetCardResponse = SingleResponse<Card>;
 
 // 'PATCH /api/cards/:id': 'cards/update'
 export type UpdateCardRequest = {
+  body: Partial<Omit<Card, 'createdAt' | 'updatedAt' | 'id' | 'creatorUserId' | 'isSubscribed'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<Card, 'createdAt' | 'updatedAt' | 'id' | 'creatorUserId' | 'isSubscribed'>>;
+  query?: never;
+  url: '/api/cards/{id}';
 };
 export type UpdateCardResponse = SingleResponse<Card>;
 
 // 'POST /api/cards/:id/duplicate': 'cards/duplicate'
 export type DuplicateCardRequest = {
-  path: {
-    id: string;
-  };
   body: {
     position: number;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/cards/{id}/duplicate';
 };
 export type DuplicateCardResponse = SingleResponse<Card>;
 
 // 'DELETE /api/cards/:id': 'cards/delete'
 export type DeleteCardRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/cards/{id}';
 };
 export type DeleteCardResponse = SingleResponse<Card>;
 
 // 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
 export type CreateCardMembershipRequest = {
-  path: {
-    cardId: string;
-  };
   body: {
     userId: string;
   };
+  path: {
+    cardId: string;
+  };
+  query?: never;
+  url: '/api/cards/{cardId}/memberships';
 };
 export type CreateCardMembershipResponse = SingleResponse<CardMembership>;
 
 // 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
 export type DeleteCardMembershipRequest = {
-  path: {
-    cardId: string;
-  };
   body: {
     userId: string;
   };
+  path: {
+    cardId: string;
+  };
+  query?: never;
+  url: '/api/cards/{cardId}/memberships';
 };
 export type DeleteCardMembershipResponse = SingleResponse<CardMembership>;
 
 // 'POST /api/cards/:cardId/labels': 'card-labels/create'
 export type CreateCardLabelRequest = {
-  path: {
-    cardId: string;
-  };
   body: {
     labelId: string;
   };
+  path: {
+    cardId: string;
+  };
+  query?: never;
+  url: '/api/cards/{cardId}/labels';
 };
 export type CreateCardLabelResponse = SingleResponse<CardLabel>;
 
 // 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
 export type DeleteCardLabelRequest = {
+  body?: never;
   path: {
     cardId: string;
     labelId: string;
   };
+  query?: never;
+  url: '/api/cards/{cardId}/labels/{labelId}';
 };
 export type DeleteCardLabelResponse = SingleResponse<CardLabel>;
 
 // 'POST /api/cards/:cardId/tasks': 'tasks/create'
 export type CreateTaskRequest = {
-  path: {
-    cardId: string;
-  };
   body: {
     position: number;
     name: string;
   };
+  path: {
+    cardId: string;
+  };
+  query?: never;
+  url: '/api/cards/{cardId}/tasks';
 };
 export type CreateTaskResponse = SingleResponse<Task>;
 
 // 'PATCH /api/tasks/:id': 'tasks/update'
 export type UpdateTaskRequest = {
+  body: Partial<Omit<Task, 'createdAt' | 'updatedAt' | 'id' | 'cardId'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<Task, 'createdAt' | 'updatedAt' | 'id' | 'cardId'>>;
+  query?: never;
+  url: '/api/tasks/{id}';
 };
 export type UpdateTaskResponse = SingleResponse<Task>;
 
 // 'DELETE /api/tasks/:id': 'tasks/delete'
 export type DeleteTaskRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/tasks/{id}';
 };
 export type DeleteTaskResponse = SingleResponse<Task>;
 
 // 'POST /api/cards/:cardId/attachments': 'attachments/create'
 export type CreateAttachmentRequest = {
-  path: {
-    cardId: string;
-  };
   body: {
     file: File;
   };
+  path: {
+    cardId: string;
+  };
+  query?: never;
+  url: '/api/cards/{cardId}/attachments';
 };
 export type CreateAttachmentResponse = SingleResponse<Attachment>;
 
 // 'PATCH /api/attachments/:id': 'attachments/update'
 export type UpdateAttachmentRequest = {
+  body: Partial<Omit<Attachment, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'>>;
   path: {
     id: string;
   };
-  body: Partial<Omit<Attachment, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'>>;
+  query?: never;
+  url: '/api/attachments/{id}';
 };
 export type UpdateAttachmentResponse = SingleResponse<Attachment>;
 
 // 'DELETE /api/attachments/:id': 'attachments/delete'
 export type DeleteAttachmentRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/attachments/{id}';
 };
 export type DeleteAttachmentResponse = SingleResponse<Attachment>;
 
 // 'GET /attachments/:id/download/:filename'
 export type GetAttachmentRequest = {
+  body?: never;
   path: {
     id: string;
     filename: string;
   };
+  query?: never;
+  url: '/attachments/{id}/download/{filename}';
 };
 export type GetAttachmentResponse = Blob;
 
 // 'GET /attachments/:id/download/thumbnails/cover-256.:extension'
 export type GetAttachmentThumbnailRequest = {
+  body?: never;
   path: {
     id: string;
     extension: string;
   };
+  query?: never;
+  url: '/attachments/{id}/download/thumbnails/cover-256.{extension}';
 };
 export type GetAttachmentThumbnailResponse = Blob;
 
 // 'GET /api/cards/:cardId/actions': 'actions/index'
 export type GetCardActionsRequest = {
+  body?: never;
   path: {
     cardId: string;
   };
+  query?: never;
+  url: '/api/cards/{cardId}/actions';
 };
 export type GetCardActionsResponse = ArrayResponse<Action>;
 
 // 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
 export type CreateCommentActionRequest = {
-  path: {
-    cardId: string;
-  };
   body: {
     text: string;
   };
+  path: {
+    cardId: string;
+  };
+  query?: never;
+  url: '/api/cards/{cardId}/comment-actions';
 };
 export type CreateCommentActionResponse = SingleResponse<Comment>;
 
 // 'PATCH /api/comment-actions/:id': 'comment-actions/update'
 export type UpdateCommentActionRequest = {
-  path: {
-    id: string;
-  };
   body: {
     text: string;
   };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/api/comment-actions/{id}';
 };
 export type UpdateCommentActionResponse = SingleResponse<Comment>;
 
 // 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
 export type DeleteCommentActionRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/comment-actions/{id}';
 };
 export type DeleteCommentActionResponse = SingleResponse<Comment>;
 
 // 'GET /api/notifications': 'notifications/index'
+export type GetNotificationsRequest = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/api/notifications';
+};
 export type GetNotificationsResponse = ArrayResponse<Notification>;
 
 // 'GET /api/notifications/:id': 'notifications/show'
 export type GetNotificationRequest = {
+  body?: never;
   path: {
     id: string;
   };
+  query?: never;
+  url: '/api/notifications/{id}';
 };
 export type GetNotificationResponse = SingleResponse<Notification>;
 
 // 'PATCH /api/notifications/:ids': 'notifications/update'
 export type UpdateNotificationsRequest = {
+  body: Partial<Omit<Notification, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>>;
   path: {
     ids: string[];
   };
-  body: Partial<Omit<Notification, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>>;
+  query?: never;
+  url: '/api/notifications/{ids}';
 };
 export type UpdateNotificationsResponse = ArrayResponse<Notification>;

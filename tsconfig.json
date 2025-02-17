@@ -9,7 +9,7 @@
     "compilerOptions": {
         "types": [ "node" ],
         "outDir": "dist",
-        "rootDir": "./src/",
+        "rootDir": ".",
         "module": "CommonJS",
         "target": "es2015",
         "sourceMap": true,
@@ -21,6 +21,7 @@
         "noImplicitAny": false,
         "noUnusedLocals": false,
         "noUnusedParameters": false,
-        "strictNullChecks": false
+        "strictNullChecks": false,
+        "skipLibCheck": true,
     }
 }

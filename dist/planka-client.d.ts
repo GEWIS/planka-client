@@ -1,8 +1,9 @@
 import { Client } from '@hey-api/client-fetch';
+import { ClientOptions as ClientOptions_2 } from '@hey-api/client-fetch';
 import { Config } from '@hey-api/client-fetch';
-import { Options } from '@hey-api/client-fetch';
-import { RequestOptionsBase } from '@hey-api/client-fetch';
+import { Options as Options_2 } from '@hey-api/client-fetch';
 import { RequestResult } from '@hey-api/client-fetch';
+import { TDataShape } from '@hey-api/client-fetch';
 
 /**
  * Authentication
@@ -70,12 +71,18 @@ export declare const authorizeOidc: <ThrowOnError extends boolean = false>(optio
 
 export declare type AuthorizeOidcRequest = {
     body: AccessTokenOidcRequest;
+    path?: never;
+    query?: never;
+    url: '/api/access-tokens/exchange-using-oidc';
 };
 
 export declare type AuthorizeOidcResponse = SingleResponse<string>;
 
 export declare type AuthorizeRequest = {
     body: AccessTokenRequest;
+    path?: never;
+    query?: never;
+    url: '/api/access-tokens';
 };
 
 export declare type AuthorizeResponse = SingleResponse<string>;
@@ -154,9 +161,11 @@ export declare type CardMembership = {
     userId: string;
 };
 
-export declare const client: Client<Request, Response, unknown, RequestOptionsBase<false> & Config<false> & {
-headers: Headers;
-}>;
+export declare const client: Client;
+
+export declare type ClientOptions = {
+    baseUrl: `${string}://${string}/api` | (string & {});
+};
 
 /**
  * Comments
@@ -182,12 +191,14 @@ export declare type CommentType = 'commentCard';
 export declare const createAttachment: <ThrowOnError extends boolean = false>(options: Options<CreateAttachmentRequest, ThrowOnError>) => RequestResult<CreateAttachmentResponse, HttpError, ThrowOnError>;
 
 export declare type CreateAttachmentRequest = {
-    path: {
-        cardId: string;
-    };
     body: {
         file: File;
     };
+    path: {
+        cardId: string;
+    };
+    query?: never;
+    url: '/api/cards/{cardId}/attachments';
 };
 
 export declare type CreateAttachmentResponse = SingleResponse<Attachment>;
@@ -207,25 +218,29 @@ export declare const createBoard: <ThrowOnError extends boolean = false>(options
 export declare const createBoardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateBoardMembershipRequest, ThrowOnError>) => RequestResult<CreateBoardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type CreateBoardMembershipRequest = {
-    path: {
-        boardId: string;
-    };
     body: {
         userId: string;
         role: Role;
     };
+    path: {
+        boardId: string;
+    };
+    query?: never;
+    url: '/api/boards/{boardId}/memberships';
 };
 
 export declare type CreateBoardMembershipResponse = SingleResponse<BoardMembership>;
 
 export declare type CreateBoardRequest = {
-    path: {
-        projectId: string;
-    };
     body: {
         position: number;
         name: string;
     };
+    path: {
+        projectId: string;
+    };
+    query?: never;
+    url: '/api/projects/{projectId}/boards';
 };
 
 export declare type CreateBoardResponse = SingleResponse<Board>;
@@ -245,12 +260,14 @@ export declare const createCard: <ThrowOnError extends boolean = false>(options:
 export declare const createCardLabel: <ThrowOnError extends boolean = false>(options: Options<CreateCardLabelRequest, ThrowOnError>) => RequestResult<CreateCardLabelResponse, HttpError, ThrowOnError>;
 
 export declare type CreateCardLabelRequest = {
-    path: {
-        cardId: string;
-    };
     body: {
         labelId: string;
     };
+    path: {
+        cardId: string;
+    };
+    query?: never;
+    url: '/api/cards/{cardId}/labels';
 };
 
 export declare type CreateCardLabelResponse = SingleResponse<CardLabel>;
@@ -263,27 +280,33 @@ export declare type CreateCardLabelResponse = SingleResponse<CardLabel>;
 export declare const createCardMembership: <ThrowOnError extends boolean = false>(options: Options<CreateCardMembershipRequest, ThrowOnError>) => RequestResult<CreateCardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type CreateCardMembershipRequest = {
-    path: {
-        cardId: string;
-    };
     body: {
         userId: string;
     };
+    path: {
+        cardId: string;
+    };
+    query?: never;
+    url: '/api/cards/{cardId}/memberships';
 };
 
 export declare type CreateCardMembershipResponse = SingleResponse<CardMembership>;
 
 export declare type CreateCardRequest = {
-    path: {
-        listId: string;
-    };
     body: {
         name: string;
         position: number;
     };
+    path: {
+        listId: string;
+    };
+    query?: never;
+    url: '/api/lists/{listId}/cards';
 };
 
 export declare type CreateCardResponse = SingleResponse<Card>;
+
+export declare type CreateClientConfig<T extends ClientOptions_2 = ClientOptions> = (override?: Config<ClientOptions_2 & T>) => Config<Required<ClientOptions_2> & T>;
 
 /**
  * Create comment action
@@ -293,12 +316,14 @@ export declare type CreateCardResponse = SingleResponse<Card>;
 export declare const createCommentAction: <ThrowOnError extends boolean = false>(options: Options<CreateCommentActionRequest, ThrowOnError>) => RequestResult<CreateCommentActionResponse, HttpError, ThrowOnError>;
 
 export declare type CreateCommentActionRequest = {
-    path: {
-        cardId: string;
-    };
     body: {
         text: string;
     };
+    path: {
+        cardId: string;
+    };
+    query?: never;
+    url: '/api/cards/{cardId}/comment-actions';
 };
 
 export declare type CreateCommentActionResponse = SingleResponse<Comment_2>;
@@ -311,14 +336,16 @@ export declare type CreateCommentActionResponse = SingleResponse<Comment_2>;
 export declare const createLabel: <ThrowOnError extends boolean = false>(options: Options<CreateLabelRequest, ThrowOnError>) => RequestResult<CreateLabelResponse, HttpError, ThrowOnError>;
 
 export declare type CreateLabelRequest = {
-    path: {
-        boardId: string;
-    };
     body: {
         name: string;
         position: number;
         color: LabelColor;
     };
+    path: {
+        boardId: string;
+    };
+    query?: never;
+    url: '/api/boards/{boardId}/labels';
 };
 
 export declare type CreateLabelResponse = SingleResponse<Label>;
@@ -331,13 +358,15 @@ export declare type CreateLabelResponse = SingleResponse<Label>;
 export declare const createList: <ThrowOnError extends boolean = false>(options: Options<CreateListRequest, ThrowOnError>) => RequestResult<CreateListResponse, HttpError, ThrowOnError>;
 
 export declare type CreateListRequest = {
-    path: {
-        boardId: string;
-    };
     body: {
         position: number;
         name: string;
     };
+    path: {
+        boardId: string;
+    };
+    query?: never;
+    url: '/api/boards/{boardId}/lists';
 };
 
 export declare type CreateListResponse = SingleResponse<List>;
@@ -357,12 +386,14 @@ export declare const createProject: <ThrowOnError extends boolean = false>(optio
 export declare const createProjectManager: <ThrowOnError extends boolean = false>(options: Options<CreateProjectManagerRequest, ThrowOnError>) => RequestResult<CreateProjectManagerResponse, HttpError, ThrowOnError>;
 
 export declare type CreateProjectManagerRequest = {
-    path: {
-        projectId: string;
-    };
     body: {
         userId: string;
     };
+    path: {
+        projectId: string;
+    };
+    query?: never;
+    url: '/api/projects/{projectId}/managers';
 };
 
 export declare type CreateProjectManagerResponse = SingleResponse<ProjectManager>;
@@ -371,6 +402,9 @@ export declare type CreateProjectRequest = {
     body: {
         name: string;
     };
+    path?: never;
+    query?: never;
+    url: '/api/projects';
 };
 
 export declare type CreateProjectResponse = SingleResponse<Project>;
@@ -383,13 +417,15 @@ export declare type CreateProjectResponse = SingleResponse<Project>;
 export declare const createTask: <ThrowOnError extends boolean = false>(options: Options<CreateTaskRequest, ThrowOnError>) => RequestResult<CreateTaskResponse, HttpError, ThrowOnError>;
 
 export declare type CreateTaskRequest = {
-    path: {
-        cardId: string;
-    };
     body: {
         position: number;
         name: string;
     };
+    path: {
+        cardId: string;
+    };
+    query?: never;
+    url: '/api/cards/{cardId}/tasks';
 };
 
 export declare type CreateTaskResponse = SingleResponse<Task>;
@@ -408,6 +444,9 @@ export declare type CreateUserRequest = {
         name: string;
         username?: string;
     };
+    path?: never;
+    query?: never;
+    url: '/api/users';
 };
 
 export declare type CreateUserResponse = SingleResponse<User>;
@@ -420,9 +459,12 @@ export declare type CreateUserResponse = SingleResponse<User>;
 export declare const deleteAttachment: <ThrowOnError extends boolean = false>(options: Options<DeleteAttachmentRequest, ThrowOnError>) => RequestResult<DeleteAttachmentResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteAttachmentRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/attachments/{id}';
 };
 
 export declare type DeleteAttachmentResponse = SingleResponse<Attachment>;
@@ -442,17 +484,23 @@ export declare const deleteBoard: <ThrowOnError extends boolean = false>(options
 export declare const deleteBoardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteBoardMembershipRequest, ThrowOnError>) => RequestResult<DeleteBoardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteBoardMembershipRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/board-memberships/{id}';
 };
 
 export declare type DeleteBoardMembershipResponse = SingleResponse<BoardMembership>;
 
 export declare type DeleteBoardRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/boards/{id}';
 };
 
 export declare type DeleteBoardResponse = SingleResponse<void>;
@@ -472,10 +520,13 @@ export declare const deleteCard: <ThrowOnError extends boolean = false>(options:
 export declare const deleteCardLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteCardLabelRequest, ThrowOnError>) => RequestResult<DeleteCardLabelResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteCardLabelRequest = {
+    body?: never;
     path: {
         cardId: string;
         labelId: string;
     };
+    query?: never;
+    url: '/api/cards/{cardId}/labels/{labelId}';
 };
 
 export declare type DeleteCardLabelResponse = SingleResponse<CardLabel>;
@@ -488,20 +539,25 @@ export declare type DeleteCardLabelResponse = SingleResponse<CardLabel>;
 export declare const deleteCardMembership: <ThrowOnError extends boolean = false>(options: Options<DeleteCardMembershipRequest, ThrowOnError>) => RequestResult<DeleteCardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteCardMembershipRequest = {
-    path: {
-        cardId: string;
-    };
     body: {
         userId: string;
     };
+    path: {
+        cardId: string;
+    };
+    query?: never;
+    url: '/api/cards/{cardId}/memberships';
 };
 
 export declare type DeleteCardMembershipResponse = SingleResponse<CardMembership>;
 
 export declare type DeleteCardRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/cards/{id}';
 };
 
 export declare type DeleteCardResponse = SingleResponse<Card>;
@@ -514,9 +570,12 @@ export declare type DeleteCardResponse = SingleResponse<Card>;
 export declare const deleteCommentAction: <ThrowOnError extends boolean = false>(options: Options<DeleteCommentActionRequest, ThrowOnError>) => RequestResult<DeleteCommentActionResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteCommentActionRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/comment-actions/{id}';
 };
 
 export declare type DeleteCommentActionResponse = SingleResponse<Comment_2>;
@@ -529,9 +588,12 @@ export declare type DeleteCommentActionResponse = SingleResponse<Comment_2>;
 export declare const deleteLabel: <ThrowOnError extends boolean = false>(options: Options<DeleteLabelRequest, ThrowOnError>) => RequestResult<DeleteLabelResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteLabelRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/labels/{id}';
 };
 
 export declare type DeleteLabelResponse = SingleResponse<Label>;
@@ -544,9 +606,12 @@ export declare type DeleteLabelResponse = SingleResponse<Label>;
 export declare const deleteList: <ThrowOnError extends boolean = false>(options: Options<DeleteListRequest, ThrowOnError>) => RequestResult<DeleteListResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteListRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/lists/{id}';
 };
 
 export declare type DeleteListResponse = SingleResponse<List>;
@@ -566,17 +631,23 @@ export declare const deleteProject: <ThrowOnError extends boolean = false>(optio
 export declare const deleteProjectManager: <ThrowOnError extends boolean = false>(options: Options<DeleteProjectManagerRequest, ThrowOnError>) => RequestResult<DeleteProjectManagerResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteProjectManagerRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/project-managers/{id}';
 };
 
 export declare type DeleteProjectManagerResponse = SingleResponse<ProjectManager>;
 
 export declare type DeleteProjectRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/projects/{id}';
 };
 
 export declare type DeleteProjectResponse = SingleResponse<Project>;
@@ -589,9 +660,12 @@ export declare type DeleteProjectResponse = SingleResponse<Project>;
 export declare const deleteTask: <ThrowOnError extends boolean = false>(options: Options<DeleteTaskRequest, ThrowOnError>) => RequestResult<DeleteTaskResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteTaskRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/tasks/{id}';
 };
 
 export declare type DeleteTaskResponse = SingleResponse<Task>;
@@ -604,9 +678,12 @@ export declare type DeleteTaskResponse = SingleResponse<Task>;
 export declare const deleteUser: <ThrowOnError extends boolean = false>(options: Options<DeleteUserRequest, ThrowOnError>) => RequestResult<DeleteUserResponse, HttpError, ThrowOnError>;
 
 export declare type DeleteUserRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/users/{id}';
 };
 
 export declare type DeleteUserResponse = SingleResponse<User>;
@@ -619,12 +696,14 @@ export declare type DeleteUserResponse = SingleResponse<User>;
 export declare const duplicateCard: <ThrowOnError extends boolean = false>(options: Options<DuplicateCardRequest, ThrowOnError>) => RequestResult<DuplicateCardResponse, HttpError, ThrowOnError>;
 
 export declare type DuplicateCardRequest = {
-    path: {
-        id: string;
-    };
     body: {
         position: number;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/cards/{id}/duplicate';
 };
 
 export declare type DuplicateCardResponse = SingleResponse<Card>;
@@ -638,10 +717,13 @@ export declare type DuplicateCardResponse = SingleResponse<Card>;
 export declare const getAttachment: <ThrowOnError extends boolean = false>(options: Options<GetAttachmentRequest, ThrowOnError>) => RequestResult<Blob, HttpError, ThrowOnError>;
 
 export declare type GetAttachmentRequest = {
+    body?: never;
     path: {
         id: string;
         filename: string;
     };
+    query?: never;
+    url: '/attachments/{id}/download/{filename}';
 };
 
 export declare type GetAttachmentResponse = Blob;
@@ -655,10 +737,13 @@ export declare type GetAttachmentResponse = Blob;
 export declare const getAttachmentThumbnail: <ThrowOnError extends boolean = false>(options: Options<GetAttachmentThumbnailRequest, ThrowOnError>) => RequestResult<Blob, HttpError, ThrowOnError>;
 
 export declare type GetAttachmentThumbnailRequest = {
+    body?: never;
     path: {
         id: string;
         extension: string;
     };
+    query?: never;
+    url: '/attachments/{id}/download/thumbnails/cover-256.{extension}';
 };
 
 export declare type GetAttachmentThumbnailResponse = Blob;
@@ -671,9 +756,12 @@ export declare type GetAttachmentThumbnailResponse = Blob;
 export declare const getBoard: <ThrowOnError extends boolean = false>(options: Options<GetBoardRequest, ThrowOnError>) => RequestResult<GetBoardResponse, HttpError, ThrowOnError>;
 
 export declare type GetBoardRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/boards/{id}';
 };
 
 export declare type GetBoardResponse = SingleResponse<Board>;
@@ -693,17 +781,23 @@ export declare const getCard: <ThrowOnError extends boolean = false>(options: Op
 export declare const getCardActions: <ThrowOnError extends boolean = false>(options: Options<GetCardActionsRequest, ThrowOnError>) => RequestResult<GetCardActionsResponse, HttpError, ThrowOnError>;
 
 export declare type GetCardActionsRequest = {
+    body?: never;
     path: {
         cardId: string;
     };
+    query?: never;
+    url: '/api/cards/{cardId}/actions';
 };
 
 export declare type GetCardActionsResponse = ArrayResponse<Action>;
 
 export declare type GetCardRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/cards/{id}';
 };
 
 export declare type GetCardResponse = SingleResponse<Card>;
@@ -713,11 +807,18 @@ export declare type GetCardResponse = SingleResponse<Card>;
  * 'GET /api/config': 'show-config'
  * @param options
  */
-export declare const getConfig: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetConfigResponse, unknown, ThrowOnError>;
+export declare const getConfig: <ThrowOnError extends boolean = false>(options?: Options<GetConfigRequest, ThrowOnError>) => RequestResult<GetConfigResponse, unknown, ThrowOnError>;
 
 /**
  * All types necessary to provide to the hey-api client
  */
+export declare type GetConfigRequest = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/config';
+};
+
 export declare type GetConfigResponse = SingleResponse<Oidc>;
 
 /**
@@ -728,9 +829,12 @@ export declare type GetConfigResponse = SingleResponse<Oidc>;
 export declare const getNotification: <ThrowOnError extends boolean = false>(options: Options<GetNotificationRequest, ThrowOnError>) => RequestResult<GetNotificationResponse, HttpError, ThrowOnError>;
 
 export declare type GetNotificationRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/notifications/{id}';
 };
 
 export declare type GetNotificationResponse = SingleResponse<Notification_2>;
@@ -740,7 +844,14 @@ export declare type GetNotificationResponse = SingleResponse<Notification_2>;
  * 'GET /api/notifications': 'notifications/index'
  * @param options
  */
-export declare const getNotifications: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetNotificationsResponse, HttpError, ThrowOnError>;
+export declare const getNotifications: <ThrowOnError extends boolean = false>(options?: Options<GetNotificationsRequest, ThrowOnError>) => RequestResult<GetNotificationsResponse, HttpError, ThrowOnError>;
+
+export declare type GetNotificationsRequest = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/notifications';
+};
 
 export declare type GetNotificationsResponse = ArrayResponse<Notification_2>;
 
@@ -752,9 +863,12 @@ export declare type GetNotificationsResponse = ArrayResponse<Notification_2>;
 export declare const getProject: <ThrowOnError extends boolean = false>(options: Options<GetProjectRequest, ThrowOnError>) => RequestResult<GetProjectResponse, HttpError, ThrowOnError>;
 
 export declare type GetProjectRequest = {
+    body?: never;
     path: {
         id: string;
     };
+    query?: never;
+    url: '/api/projects/{id}';
 };
 
 export declare type GetProjectResponse = SingleResponse<Project>;
@@ -764,7 +878,14 @@ export declare type GetProjectResponse = SingleResponse<Project>;
  * 'GET /api/projects': 'projects/index'
  * @param options
  */
-export declare const getProjects: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetProjectsResponse, HttpError, ThrowOnError>;
+export declare const getProjects: <ThrowOnError extends boolean = false>(options: Options<GetProjectsRequest, ThrowOnError>) => RequestResult<GetProjectsResponse, HttpError, ThrowOnError>;
+
+export declare type GetProjectsRequest = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/projects';
+};
 
 export declare type GetProjectsResponse = ArrayResponse<Project>;
 
@@ -779,6 +900,9 @@ export declare type GetUserRequest = {
     path: {
         id: string;
     };
+    body?: never;
+    query?: never;
+    url: '/api/users/{id}';
 };
 
 export declare type GetUserResponse = SingleResponse<User>;
@@ -788,7 +912,14 @@ export declare type GetUserResponse = SingleResponse<User>;
  * 'GET /api/users': 'users/index'
  * @param options
  */
-export declare const getUsers: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<GetUsersResponse, HttpError, ThrowOnError>;
+export declare const getUsers: <ThrowOnError extends boolean = false>(options?: Options<GetUsersRequest, ThrowOnError>) => RequestResult<GetUsersResponse, HttpError, ThrowOnError>;
+
+export declare type GetUsersRequest = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/users';
+};
 
 export declare type GetUsersResponse = ArrayResponse<User>;
 
@@ -868,6 +999,11 @@ export declare type Oidc = {
     oidc: string;
 };
 
+export declare type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options_2<TData, ThrowOnError> & {
+    client?: Client;
+    meta?: Record<string, unknown>;
+};
+
 /**
  * Projects
  */
@@ -906,12 +1042,14 @@ export declare type SingleResponse<T> = {
 export declare const sortList: <ThrowOnError extends boolean = false>(options: Options<SortListRequest, ThrowOnError>) => RequestResult<SortListResponse, HttpError, ThrowOnError>;
 
 export declare type SortListRequest = {
-    path: {
-        id: string;
-    };
     body: {
         type: SortType;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/lists/{id}/sort';
 };
 
 export declare type SortListResponse = SingleResponse<List>;
@@ -933,7 +1071,14 @@ export declare type Task = {
  * 'DELETE /api/access-tokens/me': 'access-tokens/delete'
  * @param options
  */
-export declare const unauthorize: <ThrowOnError extends boolean = false>(options: Options<unknown, ThrowOnError>) => RequestResult<UnauthorizeResponse, HttpError, ThrowOnError>;
+export declare const unauthorize: <ThrowOnError extends boolean = false>(options?: Options<UnauthorizeRequest, ThrowOnError>) => RequestResult<UnauthorizeResponse, HttpError, ThrowOnError>;
+
+export declare type UnauthorizeRequest = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/access-tokens/me';
+};
 
 export declare type UnauthorizeResponse = SingleResponse<string>;
 
@@ -945,10 +1090,12 @@ export declare type UnauthorizeResponse = SingleResponse<string>;
 export declare const updateAttachment: <ThrowOnError extends boolean = false>(options: Options<UpdateAttachmentRequest, ThrowOnError>) => RequestResult<UpdateAttachmentResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateAttachmentRequest = {
+    body: Partial<Omit<Attachment, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<Attachment, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'createUserId' | 'url' | 'coverUrl'>>;
+    query?: never;
+    url: '/api/attachments/{id}';
 };
 
 export declare type UpdateAttachmentResponse = SingleResponse<Attachment>;
@@ -968,21 +1115,25 @@ export declare const updateBoard: <ThrowOnError extends boolean = false>(options
 export declare const updateBoardMembership: <ThrowOnError extends boolean = false>(options: Options<UpdateBoardMembershipRequest, ThrowOnError>) => RequestResult<UpdateBoardMembershipResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateBoardMembershipRequest = {
-    path: {
-        id: string;
-    };
     body: {
         role: Role;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/board-memberships/{id}';
 };
 
 export declare type UpdateBoardMembershipResponse = SingleResponse<BoardMembership>;
 
 export declare type UpdateBoardRequest = {
+    body: Partial<Omit<Board, 'createdAt' | 'updatedAt' | 'id' | 'projectId'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<Board, 'createdAt' | 'updatedAt' | 'id' | 'projectId'>>;
+    query?: never;
+    url: '/api/boards/{id}';
 };
 
 export declare type UpdateBoardResponse = SingleResponse<Board>;
@@ -995,10 +1146,12 @@ export declare type UpdateBoardResponse = SingleResponse<Board>;
 export declare const updateCard: <ThrowOnError extends boolean = false>(options: Options<UpdateCardRequest, ThrowOnError>) => RequestResult<UpdateCardResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateCardRequest = {
+    body: Partial<Omit<Card, 'createdAt' | 'updatedAt' | 'id' | 'creatorUserId' | 'isSubscribed'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<Card, 'createdAt' | 'updatedAt' | 'id' | 'creatorUserId' | 'isSubscribed'>>;
+    query?: never;
+    url: '/api/cards/{id}';
 };
 
 export declare type UpdateCardResponse = SingleResponse<Card>;
@@ -1011,12 +1164,14 @@ export declare type UpdateCardResponse = SingleResponse<Card>;
 export declare const updateCommentAction: <ThrowOnError extends boolean = false>(options: Options<UpdateCommentActionRequest, ThrowOnError>) => RequestResult<UpdateCommentActionResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateCommentActionRequest = {
-    path: {
-        id: string;
-    };
     body: {
         text: string;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/comment-actions/{id}';
 };
 
 export declare type UpdateCommentActionResponse = SingleResponse<Comment_2>;
@@ -1029,10 +1184,12 @@ export declare type UpdateCommentActionResponse = SingleResponse<Comment_2>;
 export declare const updateLabel: <ThrowOnError extends boolean = false>(options: Options<UpdateLabelRequest, ThrowOnError>) => RequestResult<UpdateLabelResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateLabelRequest = {
+    body: Partial<Omit<Label, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<Label, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
+    query?: never;
+    url: '/api/labels/{id}';
 };
 
 export declare type UpdateLabelResponse = SingleResponse<Label>;
@@ -1045,10 +1202,12 @@ export declare type UpdateLabelResponse = SingleResponse<Label>;
 export declare const updateList: <ThrowOnError extends boolean = false>(options: Options<UpdateListRequest, ThrowOnError>) => RequestResult<UpdateListResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateListRequest = {
+    body: Partial<Omit<List, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<List, 'createdAt' | 'updatedAt' | 'id' | 'boardId'>>;
+    query?: never;
+    url: '/api/lists/{id}';
 };
 
 export declare type UpdateListResponse = SingleResponse<List>;
@@ -1061,10 +1220,12 @@ export declare type UpdateListResponse = SingleResponse<List>;
 export declare const updateNotifications: <ThrowOnError extends boolean = false>(options: Options<UpdateNotificationsRequest, ThrowOnError>) => RequestResult<UpdateNotificationsResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateNotificationsRequest = {
+    body: Partial<Omit<Notification_2, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>>;
     path: {
         ids: string[];
     };
-    body: Partial<Omit<Notification_2, 'createdAt' | 'updatedAt' | 'id' | 'cardId' | 'userId' | 'actionId'>>;
+    query?: never;
+    url: '/api/notifications/{ids}';
 };
 
 export declare type UpdateNotificationsResponse = ArrayResponse<Notification_2>;
@@ -1084,21 +1245,25 @@ export declare const updateProject: <ThrowOnError extends boolean = false>(optio
 export declare const updateProjectBackgroundImage: <ThrowOnError extends boolean = false>(options: Options<UpdateProjectBackgroundImageRequest, ThrowOnError>) => RequestResult<UpdateProjectBackgroundImageResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateProjectBackgroundImageRequest = {
-    path: {
-        id: string;
-    };
     body: {
         file: File;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/projects/{id}/background-image';
 };
 
 export declare type UpdateProjectBackgroundImageResponse = SingleResponse<Project>;
 
 export declare type UpdateProjectRequest = {
+    body: Partial<Omit<Project, 'createdAt' | 'updatedAt' | 'id' | 'backgroundImage'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<Project, 'createdAt' | 'updatedAt' | 'id' | 'backgroundImage'>>;
+    query?: never;
+    url: '/api/projects/{id}';
 };
 
 export declare type UpdateProjectResponse = SingleResponse<Project>;
@@ -1111,10 +1276,12 @@ export declare type UpdateProjectResponse = SingleResponse<Project>;
 export declare const updateTask: <ThrowOnError extends boolean = false>(options: Options<UpdateTaskRequest, ThrowOnError>) => RequestResult<UpdateTaskResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateTaskRequest = {
+    body: Partial<Omit<Task, 'createdAt' | 'updatedAt' | 'id' | 'cardId'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<Task, 'createdAt' | 'updatedAt' | 'id' | 'cardId'>>;
+    query?: never;
+    url: '/api/tasks/{id}';
 };
 
 export declare type UpdateTaskResponse = SingleResponse<Task>;
@@ -1134,12 +1301,14 @@ export declare const updateUser: <ThrowOnError extends boolean = false>(options:
 export declare const updateUserAvatar: <ThrowOnError extends boolean = false>(options: Options<UpdateUserAvatarRequest, ThrowOnError>) => RequestResult<UpdateUserAvatarResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserAvatarRequest = {
-    path: {
-        id: string;
-    };
     body: {
         file: File;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/users/{id}/avatar';
 };
 
 export declare type UpdateUserAvatarResponse = SingleResponse<User>;
@@ -1152,12 +1321,14 @@ export declare type UpdateUserAvatarResponse = SingleResponse<User>;
 export declare const updateUserEmail: <ThrowOnError extends boolean = false>(options: Options<UpdateUserEmailRequest, ThrowOnError>) => RequestResult<UpdateUserEmailResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserEmailRequest = {
-    path: {
-        id: string;
-    };
     body: {
         email: string;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/users/{id}/email';
 };
 
 export declare type UpdateUserEmailResponse = SingleResponse<User>;
@@ -1170,21 +1341,25 @@ export declare type UpdateUserEmailResponse = SingleResponse<User>;
 export declare const updateUserPassword: <ThrowOnError extends boolean = false>(options: Options<UpdateUserPasswordRequest, ThrowOnError>) => RequestResult<UpdateUserPasswordResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserPasswordRequest = {
-    path: {
-        id: string;
-    };
     body: {
         password: string;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/users/{id}/password';
 };
 
 export declare type UpdateUserPasswordResponse = SingleResponse<User>;
 
 export declare type UpdateUserRequest = {
+    body: Partial<Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>>;
     path: {
         id: string;
     };
-    body: Partial<Omit<User, 'updatedAt' | 'createdAt' | 'deletedAt' | 'username' | 'email' | 'avatarUrl'>>;
+    query?: never;
+    url: '/api/users/{id}/email';
 };
 
 export declare type UpdateUserResponse = SingleResponse<User>;
@@ -1197,12 +1372,14 @@ export declare type UpdateUserResponse = SingleResponse<User>;
 export declare const updateUserUsername: <ThrowOnError extends boolean = false>(options: Options<UpdateUserUsernameRequest, ThrowOnError>) => RequestResult<UpdateUserUsernameResponse, HttpError, ThrowOnError>;
 
 export declare type UpdateUserUsernameRequest = {
-    path: {
-        id: string;
-    };
     body: {
         username: string;
     };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/users/{id}/username';
 };
 
 export declare type UpdateUserUsernameResponse = SingleResponse<User>;
