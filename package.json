@@ -2,7 +2,6 @@
   "name": "@gewis/planka-client",
   "version": "1.2.0",
   "license": "AGPL-3.0-or-later",
-  "private": false,
   "scripts": {
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
@@ -65,5 +64,5 @@
   "engines": {
     "node": ">=22.0.0"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.5.1"
 }
