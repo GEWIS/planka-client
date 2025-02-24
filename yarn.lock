@@ -500,7 +500,7 @@ __metadata:
   resolution: "@gewis/planka-client@workspace:."
   dependencies:
     "@gewis/eslint-config-typescript": "npm:^2.2.0"
-    "@gewis/prettier-config": "npm:^2.2.0"
+    "@gewis/prettier-config": "npm:^2.2.2"
     "@gewis/release-config": "npm:^2.2.0"
     "@hey-api/client-fetch": "npm:^0.8.1"
     "@types/node": "npm:^22.13.1"
@@ -518,16 +518,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gewis/prettier-config@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@gewis/prettier-config@npm:2.2.0"
+"@gewis/prettier-config@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@gewis/prettier-config@npm:2.2.2"
   dependencies:
-    "@vue/eslint-config-prettier": "npm:^10.0.0"
-    eslint-config-prettier: "npm:^9.1.0"
+    "@vue/eslint-config-prettier": "npm:^10.2.0"
+    eslint-config-prettier: "npm:^10.0.1"
   peerDependencies:
     eslint: "*"
     prettier: "*"
-  checksum: 10c0/f238593137df8515a67d7da3329b7728b342f0abdba272d067d372bb1fb5c9242346900073aecbd52cc3c78ef1110399e7f87ab482b185e0c5d62bd4526f8894
+  checksum: 10c0/daad166ea095b929663734fa234812a5ae4f6cd4067cf52563eb7057521ed51c1ab3c6a48206d8867e0d171114d3b1526178642c3cc0e8e3bfdfd0f4fe2a1b85
   languageName: node
   linkType: hard
 
@@ -1304,7 +1304,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/eslint-config-prettier@npm:^10.0.0":
+"@vue/eslint-config-prettier@npm:^10.2.0":
   version: 10.2.0
   resolution: "@vue/eslint-config-prettier@npm:10.2.0"
   dependencies:
@@ -2360,17 +2360,6 @@ __metadata:
   bin:
     eslint-config-prettier: build/bin/cli.js
   checksum: 10c0/e2434931669d211663c0493f2c1640a670a02ba4503a68f056a7eda133f383acbbb983a4a7bd0ad6cb3b2bc4d5731c3be8b32fe28e35087a76fea45f7061ae70
-  languageName: node
-  linkType: hard
-
-"eslint-config-prettier@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "eslint-config-prettier@npm:9.1.0"
-  peerDependencies:
-    eslint: ">=7.0.0"
-  bin:
-    eslint-config-prettier: bin/cli.js
-  checksum: 10c0/6d332694b36bc9ac6fdb18d3ca2f6ac42afa2ad61f0493e89226950a7091e38981b66bac2b47ba39d15b73fff2cd32c78b850a9cf9eed9ca9a96bfb2f3a2f10d
   languageName: node
   linkType: hard
 
