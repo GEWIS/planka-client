@@ -507,7 +507,7 @@ __metadata:
   dependencies:
     "@gewis/eslint-config-typescript": "npm:^2.2.2"
     "@gewis/prettier-config": "npm:^2.2.2"
-    "@gewis/release-config": "npm:^2.2.0"
+    "@gewis/release-config": "npm:^2.2.2"
     "@hey-api/client-fetch": "npm:^0.8.1"
     "@types/node": "npm:^22.13.5"
     eslint: "npm:^9.20.1"
@@ -537,10 +537,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gewis/release-config@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@gewis/release-config@npm:2.2.0"
-  checksum: 10c0/0afa95569fc9859ccb2e73679c6d085494c1eba5f6fa11adc377a6d0712f3df9b37889abe317d0176160b2f2d38abba1cf63ae18a1d10842878312dce5f4505f
+"@gewis/release-config@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@gewis/release-config@npm:2.2.2"
+  checksum: 10c0/17a0b141f747e5cea47dba89b4aee64ed5359771f731f2e9de8ba4a98f06eb52f974d5a5bdb2899f3699e9f176db8e1ecb03b8eee8db0c20ff0701668dbac4ed
   languageName: node
   linkType: hard
 
