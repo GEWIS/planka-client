@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/GEWIS/planka-client#readme",
   "devDependencies": {
-    "@gewis/eslint-config-typescript": "^2.2.2",
+    "@gewis/eslint-config-typescript": "^2.2.3",
     "@gewis/prettier-config": "^2.2.2",
     "@gewis/release-config": "^2.2.2",
     "@types/node": "^22.13.9",
