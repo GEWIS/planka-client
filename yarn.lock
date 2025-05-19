@@ -512,7 +512,7 @@ __metadata:
     "@gewis/eslint-config-typescript": "npm:^2.4.0"
     "@gewis/prettier-config": "npm:^2.2.2"
     "@gewis/release-config": "npm:^2.4.0"
-    "@hey-api/client-fetch": "npm:^0.10.0"
+    "@hey-api/client-fetch": "npm:^0.10.1"
     "@types/node": "npm:^22.15.3"
     eslint: "npm:^9.26.0"
     husky: "npm:^9.1.7"
@@ -548,12 +548,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/client-fetch@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "@hey-api/client-fetch@npm:0.10.0"
+"@hey-api/client-fetch@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "@hey-api/client-fetch@npm:0.10.1"
   peerDependencies:
     "@hey-api/openapi-ts": < 2
-  checksum: 10c0/57fee58375f92599a4c4d439466225318a40ce0318059058a25eb9956d351f328987dde6f6dea548396e8e176be59c6c8c8fe77b5400de017f1b8433604972b1
+  checksum: 10c0/64bce54d1cd8657fd1d7c44561a891661895e5ad6781e6546917c26046aa5778e8b8a367bef3a712aa40677231e0ff4dbff627e0c2a12100ad6d13ebc61636e7
   languageName: node
   linkType: hard
 

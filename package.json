@@ -59,7 +59,7 @@
     "vitest": "^2.1.9"
   },
   "dependencies": {
-    "@hey-api/client-fetch": "^0.10.0"
+    "@hey-api/client-fetch": "^0.10.1"
   },
   "engines": {
     "node": ">=22.0.0"
