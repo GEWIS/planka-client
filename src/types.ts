@@ -1,3 +1,8 @@
+export type TempResponses = {
+  200: SingleResponse<string>;
+};
+export type TempResponse = TempResponses[keyof TempResponses];
+
 /**
  * Authentication
  */
@@ -340,10 +345,29 @@ export type Include = {
 /**
  * Most errors are roughly the same, so they are types singly
  */
-export type HttpError = {
-  code: 'E_MISSING_OR_INVALID_PARAMS' | 'E_UNAUTHORIZED' | 'E_NOT_FOUND' | 'E_CONFLICT' | 'E_UNPROCESSABLE_ENTITY';
-  message?: string;
-  problems?: string[];
+export type HttpErrors = {
+  400: {
+    code: 'E_MISSING_OR_INVALID_PARAMS';
+    message?: string;
+    problems?: string[];
+  };
+  401: {
+    code: 'E_UNAUTHORIZED';
+    message?: string;
+  };
+  404: {
+    code: 'E_NOT_FOUND';
+    message?: string;
+  };
+  409: {
+    code: 'E_CONFLICT';
+    message?: string;
+  };
+  422: {
+    code: 'E_UNPROCESSABLE_ENTITY';
+    message?: string;
+    problems?: string[];
+  };
 };
 
 /**
@@ -357,7 +381,10 @@ export type GetConfigRequest = {
   query?: never;
   url: '/api/config';
 };
-export type GetConfigResponse = SingleResponse<Oidc>;
+export type GetConfigResponses = {
+  200: SingleResponse<Oidc>;
+};
+export type GetConfigResponse = GetConfigResponses[keyof GetConfigResponses];
 
 // 'POST /api/access-tokens': 'access-tokens/create'
 export type AuthorizeRequest = {
@@ -366,8 +393,12 @@ export type AuthorizeRequest = {
   query?: never;
   url: '/api/access-tokens';
 };
-export type AuthorizeResponse = SingleResponse<string>;
-export type AuthorizeError = HttpError;
+export type AuthorizeResponses = {
+  200: SingleResponse<string>;
+};
+export type AuthorizeResponse = AuthorizeResponses[keyof AuthorizeResponses];
+export type AuthorizeErrors = HttpErrors;
+export type AuthorizeError = AuthorizeErrors[keyof AuthorizeErrors];
 
 // 'POST /api/access-tokens/exchange-using-oidc': 'access-tokens/exchange-using-oidc'
 export type AuthorizeOidcRequest = {
@@ -376,7 +407,10 @@ export type AuthorizeOidcRequest = {
   query?: never;
   url: '/api/access-tokens/exchange-using-oidc';
 };
-export type AuthorizeOidcResponse = SingleResponse<string>;
+export type AuthorizeOidcResponses = {
+  200: SingleResponse<string>;
+};
+export type AuthorizeOidcResponse = AuthorizeOidcResponses[keyof AuthorizeOidcResponses];
 
 // 'DELETE /api/access-tokens/me': 'access-tokens/delete'
 export type UnauthorizeRequest = {
@@ -385,7 +419,10 @@ export type UnauthorizeRequest = {
   query?: never;
   url: '/api/access-tokens/me';
 };
-export type UnauthorizeResponse = SingleResponse<string>;
+export type UnauthorizeResponses = {
+  200: SingleResponse<string>;
+};
+export type UnauthorizeResponse = UnauthorizeResponses[keyof UnauthorizeResponses];
 
 // 'GET /api/users': 'users/index'
 export type GetUsersRequest = {
@@ -394,7 +431,10 @@ export type GetUsersRequest = {
   query?: never;
   url: '/api/users';
 };
-export type GetUsersResponse = ArrayResponse<User>;
+export type GetUsersResponses = {
+  200: ArrayResponse<User>;
+};
+export type GetUsersResponse = GetUsersResponses[keyof GetUsersResponses];
 
 // 'POST /api/users': 'users/create'
 export type CreateUserRequest = {
@@ -408,7 +448,10 @@ export type CreateUserRequest = {
   query?: never;
   url: '/api/users';
 };
-export type CreateUserResponse = SingleResponse<User>;
+export type CreateUserResponses = {
+  200: SingleResponse<User>;
+};
+export type CreateUserResponse = CreateUserResponses[keyof CreateUserResponses];
 
 // 'GET /api/users/:id': 'users/show'
 export type GetUserRequest = {
@@ -419,7 +462,10 @@ export type GetUserRequest = {
   query?: never;
   url: '/api/users/{id}';
 };
-export type GetUserResponse = SingleResponse<User>;
+export type GetUserResponses = {
+  200: SingleResponse<User>;
+};
+export type GetUserResponse = GetUsersResponses[keyof GetUserResponses];
 
 // 'PATCH /api/users/:id/email': 'users/update-email'
 export type UpdateUserRequest = {
@@ -430,7 +476,10 @@ export type UpdateUserRequest = {
   query?: never;
   url: '/api/users/{id}/email';
 };
-export type UpdateUserResponse = SingleResponse<User>;
+export type UpdateUserResponses = {
+  200: SingleResponse<User>;
+};
+export type UpdateUserResponse = UpdateUserResponses[keyof UpdateUserResponses];
 
 // 'PATCH /api/users/:id/email': 'users/update-email'
 export type UpdateUserEmailRequest = {
@@ -443,7 +492,10 @@ export type UpdateUserEmailRequest = {
   query?: never;
   url: '/api/users/{id}/email';
 };
-export type UpdateUserEmailResponse = SingleResponse<User>;
+export type UpdateUserEmailResponses = {
+  200: SingleResponse<User>;
+};
+export type UpdateUserEmailResponse = UpdateUserEmailResponses[keyof UpdateUserEmailResponses];
 
 // 'PATCH /api/users/:id/password': 'users/update-password'
 export type UpdateUserPasswordRequest = {
@@ -456,7 +508,10 @@ export type UpdateUserPasswordRequest = {
   query?: never;
   url: '/api/users/{id}/password';
 };
-export type UpdateUserPasswordResponse = SingleResponse<User>;
+export type UpdateUserPasswordResponses = {
+  200: SingleResponse<User>;
+};
+export type UpdateUserPasswordResponse = UpdateUserPasswordResponses[keyof UpdateUserPasswordResponses];
 
 // 'PATCH /api/users/:id/username': 'users/update-username'
 export type UpdateUserUsernameRequest = {
@@ -469,7 +524,10 @@ export type UpdateUserUsernameRequest = {
   query?: never;
   url: '/api/users/{id}/username';
 };
-export type UpdateUserUsernameResponse = SingleResponse<User>;
+export type UpdateUserUsernameResponses = {
+  200: SingleResponse<User>;
+};
+export type UpdateUserUsernameResponse = UpdateUserUsernameResponses[keyof UpdateUserUsernameResponses];
 
 // 'PATCH /api/users/:id/username': 'users/update-username'
 export type UpdateUserAvatarRequest = {
@@ -482,7 +540,10 @@ export type UpdateUserAvatarRequest = {
   query?: never;
   url: '/api/users/{id}/avatar';
 };
-export type UpdateUserAvatarResponse = SingleResponse<User>;
+export type UpdateUserAvatarResponses = {
+  200: SingleResponse<User>;
+};
+export type UpdateUserAvatarResponse = UpdateUserAvatarResponses[keyof UpdateUserAvatarResponses];
 
 // 'DELETE /api/users/:id': 'users/delete'
 export type DeleteUserRequest = {
@@ -493,7 +554,10 @@ export type DeleteUserRequest = {
   query?: never;
   url: '/api/users/{id}';
 };
-export type DeleteUserResponse = SingleResponse<User>;
+export type DeleteUserResponses = {
+  200: SingleResponse<User>;
+};
+export type DeleteUserResponse = DeleteUserResponses[keyof DeleteUserResponses];
 
 // 'GET /api/projects': 'projects/index'
 export type GetProjectsRequest = {
@@ -502,7 +566,10 @@ export type GetProjectsRequest = {
   query?: never;
   url: '/api/projects';
 };
-export type GetProjectsResponse = ArrayResponse<Project>;
+export type GetProjectsResponses = {
+  200: ArrayResponse<Project>;
+};
+export type GetProjectsResponse = GetProjectResponses[keyof GetProjectResponses];
 
 // 'POST /api/projects': 'projects/create'
 export type CreateProjectRequest = {
@@ -513,7 +580,10 @@ export type CreateProjectRequest = {
   query?: never;
   url: '/api/projects';
 };
-export type CreateProjectResponse = SingleResponse<Project>;
+export type CreateProjectResponses = {
+  200: SingleResponse<Project>;
+};
+export type CreateProjectResponse = CreateProjectResponses[keyof CreateProjectResponses];
 
 // 'GET /api/projects/:id': 'projects/show'
 export type GetProjectRequest = {
@@ -524,7 +594,10 @@ export type GetProjectRequest = {
   query?: never;
   url: '/api/projects/{id}';
 };
-export type GetProjectResponse = SingleResponse<Project>;
+export type GetProjectResponses = {
+  200: SingleResponse<Project>;
+};
+export type GetProjectResponse = GetProjectResponses[keyof GetProjectResponses];
 
 // 'POST /api/projects/:id/background-image': 'projects/update-background-image'
 export type UpdateProjectBackgroundImageRequest = {
@@ -537,7 +610,11 @@ export type UpdateProjectBackgroundImageRequest = {
   query?: never;
   url: '/api/projects/{id}/background-image';
 };
-export type UpdateProjectBackgroundImageResponse = SingleResponse<Project>;
+export type UpdateProjectBackgroundImageResponses = {
+  200: SingleResponse<Project>;
+};
+export type UpdateProjectBackgroundImageResponse =
+  UpdateProjectBackgroundImageResponses[keyof UpdateProjectBackgroundImageResponses];
 
 // 'PATCH /api/projects/:id': 'projects/update'
 export type UpdateProjectRequest = {
@@ -548,7 +625,10 @@ export type UpdateProjectRequest = {
   query?: never;
   url: '/api/projects/{id}';
 };
-export type UpdateProjectResponse = SingleResponse<Project>;
+export type UpdateProjectResponses = {
+  200: SingleResponse<Project>;
+};
+export type UpdateProjectResponse = UpdateProjectResponses[keyof UpdateProjectResponses];
 
 // 'DELETE /api/projects/:id': 'projects/delete'
 export type DeleteProjectRequest = {
@@ -559,7 +639,10 @@ export type DeleteProjectRequest = {
   query?: never;
   url: '/api/projects/{id}';
 };
-export type DeleteProjectResponse = SingleResponse<Project>;
+export type DeleteProjectResponses = {
+  200: SingleResponse<Project>;
+};
+export type DeleteProjectResponse = DeleteProjectResponses[keyof DeleteProjectResponses];
 
 // 'POST /api/projects/:projectId/managers': 'project-managers/create'
 export type CreateProjectManagerRequest = {
@@ -572,7 +655,10 @@ export type CreateProjectManagerRequest = {
   query?: never;
   url: '/api/projects/{projectId}/managers';
 };
-export type CreateProjectManagerResponse = SingleResponse<ProjectManager>;
+export type CreateProjectManagerResponses = {
+  200: SingleResponse<ProjectManager>;
+};
+export type CreateProjectManagerResponse = CreateProjectManagerResponses[keyof CreateProjectManagerResponses];
 
 // 'DELETE /api/project-managers/:id': 'project-managers/delete'
 export type DeleteProjectManagerRequest = {
@@ -583,7 +669,10 @@ export type DeleteProjectManagerRequest = {
   query?: never;
   url: '/api/project-managers/{id}';
 };
-export type DeleteProjectManagerResponse = SingleResponse<ProjectManager>;
+export type DeleteProjectManagerResponses = {
+  200: SingleResponse<ProjectManager>;
+};
+export type DeleteProjectManagerResponse = DeleteProjectManagerResponses[keyof DeleteProjectManagerResponses];
 
 // 'POST /api/projects/:projectId/boards': 'boards/create'
 export type CreateBoardRequest = {
@@ -597,7 +686,10 @@ export type CreateBoardRequest = {
   query?: never;
   url: '/api/projects/{projectId}/boards';
 };
-export type CreateBoardResponse = SingleResponse<Board>;
+export type CreateBoardResponses = {
+  200: SingleResponse<Board>;
+};
+export type CreateBoardResponse = CreateBoardResponses[keyof CreateBoardResponses];
 
 // 'GET /api/boards/:id': 'boards/show'
 export type GetBoardRequest = {
@@ -608,7 +700,10 @@ export type GetBoardRequest = {
   query?: never;
   url: '/api/boards/{id}';
 };
-export type GetBoardResponse = SingleResponse<Board>;
+export type GetBoardResponses = {
+  200: SingleResponse<Board>;
+};
+export type GetBoardResponse = GetBoardResponses[keyof GetBoardResponses];
 
 // 'PATCH /api/boards/:id': 'boards/update'
 export type UpdateBoardRequest = {
@@ -619,7 +714,10 @@ export type UpdateBoardRequest = {
   query?: never;
   url: '/api/boards/{id}';
 };
-export type UpdateBoardResponse = SingleResponse<Board>;
+export type UpdateBoardResponses = {
+  200: SingleResponse<Board>;
+};
+export type UpdateBoardResponse = UpdateBoardResponses[keyof UpdateBoardResponses];
 
 // 'DELETE /api/boards/:id': 'boards/delete'
 export type DeleteBoardRequest = {
@@ -630,7 +728,10 @@ export type DeleteBoardRequest = {
   query?: never;
   url: '/api/boards/{id}';
 };
-export type DeleteBoardResponse = SingleResponse<void>;
+export type DeleteBoardResponses = {
+  200: SingleResponse<void>;
+};
+export type DeleteBoardResponse = DeleteBoardResponses[keyof DeleteBoardResponses];
 
 // 'POST /api/boards/:boardId/memberships': 'board-memberships/create'
 export type CreateBoardMembershipRequest = {
@@ -644,7 +745,10 @@ export type CreateBoardMembershipRequest = {
   query?: never;
   url: '/api/boards/{boardId}/memberships';
 };
-export type CreateBoardMembershipResponse = SingleResponse<BoardMembership>;
+export type CreateBoardMembershipResponses = {
+  200: SingleResponse<BoardMembership>;
+};
+export type CreateBoardMembershipResponse = CreateBoardMembershipResponses[keyof CreateBoardMembershipResponses];
 
 // 'PATCH /api/board-memberships/:id': 'board-memberships/update'
 export type UpdateBoardMembershipRequest = {
@@ -657,7 +761,10 @@ export type UpdateBoardMembershipRequest = {
   query?: never;
   url: '/api/board-memberships/{id}';
 };
-export type UpdateBoardMembershipResponse = SingleResponse<BoardMembership>;
+export type UpdateBoardMembershipResponses = {
+  200: SingleResponse<BoardMembership>;
+};
+export type UpdateBoardMembershipResponse = UpdateBoardMembershipResponses[keyof UpdateBoardMembershipResponses];
 
 // 'DELETE /api/board-memberships/:id': 'board-memberships/delete'
 export type DeleteBoardMembershipRequest = {
@@ -668,7 +775,10 @@ export type DeleteBoardMembershipRequest = {
   query?: never;
   url: '/api/board-memberships/{id}';
 };
-export type DeleteBoardMembershipResponse = SingleResponse<BoardMembership>;
+export type DeleteBoardMembershipResponses = {
+  200: SingleResponse<BoardMembership>;
+};
+export type DeleteBoardMembershipResponse = DeleteBoardMembershipResponses[keyof DeleteBoardMembershipResponses];
 
 // 'POST /api/boards/:boardId/labels': 'labels/create'
 export type CreateLabelRequest = {
@@ -683,7 +793,10 @@ export type CreateLabelRequest = {
   query?: never;
   url: '/api/boards/{boardId}/labels';
 };
-export type CreateLabelResponse = SingleResponse<Label>;
+export type CreateLabelResponses = {
+  200: SingleResponse<Label>;
+};
+export type CreateLabelResponse = CreateLabelResponses[keyof CreateLabelResponses];
 
 // 'PATCH /api/labels/:id': 'labels/update'
 export type UpdateLabelRequest = {
@@ -694,7 +807,10 @@ export type UpdateLabelRequest = {
   query?: never;
   url: '/api/labels/{id}';
 };
-export type UpdateLabelResponse = SingleResponse<Label>;
+export type UpdateLabelResponses = {
+  200: SingleResponse<Label>;
+};
+export type UpdateLabelResponse = UpdateLabelResponses[keyof UpdateLabelResponses];
 
 // 'DELETE /api/labels/:id': 'labels/delete'
 export type DeleteLabelRequest = {
@@ -705,7 +821,10 @@ export type DeleteLabelRequest = {
   query?: never;
   url: '/api/labels/{id}';
 };
-export type DeleteLabelResponse = SingleResponse<Label>;
+export type DeleteLabelResponses = {
+  200: SingleResponse<Label>;
+};
+export type DeleteLabelResponse = DeleteLabelResponses[keyof DeleteLabelResponses];
 
 // 'POST /api/boards/:boardId/lists': 'lists/create'
 export type CreateListRequest = {
@@ -719,7 +838,10 @@ export type CreateListRequest = {
   query?: never;
   url: '/api/boards/{boardId}/lists';
 };
-export type CreateListResponse = SingleResponse<List>;
+export type CreateListResponses = {
+  200: SingleResponse<List>;
+};
+export type CreateListResponse = CreateListResponses[keyof CreateListResponses];
 
 // 'PATCH /api/lists/:id': 'lists/update'
 export type UpdateListRequest = {
@@ -730,7 +852,10 @@ export type UpdateListRequest = {
   query?: never;
   url: '/api/lists/{id}';
 };
-export type UpdateListResponse = SingleResponse<List>;
+export type UpdateListResponses = {
+  200: SingleResponse<List>;
+};
+export type UpdateListResponse = UpdateListResponses[keyof UpdateListResponses];
 
 // 'POST /api/lists/:id/sort': 'lists/sort'
 export type SortListRequest = {
@@ -743,7 +868,10 @@ export type SortListRequest = {
   query?: never;
   url: '/api/lists/{id}/sort';
 };
-export type SortListResponse = SingleResponse<List>;
+export type SortListResponses = {
+  200: SingleResponse<List>;
+};
+export type SortListResponse = SortListResponses[keyof SortListResponses];
 
 // 'DELETE /api/lists/:id': 'lists/delete'
 export type DeleteListRequest = {
@@ -754,7 +882,10 @@ export type DeleteListRequest = {
   query?: never;
   url: '/api/lists/{id}';
 };
-export type DeleteListResponse = SingleResponse<List>;
+export type DeleteListResponses = {
+  200: SingleResponse<List>;
+};
+export type DeleteListResponse = DeleteListResponses[keyof DeleteListResponses];
 
 // 'POST /api/lists/:listId/cards': 'cards/create'
 export type CreateCardRequest = {
@@ -768,7 +899,10 @@ export type CreateCardRequest = {
   query?: never;
   url: '/api/lists/{listId}/cards';
 };
-export type CreateCardResponse = SingleResponse<Card>;
+export type CreateCardResponses = {
+  200: SingleResponse<Card>;
+};
+export type CreateCardResponse = CreateCardResponses[keyof CreateCardResponses];
 
 // 'GET /api/cards/:id': 'cards/show'
 export type GetCardRequest = {
@@ -779,7 +913,10 @@ export type GetCardRequest = {
   query?: never;
   url: '/api/cards/{id}';
 };
-export type GetCardResponse = SingleResponse<Card>;
+export type GetCardResponses = {
+  200: SingleResponse<Card>;
+};
+export type GetCardResponse = GetCardResponses[keyof GetCardResponses];
 
 // 'PATCH /api/cards/:id': 'cards/update'
 export type UpdateCardRequest = {
@@ -790,7 +927,10 @@ export type UpdateCardRequest = {
   query?: never;
   url: '/api/cards/{id}';
 };
-export type UpdateCardResponse = SingleResponse<Card>;
+export type UpdateCardResponses = {
+  200: SingleResponse<Card>;
+};
+export type UpdateCardResponse = UpdateCardResponses[keyof UpdateCardResponses];
 
 // 'POST /api/cards/:id/duplicate': 'cards/duplicate'
 export type DuplicateCardRequest = {
@@ -803,7 +943,10 @@ export type DuplicateCardRequest = {
   query?: never;
   url: '/api/cards/{id}/duplicate';
 };
-export type DuplicateCardResponse = SingleResponse<Card>;
+export type DuplicateCardResponses = {
+  200: SingleResponse<Card>;
+};
+export type DuplicateCardResponse = DuplicateCardResponses[keyof DuplicateCardResponses];
 
 // 'DELETE /api/cards/:id': 'cards/delete'
 export type DeleteCardRequest = {
@@ -814,7 +957,10 @@ export type DeleteCardRequest = {
   query?: never;
   url: '/api/cards/{id}';
 };
-export type DeleteCardResponse = SingleResponse<Card>;
+export type DeleteCardResponses = {
+  200: SingleResponse<Card>;
+};
+export type DeleteCardResponse = DeleteCardResponses[keyof DeleteCardResponses];
 
 // 'POST /api/cards/:cardId/memberships': 'card-memberships/create'
 export type CreateCardMembershipRequest = {
@@ -827,7 +973,10 @@ export type CreateCardMembershipRequest = {
   query?: never;
   url: '/api/cards/{cardId}/memberships';
 };
-export type CreateCardMembershipResponse = SingleResponse<CardMembership>;
+export type CreateCardMembershipResponses = {
+  200: SingleResponse<CardMembership>;
+};
+export type CreateCardMembershipResponse = CreateCardMembershipResponses[keyof CreateCardMembershipResponses];
 
 // 'DELETE /api/cards/:cardId/memberships': 'card-memberships/delete'
 export type DeleteCardMembershipRequest = {
@@ -840,7 +989,10 @@ export type DeleteCardMembershipRequest = {
   query?: never;
   url: '/api/cards/{cardId}/memberships';
 };
-export type DeleteCardMembershipResponse = SingleResponse<CardMembership>;
+export type DeleteCardMembershipResponses = {
+  200: SingleResponse<CardMembership>;
+};
+export type DeleteCardMembershipResponse = DeleteCardMembershipResponses[keyof DeleteCardMembershipResponses];
 
 // 'POST /api/cards/:cardId/labels': 'card-labels/create'
 export type CreateCardLabelRequest = {
@@ -853,7 +1005,10 @@ export type CreateCardLabelRequest = {
   query?: never;
   url: '/api/cards/{cardId}/labels';
 };
-export type CreateCardLabelResponse = SingleResponse<CardLabel>;
+export type CreateCardLabelResponses = {
+  200: SingleResponse<CardLabel>;
+};
+export type CreateCardLabelResponse = CreateCardLabelResponses[keyof CreateCardLabelResponses];
 
 // 'DELETE /api/cards/:cardId/labels/:labelId': 'card-labels/delete'
 export type DeleteCardLabelRequest = {
@@ -865,7 +1020,10 @@ export type DeleteCardLabelRequest = {
   query?: never;
   url: '/api/cards/{cardId}/labels/{labelId}';
 };
-export type DeleteCardLabelResponse = SingleResponse<CardLabel>;
+export type DeleteCardLabelResponses = {
+  200: SingleResponse<CardLabel>;
+};
+export type DeleteCardLabelResponse = DeleteCardLabelResponses[keyof DeleteCardLabelResponses];
 
 // 'POST /api/cards/:cardId/tasks': 'tasks/create'
 export type CreateTaskRequest = {
@@ -879,7 +1037,10 @@ export type CreateTaskRequest = {
   query?: never;
   url: '/api/cards/{cardId}/tasks';
 };
-export type CreateTaskResponse = SingleResponse<Task>;
+export type CreateTaskResponses = {
+  200: SingleResponse<Task>;
+};
+export type CreateTaskResponse = CreateTaskResponses[keyof CreateTaskResponses];
 
 // 'PATCH /api/tasks/:id': 'tasks/update'
 export type UpdateTaskRequest = {
@@ -890,7 +1051,10 @@ export type UpdateTaskRequest = {
   query?: never;
   url: '/api/tasks/{id}';
 };
-export type UpdateTaskResponse = SingleResponse<Task>;
+export type UpdateTaskResponses = {
+  200: SingleResponse<Task>;
+};
+export type UpdateTaskResponse = UpdateTaskResponses[keyof UpdateTaskResponses];
 
 // 'DELETE /api/tasks/:id': 'tasks/delete'
 export type DeleteTaskRequest = {
@@ -901,7 +1065,10 @@ export type DeleteTaskRequest = {
   query?: never;
   url: '/api/tasks/{id}';
 };
-export type DeleteTaskResponse = SingleResponse<Task>;
+export type DeleteTaskResponses = {
+  200: SingleResponse<Task>;
+};
+export type DeleteTaskResponse = DeleteTaskResponses[keyof DeleteTaskResponses];
 
 // 'POST /api/cards/:cardId/attachments': 'attachments/create'
 export type CreateAttachmentRequest = {
@@ -914,7 +1081,10 @@ export type CreateAttachmentRequest = {
   query?: never;
   url: '/api/cards/{cardId}/attachments';
 };
-export type CreateAttachmentResponse = SingleResponse<Attachment>;
+export type CreateAttachmentResponses = {
+  200: SingleResponse<Attachment>;
+};
+export type CreateAttachmentResponse = CreateAttachmentResponses[keyof CreateAttachmentResponses];
 
 // 'PATCH /api/attachments/:id': 'attachments/update'
 export type UpdateAttachmentRequest = {
@@ -925,7 +1095,10 @@ export type UpdateAttachmentRequest = {
   query?: never;
   url: '/api/attachments/{id}';
 };
-export type UpdateAttachmentResponse = SingleResponse<Attachment>;
+export type UpdateAttachmentResponses = {
+  200: SingleResponse<Attachment>;
+};
+export type UpdateAttachmentResponse = UpdateAttachmentResponses[keyof UpdateAttachmentResponses];
 
 // 'DELETE /api/attachments/:id': 'attachments/delete'
 export type DeleteAttachmentRequest = {
@@ -936,7 +1109,10 @@ export type DeleteAttachmentRequest = {
   query?: never;
   url: '/api/attachments/{id}';
 };
-export type DeleteAttachmentResponse = SingleResponse<Attachment>;
+export type DeleteAttachmentResponses = {
+  200: SingleResponse<Attachment>;
+};
+export type DeleteAttachmentResponse = DeleteAttachmentResponses[keyof DeleteAttachmentResponses];
 
 // 'GET /attachments/:id/download/:filename'
 export type GetAttachmentRequest = {
@@ -948,7 +1124,10 @@ export type GetAttachmentRequest = {
   query?: never;
   url: '/attachments/{id}/download/{filename}';
 };
-export type GetAttachmentResponse = Blob;
+export type GetAttachmentResponses = {
+  200: Blob;
+};
+export type GetAttachmentResponse = GetAttachmentResponses[keyof GetAttachmentResponses];
 
 // 'GET /attachments/:id/download/thumbnails/cover-256.:extension'
 export type GetAttachmentThumbnailRequest = {
@@ -960,7 +1139,10 @@ export type GetAttachmentThumbnailRequest = {
   query?: never;
   url: '/attachments/{id}/download/thumbnails/cover-256.{extension}';
 };
-export type GetAttachmentThumbnailResponse = Blob;
+export type GetAttachmentThumbnailResponses = {
+  200: Blob;
+};
+export type GetAttachmentThumbnailResponse = GetAttachmentThumbnailResponses[keyof GetAttachmentThumbnailResponses];
 
 // 'GET /api/cards/:cardId/actions': 'actions/index'
 export type GetCardActionsRequest = {
@@ -971,7 +1153,10 @@ export type GetCardActionsRequest = {
   query?: never;
   url: '/api/cards/{cardId}/actions';
 };
-export type GetCardActionsResponse = ArrayResponse<Action>;
+export type GetCardActionsResponses = {
+  200: ArrayResponse<Action>;
+};
+export type GetCardActionsResponse = GetCardActionsResponses[keyof GetCardActionsResponses];
 
 // 'POST /api/cards/:cardId/comment-actions': 'comment-actions/create'
 export type CreateCommentActionRequest = {
@@ -984,7 +1169,10 @@ export type CreateCommentActionRequest = {
   query?: never;
   url: '/api/cards/{cardId}/comment-actions';
 };
-export type CreateCommentActionResponse = SingleResponse<Comment>;
+export type CreateCommentActionResponses = {
+  200: SingleResponse<Comment>;
+};
+export type CreateCommentActionResponse = CreateCommentActionResponses[keyof CreateCommentActionResponses];
 
 // 'PATCH /api/comment-actions/:id': 'comment-actions/update'
 export type UpdateCommentActionRequest = {
@@ -997,7 +1185,10 @@ export type UpdateCommentActionRequest = {
   query?: never;
   url: '/api/comment-actions/{id}';
 };
-export type UpdateCommentActionResponse = SingleResponse<Comment>;
+export type UpdateCommentActionResponses = {
+  200: SingleResponse<Comment>;
+};
+export type UpdateCommentActionResponse = UpdateCommentActionResponses[keyof UpdateCommentActionResponses];
 
 // 'DELETE /api/comment-actions/:id': 'comment-actions/delete'
 export type DeleteCommentActionRequest = {
@@ -1008,7 +1199,10 @@ export type DeleteCommentActionRequest = {
   query?: never;
   url: '/api/comment-actions/{id}';
 };
-export type DeleteCommentActionResponse = SingleResponse<Comment>;
+export type DeleteCommentActionResponses = {
+  200: SingleResponse<Comment>;
+};
+export type DeleteCommentActionResponse = DeleteCommentActionResponses[keyof DeleteCommentActionResponses];
 
 // 'GET /api/notifications': 'notifications/index'
 export type GetNotificationsRequest = {
@@ -1017,7 +1211,10 @@ export type GetNotificationsRequest = {
   query?: never;
   url: '/api/notifications';
 };
-export type GetNotificationsResponse = ArrayResponse<Notification>;
+export type GetNotificationsResponses = {
+  200: ArrayResponse<Notification>;
+};
+export type GetNotificationsResponse = GetNotificationsResponses[keyof GetNotificationsResponses];
 
 // 'GET /api/notifications/:id': 'notifications/show'
 export type GetNotificationRequest = {
@@ -1028,7 +1225,10 @@ export type GetNotificationRequest = {
   query?: never;
   url: '/api/notifications/{id}';
 };
-export type GetNotificationResponse = SingleResponse<Notification>;
+export type GetNotificationResponses = {
+  200: SingleResponse<Notification>;
+};
+export type GetNotificationResponse = GetNotificationResponses[keyof GetNotificationResponses];
 
 // 'PATCH /api/notifications/:ids': 'notifications/update'
 export type UpdateNotificationsRequest = {
@@ -1039,4 +1239,7 @@ export type UpdateNotificationsRequest = {
   query?: never;
   url: '/api/notifications/{ids}';
 };
-export type UpdateNotificationsResponse = ArrayResponse<Notification>;
+export type UpdateNotificationsResponses = {
+  200: ArrayResponse<Notification>;
+};
+export type UpdateNotificationsResponse = UpdateNotificationsResponses[keyof UpdateNotificationsResponses];
