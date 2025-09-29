@@ -11,124 +11,124 @@ import {
 import {
   AuthorizeError,
   AuthorizeOidcRequest,
-  AuthorizeOidcResponse,
+  AuthorizeOidcResponses,
   AuthorizeRequest,
-  AuthorizeResponse,
+  AuthorizeResponses,
   CreateAttachmentRequest,
-  CreateAttachmentResponse,
+  CreateAttachmentResponses,
   CreateBoardMembershipRequest,
-  CreateBoardMembershipResponse,
+  CreateBoardMembershipResponses,
   CreateBoardRequest,
-  CreateBoardResponse,
+  CreateBoardResponses,
   CreateCardLabelRequest,
-  CreateCardLabelResponse,
+  CreateCardLabelResponses,
   CreateCardMembershipRequest,
-  CreateCardMembershipResponse,
+  CreateCardMembershipResponses,
   CreateCardRequest,
-  CreateCardResponse,
+  CreateCardResponses,
   CreateCommentActionRequest,
-  CreateCommentActionResponse,
+  CreateCommentActionResponses,
   CreateLabelRequest,
-  CreateLabelResponse,
+  CreateLabelResponses,
   CreateListRequest,
-  CreateListResponse,
+  CreateListResponses,
   CreateProjectManagerRequest,
-  CreateProjectManagerResponse,
+  CreateProjectManagerResponses,
   CreateProjectRequest,
-  CreateProjectResponse,
+  CreateProjectResponses,
   CreateTaskRequest,
-  CreateTaskResponse,
+  CreateTaskResponses,
   CreateUserRequest,
-  CreateUserResponse,
+  CreateUserResponses,
   DeleteAttachmentRequest,
-  DeleteAttachmentResponse,
+  DeleteAttachmentResponses,
   DeleteBoardMembershipRequest,
-  DeleteBoardMembershipResponse,
+  DeleteBoardMembershipResponses,
   DeleteBoardRequest,
-  DeleteBoardResponse,
+  DeleteBoardResponses,
   DeleteCardLabelRequest,
-  DeleteCardLabelResponse,
+  DeleteCardLabelResponses,
   DeleteCardMembershipRequest,
-  DeleteCardMembershipResponse,
+  DeleteCardMembershipResponses,
   DeleteCardRequest,
-  DeleteCardResponse,
+  DeleteCardResponses,
   DeleteCommentActionRequest,
-  DeleteCommentActionResponse,
+  DeleteCommentActionResponses,
   DeleteLabelRequest,
-  DeleteLabelResponse,
+  DeleteLabelResponses,
   DeleteListRequest,
-  DeleteListResponse,
+  DeleteListResponses,
   DeleteProjectManagerRequest,
-  DeleteProjectManagerResponse,
+  DeleteProjectManagerResponses,
   DeleteProjectRequest,
-  DeleteProjectResponse,
+  DeleteProjectResponses,
   DeleteTaskRequest,
-  DeleteTaskResponse,
+  DeleteTaskResponses,
   DeleteUserRequest,
-  DeleteUserResponse,
+  DeleteUserResponses,
   DuplicateCardRequest,
-  DuplicateCardResponse,
+  DuplicateCardResponses,
   GetAttachmentRequest,
-  GetAttachmentResponse,
+  GetAttachmentResponses,
   GetAttachmentThumbnailRequest,
-  GetAttachmentThumbnailResponse,
+  GetAttachmentThumbnailResponses,
   GetBoardRequest,
-  GetBoardResponse,
+  GetBoardResponses,
   GetCardActionsRequest,
-  GetCardActionsResponse,
+  GetCardActionsResponses,
   GetCardRequest,
-  GetCardResponse,
+  GetCardResponses,
   GetConfigRequest,
-  GetConfigResponse,
+  GetConfigResponses,
   GetNotificationRequest,
-  GetNotificationResponse,
+  GetNotificationResponses,
   GetNotificationsRequest,
-  GetNotificationsResponse,
+  GetNotificationsResponses,
   GetProjectRequest,
-  GetProjectResponse,
+  GetProjectResponses,
   GetProjectsRequest,
-  GetProjectsResponse,
+  GetProjectsResponses,
   GetUserRequest,
-  GetUserResponse,
+  GetUserResponses,
   GetUsersRequest,
-  GetUsersResponse,
-  HttpError,
+  GetUsersResponses,
+  HttpErrors,
   SortListRequest,
-  SortListResponse,
+  SortListResponses,
   UnauthorizeRequest,
-  UnauthorizeResponse,
+  UnauthorizeResponses,
   UpdateAttachmentRequest,
-  UpdateAttachmentResponse,
+  UpdateAttachmentResponses,
   UpdateBoardMembershipRequest,
-  UpdateBoardMembershipResponse,
+  UpdateBoardMembershipResponses,
   UpdateBoardRequest,
-  UpdateBoardResponse,
+  UpdateBoardResponses,
   UpdateCardRequest,
-  UpdateCardResponse,
+  UpdateCardResponses,
   UpdateCommentActionRequest,
-  UpdateCommentActionResponse,
+  UpdateCommentActionResponses,
   UpdateLabelRequest,
-  UpdateLabelResponse,
+  UpdateLabelResponses,
   UpdateListRequest,
-  UpdateListResponse,
+  UpdateListResponses,
   UpdateNotificationsRequest,
-  UpdateNotificationsResponse,
+  UpdateNotificationsResponses,
   UpdateProjectBackgroundImageRequest,
-  UpdateProjectBackgroundImageResponse,
+  UpdateProjectBackgroundImageResponses,
   UpdateProjectRequest,
-  UpdateProjectResponse,
+  UpdateProjectResponses,
   UpdateTaskRequest,
-  UpdateTaskResponse,
+  UpdateTaskResponses,
   UpdateUserAvatarRequest,
-  UpdateUserAvatarResponse,
+  UpdateUserAvatarResponses,
   UpdateUserEmailRequest,
-  UpdateUserEmailResponse,
+  UpdateUserEmailResponses,
   UpdateUserPasswordRequest,
-  UpdateUserPasswordResponse,
+  UpdateUserPasswordResponses,
   UpdateUserRequest,
-  UpdateUserResponse,
+  UpdateUserResponses,
   UpdateUserUsernameRequest,
-  UpdateUserUsernameResponse,
+  UpdateUserUsernameResponses,
 } from './types';
 
 export type ClientOptions = {
@@ -155,7 +155,7 @@ export const client = createClient(createConfig<ClientOptions>());
  * @param options
  */
 export const getConfig = <ThrowOnError extends boolean = false>(options?: Options<GetConfigRequest, ThrowOnError>) => {
-  return (options?.client ?? client).get<GetConfigResponse, unknown, ThrowOnError>({
+  return (options?.client ?? client).get<GetConfigResponses, unknown, ThrowOnError>({
     ...options,
     url: '/api/config',
   });
@@ -167,7 +167,7 @@ export const getConfig = <ThrowOnError extends boolean = false>(options?: Option
  * @param options
  */
 export const authorize = <ThrowOnError extends boolean = false>(options: Options<AuthorizeRequest, ThrowOnError>) => {
-  return (options?.client ?? client).post<AuthorizeResponse, AuthorizeError, ThrowOnError>({
+  return (options?.client ?? client).post<AuthorizeResponses, AuthorizeError, ThrowOnError>({
     ...options,
     url: '/api/access-tokens',
   });
@@ -182,7 +182,7 @@ export const authorize = <ThrowOnError extends boolean = false>(options: Options
 export const authorizeOidc = <ThrowOnError extends boolean = false>(
   options: Options<AuthorizeOidcRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<AuthorizeOidcResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<AuthorizeOidcResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/access-tokens/exchange-using-oidc',
   });
@@ -196,7 +196,7 @@ export const authorizeOidc = <ThrowOnError extends boolean = false>(
 export const unauthorize = <ThrowOnError extends boolean = false>(
   options?: Options<UnauthorizeRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<UnauthorizeResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<UnauthorizeResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/access-tokens/me',
   });
@@ -208,7 +208,7 @@ export const unauthorize = <ThrowOnError extends boolean = false>(
  * @param options
  */
 export const getUsers = <ThrowOnError extends boolean = false>(options?: Options<GetUsersRequest, ThrowOnError>) => {
-  return (options?.client ?? client).get<GetUsersResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetUsersResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users',
   });
@@ -220,7 +220,7 @@ export const getUsers = <ThrowOnError extends boolean = false>(options?: Options
  * @param options
  */
 export const createUser = <ThrowOnError extends boolean = false>(options: Options<CreateUserRequest, ThrowOnError>) => {
-  return (options?.client ?? client).post<CreateUserResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateUserResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users',
   });
@@ -232,7 +232,7 @@ export const createUser = <ThrowOnError extends boolean = false>(options: Option
  * @param options
  */
 export const getUser = <ThrowOnError extends boolean = false>(options: Options<GetUserRequest, ThrowOnError>) => {
-  return (options?.client ?? client).get<GetUserResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetUserResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users/{id}',
   });
@@ -244,7 +244,7 @@ export const getUser = <ThrowOnError extends boolean = false>(options: Options<G
  * @param options
  */
 export const updateUser = <ThrowOnError extends boolean = false>(options: Options<UpdateUserRequest, ThrowOnError>) => {
-  return (options?.client ?? client).patch<UpdateUserResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateUserResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users/{id}',
   });
@@ -258,7 +258,7 @@ export const updateUser = <ThrowOnError extends boolean = false>(options: Option
 export const updateUserEmail = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserEmailRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateUserEmailResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateUserEmailResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users/{id}/email',
   });
@@ -272,7 +272,7 @@ export const updateUserEmail = <ThrowOnError extends boolean = false>(
 export const updateUserPassword = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserPasswordRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateUserPasswordResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateUserPasswordResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users/{id}/password',
   });
@@ -286,7 +286,7 @@ export const updateUserPassword = <ThrowOnError extends boolean = false>(
 export const updateUserUsername = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserUsernameRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateUserUsernameResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateUserUsernameResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users/{id}/username',
   });
@@ -300,7 +300,7 @@ export const updateUserUsername = <ThrowOnError extends boolean = false>(
 export const updateUserAvatar = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserAvatarRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<UpdateUserAvatarResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<UpdateUserAvatarResponses, HttpErrors, ThrowOnError>({
     ...formDataBodySerializer,
     ...options,
     headers: {
@@ -316,7 +316,7 @@ export const updateUserAvatar = <ThrowOnError extends boolean = false>(
  * @param options
  */
 export const deleteUser = <ThrowOnError extends boolean = false>(options: Options<DeleteUserRequest, ThrowOnError>) => {
-  return (options?.client ?? client).delete<DeleteUserResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteUserResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/users/{id}',
   });
@@ -330,7 +330,7 @@ export const deleteUser = <ThrowOnError extends boolean = false>(options: Option
 export const getProjects = <ThrowOnError extends boolean = false>(
   options: Options<GetProjectsRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<GetProjectsResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetProjectsResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/projects',
   });
@@ -344,7 +344,7 @@ export const getProjects = <ThrowOnError extends boolean = false>(
 export const createProject = <ThrowOnError extends boolean = false>(
   options: Options<CreateProjectRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateProjectResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateProjectResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/projects',
   });
@@ -356,7 +356,7 @@ export const createProject = <ThrowOnError extends boolean = false>(
  * @param options
  */
 export const getProject = <ThrowOnError extends boolean = false>(options: Options<GetProjectRequest, ThrowOnError>) => {
-  return (options?.client ?? client).get<GetProjectResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetProjectResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/projects/{id}',
   });
@@ -370,7 +370,7 @@ export const getProject = <ThrowOnError extends boolean = false>(options: Option
 export const updateProject = <ThrowOnError extends boolean = false>(
   options: Options<UpdateProjectRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateProjectResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateProjectResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/projects/{id}',
   });
@@ -384,7 +384,7 @@ export const updateProject = <ThrowOnError extends boolean = false>(
 export const updateProjectBackgroundImage = <ThrowOnError extends boolean = false>(
   options: Options<UpdateProjectBackgroundImageRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<UpdateProjectBackgroundImageResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<UpdateProjectBackgroundImageResponses, HttpErrors, ThrowOnError>({
     ...formDataBodySerializer,
     ...options,
     headers: {
@@ -402,7 +402,7 @@ export const updateProjectBackgroundImage = <ThrowOnError extends boolean = fals
 export const deleteProject = <ThrowOnError extends boolean = false>(
   options: Options<DeleteProjectRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteProjectResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteProjectResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/projects/{id}',
   });
@@ -416,7 +416,7 @@ export const deleteProject = <ThrowOnError extends boolean = false>(
 export const createProjectManager = <ThrowOnError extends boolean = false>(
   options: Options<CreateProjectManagerRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateProjectManagerResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateProjectManagerResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/projects/{projectId}/managers',
   });
@@ -430,7 +430,7 @@ export const createProjectManager = <ThrowOnError extends boolean = false>(
 export const deleteProjectManager = <ThrowOnError extends boolean = false>(
   options: Options<DeleteProjectManagerRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteProjectManagerResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteProjectManagerResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/project-managers/{id}',
   });
@@ -444,7 +444,7 @@ export const deleteProjectManager = <ThrowOnError extends boolean = false>(
 export const createBoard = <ThrowOnError extends boolean = false>(
   options: Options<CreateBoardRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateBoardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateBoardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/projects/{projectId}/boards',
   });
@@ -456,7 +456,7 @@ export const createBoard = <ThrowOnError extends boolean = false>(
  * @param options
  */
 export const getBoard = <ThrowOnError extends boolean = false>(options: Options<GetBoardRequest, ThrowOnError>) => {
-  return (options?.client ?? client).get<GetBoardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetBoardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/boards/{id}',
   });
@@ -470,7 +470,7 @@ export const getBoard = <ThrowOnError extends boolean = false>(options: Options<
 export const updateBoard = <ThrowOnError extends boolean = false>(
   options: Options<UpdateBoardRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateBoardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateBoardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/boards/{id}',
   });
@@ -484,7 +484,7 @@ export const updateBoard = <ThrowOnError extends boolean = false>(
 export const deleteBoard = <ThrowOnError extends boolean = false>(
   options: Options<DeleteBoardRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteBoardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteBoardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/boards/{id}',
   });
@@ -498,7 +498,7 @@ export const deleteBoard = <ThrowOnError extends boolean = false>(
 export const createBoardMembership = <ThrowOnError extends boolean = false>(
   options: Options<CreateBoardMembershipRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateBoardMembershipResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateBoardMembershipResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/boards/{boardId}/memberships',
   });
@@ -512,7 +512,7 @@ export const createBoardMembership = <ThrowOnError extends boolean = false>(
 export const updateBoardMembership = <ThrowOnError extends boolean = false>(
   options: Options<UpdateBoardMembershipRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateBoardMembershipResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateBoardMembershipResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/board-memberships/{id}',
   });
@@ -526,7 +526,7 @@ export const updateBoardMembership = <ThrowOnError extends boolean = false>(
 export const deleteBoardMembership = <ThrowOnError extends boolean = false>(
   options: Options<DeleteBoardMembershipRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteBoardMembershipResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteBoardMembershipResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/board-memberships/{id}',
   });
@@ -540,7 +540,7 @@ export const deleteBoardMembership = <ThrowOnError extends boolean = false>(
 export const createLabel = <ThrowOnError extends boolean = false>(
   options: Options<CreateLabelRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateLabelResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateLabelResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/boards/{boardId}/labels',
   });
@@ -554,7 +554,7 @@ export const createLabel = <ThrowOnError extends boolean = false>(
 export const updateLabel = <ThrowOnError extends boolean = false>(
   options: Options<UpdateLabelRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateLabelResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateLabelResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/labels/{id}',
   });
@@ -568,7 +568,7 @@ export const updateLabel = <ThrowOnError extends boolean = false>(
 export const deleteLabel = <ThrowOnError extends boolean = false>(
   options: Options<DeleteLabelRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteLabelResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteLabelResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/labels/{id}',
   });
@@ -580,7 +580,7 @@ export const deleteLabel = <ThrowOnError extends boolean = false>(
  * @param options
  */
 export const createList = <ThrowOnError extends boolean = false>(options: Options<CreateListRequest, ThrowOnError>) => {
-  return (options?.client ?? client).post<CreateListResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateListResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/boards/{boardId}/lists',
   });
@@ -592,7 +592,7 @@ export const createList = <ThrowOnError extends boolean = false>(options: Option
  * @param options
  */
 export const updateList = <ThrowOnError extends boolean = false>(options: Options<UpdateListRequest, ThrowOnError>) => {
-  return (options?.client ?? client).patch<UpdateListResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateListResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/lists/{id}',
   });
@@ -604,7 +604,7 @@ export const updateList = <ThrowOnError extends boolean = false>(options: Option
  * @param options
  */
 export const sortList = <ThrowOnError extends boolean = false>(options: Options<SortListRequest, ThrowOnError>) => {
-  return (options?.client ?? client).post<SortListResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<SortListResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/lists/{id}/sort',
   });
@@ -616,7 +616,7 @@ export const sortList = <ThrowOnError extends boolean = false>(options: Options<
  * @param options
  */
 export const deleteList = <ThrowOnError extends boolean = false>(options: Options<DeleteListRequest, ThrowOnError>) => {
-  return (options?.client ?? client).delete<DeleteListResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteListResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/lists/{id}',
   });
@@ -628,7 +628,7 @@ export const deleteList = <ThrowOnError extends boolean = false>(options: Option
  * @param options
  */
 export const createCard = <ThrowOnError extends boolean = false>(options: Options<CreateCardRequest, ThrowOnError>) => {
-  return (options?.client ?? client).post<CreateCardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateCardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/lists/{listId}/cards',
   });
@@ -640,7 +640,7 @@ export const createCard = <ThrowOnError extends boolean = false>(options: Option
  * @param options
  */
 export const getCard = <ThrowOnError extends boolean = false>(options: Options<GetCardRequest, ThrowOnError>) => {
-  return (options?.client ?? client).get<GetCardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetCardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{id}',
   });
@@ -652,7 +652,7 @@ export const getCard = <ThrowOnError extends boolean = false>(options: Options<G
  * @param options
  */
 export const updateCard = <ThrowOnError extends boolean = false>(options: Options<UpdateCardRequest, ThrowOnError>) => {
-  return (options?.client ?? client).patch<UpdateCardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateCardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{id}',
   });
@@ -666,7 +666,7 @@ export const updateCard = <ThrowOnError extends boolean = false>(options: Option
 export const duplicateCard = <ThrowOnError extends boolean = false>(
   options: Options<DuplicateCardRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<DuplicateCardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<DuplicateCardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{id}/duplicate',
   });
@@ -678,7 +678,7 @@ export const duplicateCard = <ThrowOnError extends boolean = false>(
  * @param options
  */
 export const deleteCard = <ThrowOnError extends boolean = false>(options: Options<DeleteCardRequest, ThrowOnError>) => {
-  return (options?.client ?? client).delete<DeleteCardResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteCardResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{id}',
   });
@@ -692,7 +692,7 @@ export const deleteCard = <ThrowOnError extends boolean = false>(options: Option
 export const createCardMembership = <ThrowOnError extends boolean = false>(
   options: Options<CreateCardMembershipRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateCardMembershipResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateCardMembershipResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{cardId}/memberships',
   });
@@ -706,7 +706,7 @@ export const createCardMembership = <ThrowOnError extends boolean = false>(
 export const deleteCardMembership = <ThrowOnError extends boolean = false>(
   options: Options<DeleteCardMembershipRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteCardMembershipResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteCardMembershipResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{cardId}/memberships',
   });
@@ -720,7 +720,7 @@ export const deleteCardMembership = <ThrowOnError extends boolean = false>(
 export const createCardLabel = <ThrowOnError extends boolean = false>(
   options: Options<CreateCardLabelRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateCardLabelResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateCardLabelResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{cardId}/labels',
   });
@@ -734,7 +734,7 @@ export const createCardLabel = <ThrowOnError extends boolean = false>(
 export const deleteCardLabel = <ThrowOnError extends boolean = false>(
   options: Options<DeleteCardLabelRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteCardLabelResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteCardLabelResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{cardId}/labels/{labelId}',
   });
@@ -746,7 +746,7 @@ export const deleteCardLabel = <ThrowOnError extends boolean = false>(
  * @param options
  */
 export const createTask = <ThrowOnError extends boolean = false>(options: Options<CreateTaskRequest, ThrowOnError>) => {
-  return (options?.client ?? client).post<CreateTaskResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateTaskResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{cardId}/tasks',
   });
@@ -758,7 +758,7 @@ export const createTask = <ThrowOnError extends boolean = false>(options: Option
  * @param options
  */
 export const updateTask = <ThrowOnError extends boolean = false>(options: Options<UpdateTaskRequest, ThrowOnError>) => {
-  return (options?.client ?? client).patch<UpdateTaskResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateTaskResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/tasks/{id}',
   });
@@ -770,7 +770,7 @@ export const updateTask = <ThrowOnError extends boolean = false>(options: Option
  * @param options
  */
 export const deleteTask = <ThrowOnError extends boolean = false>(options: Options<DeleteTaskRequest, ThrowOnError>) => {
-  return (options?.client ?? client).delete<DeleteTaskResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteTaskResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/tasks/{id}',
   });
@@ -784,7 +784,7 @@ export const deleteTask = <ThrowOnError extends boolean = false>(options: Option
 export const createAttachment = <ThrowOnError extends boolean = false>(
   options: Options<CreateAttachmentRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateAttachmentResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateAttachmentResponses, HttpErrors, ThrowOnError>({
     ...formDataBodySerializer,
     ...options,
     headers: {
@@ -802,7 +802,7 @@ export const createAttachment = <ThrowOnError extends boolean = false>(
 export const updateAttachment = <ThrowOnError extends boolean = false>(
   options: Options<UpdateAttachmentRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateAttachmentResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateAttachmentResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/attachments/{id}',
   });
@@ -816,7 +816,7 @@ export const updateAttachment = <ThrowOnError extends boolean = false>(
 export const deleteAttachment = <ThrowOnError extends boolean = false>(
   options: Options<DeleteAttachmentRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteAttachmentResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteAttachmentResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/attachments/{id}',
   });
@@ -831,7 +831,7 @@ export const deleteAttachment = <ThrowOnError extends boolean = false>(
 export const getAttachment = <ThrowOnError extends boolean = false>(
   options: Options<GetAttachmentRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<GetAttachmentResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetAttachmentResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/attachments/{id}/download/{filename}',
   });
@@ -846,7 +846,7 @@ export const getAttachment = <ThrowOnError extends boolean = false>(
 export const getAttachmentThumbnail = <ThrowOnError extends boolean = false>(
   options: Options<GetAttachmentThumbnailRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<GetAttachmentThumbnailResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetAttachmentThumbnailResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/attachments/{id}/download/thumbnails/cover-256.{extension}',
   });
@@ -860,7 +860,7 @@ export const getAttachmentThumbnail = <ThrowOnError extends boolean = false>(
 export const getCardActions = <ThrowOnError extends boolean = false>(
   options: Options<GetCardActionsRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<GetCardActionsResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetCardActionsResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{cardId}/actions',
   });
@@ -874,7 +874,7 @@ export const getCardActions = <ThrowOnError extends boolean = false>(
 export const createCommentAction = <ThrowOnError extends boolean = false>(
   options: Options<CreateCommentActionRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).post<CreateCommentActionResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).post<CreateCommentActionResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/cards/{cardId}/comment-actions',
   });
@@ -888,7 +888,7 @@ export const createCommentAction = <ThrowOnError extends boolean = false>(
 export const updateCommentAction = <ThrowOnError extends boolean = false>(
   options: Options<UpdateCommentActionRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateCommentActionResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateCommentActionResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/comment-actions/{id}',
   });
@@ -902,7 +902,7 @@ export const updateCommentAction = <ThrowOnError extends boolean = false>(
 export const deleteCommentAction = <ThrowOnError extends boolean = false>(
   options: Options<DeleteCommentActionRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).delete<DeleteCommentActionResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).delete<DeleteCommentActionResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/comment-actions/{id}',
   });
@@ -916,7 +916,7 @@ export const deleteCommentAction = <ThrowOnError extends boolean = false>(
 export const getNotifications = <ThrowOnError extends boolean = false>(
   options?: Options<GetNotificationsRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<GetNotificationsResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetNotificationsResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/notifications',
   });
@@ -930,7 +930,7 @@ export const getNotifications = <ThrowOnError extends boolean = false>(
 export const getNotification = <ThrowOnError extends boolean = false>(
   options: Options<GetNotificationRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<GetNotificationResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).get<GetNotificationResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/notifications/{id}',
   });
@@ -944,7 +944,7 @@ export const getNotification = <ThrowOnError extends boolean = false>(
 export const updateNotifications = <ThrowOnError extends boolean = false>(
   options: Options<UpdateNotificationsRequest, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).patch<UpdateNotificationsResponse, HttpError, ThrowOnError>({
+  return (options?.client ?? client).patch<UpdateNotificationsResponses, HttpErrors, ThrowOnError>({
     ...options,
     url: '/api/notifications/{ids}',
   });

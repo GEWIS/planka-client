@@ -1,3 +1,5 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { beforeEach, test, expect, describe } from 'vitest';
 import {
   authorize,
@@ -74,8 +76,6 @@ import {
   getAttachment,
   getAttachmentThumbnail,
 } from '../src';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
 
 let globalUser = {} as User;
 let globalProject = {} as Project;
@@ -124,6 +124,7 @@ describe('Config', () => {
       expect(res.error).to.equal(undefined);
       expect(res.data.item).toEqual(
         expect.objectContaining({
+          allowAllToCreateProjects: false,
           oidc: null,
         }),
       );
@@ -247,7 +248,8 @@ describe('Users', () => {
   test('PATCH /api/users/:id/avatar', async () => {
     const imagePath = path.join(__dirname, 'gewis.jpg');
     const fileBuffer = fs.readFileSync(imagePath);
-    const file = new File([fileBuffer], 'gewis.jpg', { type: 'image/jpeg' });
+    const uint8Array = new Uint8Array(fileBuffer);
+    const file = new File([uint8Array], 'gewis.jpg', { type: 'image/jpeg' });
 
     await updateUserAvatar({
       path: {
@@ -361,7 +363,8 @@ describe('Projects', () => {
   test('PATCH /api/projects/:id/background-image', async () => {
     const imagePath = path.join(__dirname, 'gewis.jpg');
     const fileBuffer = fs.readFileSync(imagePath);
-    const file = new File([fileBuffer], 'gewis.jpg', { type: 'image/jpeg' });
+    const uint8Array = new Uint8Array(fileBuffer);
+    const file = new File([uint8Array], 'gewis.jpg', { type: 'image/jpeg' });
 
     await updateProjectBackgroundImage({
       path: {
@@ -373,9 +376,7 @@ describe('Projects', () => {
     }).then((res) => {
       expect(res.error).to.equal(undefined);
       const project = res.data.item;
-      expect(project.backgroundImage?.url).to.contain(
-        'http://localhost:3000/project-background-images',
-      );
+      expect(project.backgroundImage?.url).to.contain('http://localhost:3000/project-background-images');
       globalProject.backgroundImage = project.backgroundImage;
       expect(project.background).to.not.equal(null);
       expect(project.background.type).to.equal('image');
@@ -670,7 +671,7 @@ describe('Cards', () => {
       body: {
         type: 'createdAt_desc',
       },
-    }).then(async (res) => {
+    }).then((res) => {
       expect(res.error).to.equal(undefined);
       const sortedCards = res.data.included.cards;
       expect(originalCards[0].id).to.equal(sortedCards[1].id);
@@ -840,7 +841,8 @@ describe('Attachments', () => {
   test('POST /api/cards/:cardId/attachments', async () => {
     const imagePath = path.join(__dirname, 'gewis.jpg');
     const fileBuffer = fs.readFileSync(imagePath);
-    const file = new File([fileBuffer], 'gewis.jpg', { type: 'image/jpeg' });
+    const uint8Array = new Uint8Array(fileBuffer);
+    const file = new File([uint8Array], 'gewis.jpg', { type: 'image/jpeg' });
 
     await createAttachment({
       path: {
@@ -875,8 +877,8 @@ describe('Attachments', () => {
     });
   });
 
-  test('GET /attachments/:id/download/:filename', () => {
-    getAttachment({
+  test('GET /attachments/:id/download/:filename', async () => {
+    await getAttachment({
       path: {
         id: globalAttachment.id,
         filename: globalAttachment.name,
@@ -889,8 +891,8 @@ describe('Attachments', () => {
     });
   });
 
-  test('GET /attachments/:id/download/thumbnails/cover-256.:extension', () => {
-    getAttachmentThumbnail({
+  test('GET /attachments/:id/download/thumbnails/cover-256.:extension', async () => {
+    await getAttachmentThumbnail({
       path: {
         id: globalAttachment.id,
         extension: 'png',

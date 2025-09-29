@@ -1,11 +1,4 @@
-import {
-  authorize,
-  client,
-  createBoard,
-  createProject,
-  deleteBoard,
-  deleteProject,
-} from '../dist/planka-client';
+import { authorize, client, createBoard, createProject, deleteBoard, deleteProject } from '../dist/planka-client';
 
 client.setConfig({
   baseUrl: 'http://localhost:3000',
@@ -17,8 +10,7 @@ const accessTokenResponse = await authorize({
     password: 'demo',
   },
 });
-const accessToken = accessTokenResponse.data.item;
-console.log(accessToken);
+const accessToken = accessTokenResponse.data!.item;
 
 client.setConfig({
   baseUrl: 'http://localhost:3000',
@@ -32,7 +24,7 @@ const projectResponse = await createProject({
     name: 'First Project',
   },
 });
-const project = projectResponse.data.item;
+const project = projectResponse.data!.item;
 
 const boardResponse = await createBoard({
   path: {
@@ -43,7 +35,10 @@ const boardResponse = await createBoard({
     name: 'First Project',
   },
 });
-const board = boardResponse.data.item;
+if (boardResponse.error) {
+  throw boardResponse.error;
+}
+const board = boardResponse.data!.item;
 
 await deleteBoard({
   path: {
