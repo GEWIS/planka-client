@@ -1,0 +1,32 @@
+name: Auto-Merge Release PR
+
+on:
+  workflow_run:
+    workflows: ["Lint and build"]
+    types:
+      - completed
+
+permissions:
+  pull-requests: write
+
+jobs:
+  merge_release_pr:
+    name: Merge Release Pull Request
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'develop' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Merge PR from develop to main
+        run: |
+          PR_NUMBER=$(gh pr list --head develop --base main --json number --jq '.[0].number')
+          if [ -n "$PR_NUMBER" ]; then
+            gh pr merge $PR_NUMBER --rebase --auto
+            echo "Merged PR #$PR_NUMBER."
+          else
+            echo "No PR found to merge."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
