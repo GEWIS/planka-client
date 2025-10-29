@@ -1,0 +1,41 @@
+name: Scheduled Semantic Release
+
+on:
+  schedule:
+    - cron: "0 0 * * 5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create_release_pr:
+    name: Create Release Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create PR from develop → main
+        id: create_pr
+        run: |
+          # Check if PR already exists
+          PR_URL=$(gh pr list --head develop --base main --json number --jq '.[0].url')
+          if [ -z "$PR_URL" ]; then
+            PR_URL=$(gh pr create \
+              --base main \
+              --head develop \
+              --title "chore(release): merge develop into main" \
+              --body "Automated scheduled release PR")
+          fi
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
