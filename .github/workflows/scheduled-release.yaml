@@ -1,4 +1,4 @@
-name: Scheduled Semantic Release
+name: Scheduled semantic release
 
 on:
   schedule:
@@ -23,18 +23,22 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Create PR from develop to main
-        id: create_pr
+      - name: Create Pull Request
         run: |
-          # Check if PR already exists
-          PR_URL=$(gh pr list --head develop --base main --json number --jq '.[0].url')
-          if [ -z "$PR_URL" ]; then
-            PR_URL=$(gh pr create \
-              --base main \
-              --head develop \
-              --title "chore(release): merge develop into main" \
-              --body "Automated scheduled release PR")
+          PR_NUMBER=$(gh pr list --head develop --base main --state open --author 'github-actions[bot]' --json number --jq '.[0].number')
+
+          if [ -n "$PR_NUMBER" ]; then
+            echo "Existing release pull request found (#$PR_NUMBER), skipping creation."
+            echo "pr_url=https://github.com/${GITHUB_REPOSITORY}/pull/$PR_NUMBER" >> $GITHUB_OUTPUT
+            exit 0
           fi
+
+          echo "No existing release pull request found, creating a new one."
+          PR_URL=$(gh pr create \
+            --base main \
+            --head develop \
+            --title "chore(release): merge develop into main" \
+            --body "Automated scheduled release PR")
           echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

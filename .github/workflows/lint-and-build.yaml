@@ -35,13 +35,13 @@ jobs:
       - name: Stop Planka
         if: always()
         run: docker compose -f "docker-compose.yml" down
-  dependabot:
+  auto-merge:
     needs: [test]
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
       contents: write
-    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
+    if: ${{ (github.event.pull_request.user.login == 'dependabot[bot]' || github.event.pull_request.user.login == 'github-actions[bot]') && github.event_name == 'pull_request' }}
     steps:
       - run: |
           gh pr review --approve "$PR_URL"
