@@ -1,0 +1,43 @@
+name: Auto-merge pull request
+
+on:
+  workflow_run:
+    workflows: ['Lint and build']
+    types:
+      - completed
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  auto_merge_pr:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get PR number and author safely
+        id: pr
+        run: |
+          PR_NUMBER=$(gh pr list --head "develop" --json number --jq '.[0].number' 2>/dev/null) || true
+
+          if [ -z "$PR_NUMBER" ]; then
+            exit 0
+          fi
+
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
+          AUTHOR=$(gh pr view "$PR_NUMBER" --json author --jq '.author.login')
+          echo "AUTHOR=$AUTHOR" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-merge Pull Request
+        if: ${{ steps.pr.outputs.AUTHOR == 'dependabot[bot]' || steps.pr.outputs.AUTHOR == 'github-actions[bot]' }}
+        run: |
+          gh pr review "$PR_NUMBER" --approve
+          gh pr merge "$PR_NUMBER" --rebase --auto
+        env:
+          PR_NUMBER: ${{ steps.pr.outputs.PR_NUMBER }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
