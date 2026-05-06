@@ -1,53 +1,48 @@
-import { authorize, client, createBoard, createProject, deleteBoard, deleteProject } from '../dist/planka-client';
+/**
+ * Minimal end-to-end example: log in with username/password, create a project +
+ * board, then clean up. Requires a running Planka instance (see docker-compose.yml).
+ *
+ *   yarn build && yarn example
+ */
+import {
+  client,
+  createAccessToken,
+  createBoard,
+  createProject,
+  deleteAccessToken,
+  deleteBoard,
+  deleteProject,
+  withBearerToken,
+} from '../dist/planka-client';
 
 client.setConfig({
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'http://localhost:3000/api',
 });
 
-const accessTokenResponse = await authorize({
-  body: {
-    emailOrUsername: 'demo',
-    password: 'demo',
-  },
+const tokenRes = await createAccessToken({
+  body: { emailOrUsername: 'demo', password: 'demo' },
 });
-const accessToken = accessTokenResponse.data!.item;
+if (tokenRes.error) throw new Error(`createAccessToken: ${JSON.stringify(tokenRes.error)}`);
+const token = tokenRes.data.item;
 
 client.setConfig({
-  baseUrl: 'http://localhost:3000',
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-  },
+  baseUrl: 'http://localhost:3000/api',
+  ...withBearerToken(token),
 });
 
-const projectResponse = await createProject({
-  body: {
-    name: 'First Project',
-  },
+const projectRes = await createProject({
+  body: { type: 'private', name: 'First Project' },
 });
-const project = projectResponse.data!.item;
+if (projectRes.error) throw new Error(`createProject: ${JSON.stringify(projectRes.error)}`);
+const project = projectRes.data.item;
 
-const boardResponse = await createBoard({
-  path: {
-    projectId: project.id,
-  },
-  body: {
-    position: 0,
-    name: 'First Project',
-  },
+const boardRes = await createBoard({
+  path: { projectId: project.id },
+  body: { position: 0, name: 'First Board' },
 });
-if (boardResponse.error) {
-  throw boardResponse.error;
-}
-const board = boardResponse.data!.item;
+if (boardRes.error) throw new Error(`createBoard: ${JSON.stringify(boardRes.error)}`);
+const board = boardRes.data.item;
 
-await deleteBoard({
-  path: {
-    id: board.id,
-  },
-});
-
-await deleteProject({
-  path: {
-    id: project.id,
-  },
-});
+await deleteBoard({ path: { id: board.id } });
+await deleteProject({ path: { id: project.id } });
+await deleteAccessToken();

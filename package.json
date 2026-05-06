@@ -1,17 +1,19 @@
 {
   "name": "@gewis/planka-client",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
     "example": "tsx example/example.ts",
+    "update-swagger": "node scripts/update-swagger.mjs",
+    "generate": "openapi-ts",
     "release-major": "release-it --ci major --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
     "release": "release-it --ci minor --git.commitMessage=\"chore: release ${version}\" --git.requireBranch=main --no-github.release --no-npm.publish",
-    "lint": "eslint src --max-warnings=1",
-    "lint-fix": "eslint src --fix",
-    "format": "prettier --check ./src/",
-    "format-fix": "prettier --write ./src/",
+    "lint": "eslint src test example --max-warnings=1",
+    "lint-fix": "eslint src test example --fix",
+    "format": "prettier --check ./src/ ./test/ ./example/",
+    "format-fix": "prettier --write ./src/ ./test/ ./example/",
     "prepublishOnly": "yarn install --frozen-lockfile && yarn build"
   },
   "main": "dist/planka-client.umd.cjs",
@@ -20,9 +22,9 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/planka-client.d.ts",
       "import": "./dist/planka-client.js",
-      "require": "./dist/planka-client.umd.cjs",
-      "types": "./dist/planka-client.d.ts"
+      "require": "./dist/planka-client.umd.cjs"
     }
   },
   "files": [
@@ -45,6 +47,7 @@
     "@gewis/eslint-config-typescript": "^2.4.0",
     "@gewis/prettier-config": "^2.2.2",
     "@gewis/release-config": "^2.4.0",
+    "@hey-api/openapi-ts": "^0.97.1",
     "@types/node": "^25.2.2",
     "eslint": "^9.39.2",
     "husky": "^9.1.7",

@@ -1,7 +1,10 @@
 {
     "include": [
         "src/**/*",
-        "test/**/*"
+        "test/**/*",
+        "example/**/*",
+        "scripts/**/*",
+        "openapi-ts.config.ts"
     ],
     "exclude": [
         "node_modules",
@@ -10,8 +13,9 @@
         "types": [ "node" ],
         "outDir": "dist",
         "rootDir": ".",
-        "module": "CommonJS",
-        "target": "es2015",
+        "module": "es2022",
+        "target": "es2022",
+        "moduleResolution": "bundler",
         "sourceMap": true,
         "allowJs": true,
         "declaration": true,
