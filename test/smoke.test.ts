@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
+  acceptTerms,
   client,
   createAccessToken,
   createBoard,
@@ -9,6 +10,7 @@ import {
   deleteBoard,
   deleteProject,
   getProjects,
+  getTerms,
   withApiKey,
   withBearerToken,
 } from '../src';
@@ -21,14 +23,27 @@ const unwrap = <T, E>(res: { data?: T; error?: E }, label: string): T => {
   return res.data;
 };
 
+const login = async (emailOrUsername: string, password: string): Promise<string> => {
+  const res = await createAccessToken({ body: { emailOrUsername, password } });
+  if (res.data) return res.data.item;
+
+  const err = res.error as { code?: string; message?: string; pendingToken?: string } | undefined;
+  if (err?.message === 'Terms acceptance required' && err.pendingToken) {
+    const terms = unwrap(await getTerms({ query: { language: 'en-US' } }), 'getTerms');
+    const accepted = unwrap(
+      await acceptTerms({ body: { pendingToken: err.pendingToken, signature: terms.item.signature } }),
+      'acceptTerms',
+    );
+    return accepted.item;
+  }
+  throw new Error(`login: ${JSON.stringify(res.error)}`);
+};
+
 let token: string;
 
 beforeAll(async () => {
   client.setConfig({ baseUrl });
-  const res = await createAccessToken({
-    body: { emailOrUsername: 'demo', password: 'demo' },
-  });
-  token = unwrap(res, 'login').item;
+  token = await login('demo', 'demo');
   client.setConfig({ baseUrl, ...withBearerToken(token) });
 });
 
