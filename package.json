@@ -14,7 +14,7 @@
     "lint-fix": "eslint src test example --fix",
     "format": "prettier --check ./src/ ./test/ ./example/",
     "format-fix": "prettier --write ./src/ ./test/ ./example/",
-    "prepublishOnly": "tsc --noEmit && vite build"
+    "prepublishOnly": "corepack enable && yarn install --immutable && yarn build"
   },
   "main": "dist/planka-client.umd.cjs",
   "module": "dist/planka-client.js",
