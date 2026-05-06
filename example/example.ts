@@ -2,7 +2,7 @@
  * Minimal end-to-end example: log in with username/password, create a project +
  * board, then clean up. Requires a running Planka instance (see docker-compose.yml).
  *
- *   yarn build && yarn example
+ *   yarn example
  */
 import {
   client,
@@ -13,7 +13,7 @@ import {
   deleteBoard,
   deleteProject,
   withBearerToken,
-} from '../dist/planka-client';
+} from '../src';
 
 client.setConfig({
   baseUrl: 'http://localhost:3000/api',
