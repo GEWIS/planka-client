@@ -11,6 +11,7 @@ import {
   deleteProject,
   getProjects,
   getTerms,
+  getUsers,
   withApiKey,
   withBearerToken,
 } from '../src';
@@ -75,9 +76,9 @@ describe('smoke', () => {
   });
 
   test('api key auth: mint key, then use it via withApiKey', async () => {
-    const projects = unwrap(await getProjects(), 'getProjects');
-    const demoUser = projects.included?.users?.find((u) => u.username === 'demo');
-    if (!demoUser) throw new Error('demo user not found in projects.included.users');
+    const users = unwrap(await getUsers(), 'getUsers');
+    const demoUser = users.items.find((u) => u.username === 'demo');
+    if (!demoUser) throw new Error('demo user not found in getUsers response');
 
     const minted = unwrap(await createUserApiKey({ path: { id: demoUser.id } }), 'createUserApiKey');
     const apiKey = minted.included.apiKey;
