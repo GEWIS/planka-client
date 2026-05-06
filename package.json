@@ -14,7 +14,7 @@
     "lint-fix": "eslint src test example --fix",
     "format": "prettier --check ./src/ ./test/ ./example/",
     "format-fix": "prettier --write ./src/ ./test/ ./example/",
-    "prepublishOnly": "yarn install --frozen-lockfile && yarn build"
+    "prepublishOnly": "tsc --noEmit && vite build"
   },
   "main": "dist/planka-client.umd.cjs",
   "module": "dist/planka-client.js",
@@ -58,7 +58,7 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.59.2",
     "vite": "8.0.10",
-    "vite-plugin-dts": "5.0.0",
+    "vite-plugin-dts": "4.5.4",
     "vitest": "4.1.5"
   },
   "dependencies": {
