@@ -446,7 +446,7 @@ __metadata:
     "@gewis/prettier-config": "npm:2.2.2"
     "@gewis/release-config": "npm:2.4.0"
     "@hey-api/client-fetch": "npm:0.13.1"
-    "@hey-api/openapi-ts": "npm:0.97.1"
+    "@hey-api/openapi-ts": "npm:0.97.2"
     "@types/node": "npm:25.9.0"
     eslint: "npm:9.39.4"
     husky: "npm:9.1.7"
@@ -514,13 +514,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:0.97.1":
-  version: 0.97.1
-  resolution: "@hey-api/openapi-ts@npm:0.97.1"
+"@hey-api/openapi-ts@npm:0.97.2":
+  version: 0.97.2
+  resolution: "@hey-api/openapi-ts@npm:0.97.2"
   dependencies:
     "@hey-api/codegen-core": "npm:0.8.1"
     "@hey-api/json-schema-ref-parser": "npm:1.4.2"
-    "@hey-api/shared": "npm:0.4.3"
+    "@hey-api/shared": "npm:0.4.4"
     "@hey-api/spec-types": "npm:0.2.0"
     "@hey-api/types": "npm:0.1.4"
     "@lukeed/ms": "npm:2.0.2"
@@ -531,14 +531,14 @@ __metadata:
   peerDependencies:
     typescript: ">=5.5.3 || >=6.0.0 || 6.0.1-rc"
   bin:
-    openapi-ts: bin/run.js
-  checksum: 10c0/2eabae6d7562abdc1a4e0f469f07dd7ca19db0e93ac37607e8be0a56f869371d971d74d9f2de104939d6bbf4b67a1a96f9339e7084886f066f69d91c29a8f9b4
+    openapi-ts: ./bin/run.js
+  checksum: 10c0/9163d57e3e9905367e908469c8b81c30a183524165cee94020334be59a462560b6863b04ce5e513c6ccb440c2bba79113e0f0a192304b4bff15f20f345efd7a0
   languageName: node
   linkType: hard
 
-"@hey-api/shared@npm:0.4.3":
-  version: 0.4.3
-  resolution: "@hey-api/shared@npm:0.4.3"
+"@hey-api/shared@npm:0.4.4":
+  version: 0.4.4
+  resolution: "@hey-api/shared@npm:0.4.4"
   dependencies:
     "@hey-api/codegen-core": "npm:0.8.1"
     "@hey-api/json-schema-ref-parser": "npm:1.4.2"
@@ -548,7 +548,7 @@ __metadata:
     cross-spawn: "npm:7.0.6"
     open: "npm:11.0.0"
     semver: "npm:7.7.4"
-  checksum: 10c0/291abd880e127a13bea1b1c30956db4d68fb76ecb8f1d6dca45a52ae35538d3ddb82c31a90ef7408f39905a62915e6e8ea7b8424bd4a1b56c6ca7b9649f0da80
+  checksum: 10c0/698dd7ba33424ebe8e087a160399716f5f42470efbc4547c3382f29bbcbf97f5be746049c1d54ca2a00dc0b3e40638f79160e9d3d2d426996468fcee9bbbc6e9
   languageName: node
   linkType: hard
 
