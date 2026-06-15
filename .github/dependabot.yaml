@@ -5,5 +5,7 @@ updates:
       - "."
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
     target-branch: "develop"
     open-pull-requests-limit: 15
