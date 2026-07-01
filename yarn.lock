@@ -439,7 +439,7 @@ __metadata:
     "@gewis/prettier-config": "npm:2.2.2"
     "@gewis/release-config": "npm:2.4.0"
     "@hey-api/client-fetch": "npm:0.13.1"
-    "@hey-api/openapi-ts": "npm:0.98.2"
+    "@hey-api/openapi-ts": "npm:0.99.0"
     "@types/node": "npm:26.0.0"
     eslint: "npm:9.39.4"
     husky: "npm:9.1.7"
@@ -484,36 +484,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:0.9.0":
-  version: 0.9.0
-  resolution: "@hey-api/codegen-core@npm:0.9.0"
+"@hey-api/codegen-core@npm:0.9.1":
+  version: 0.9.1
+  resolution: "@hey-api/codegen-core@npm:0.9.1"
   dependencies:
     "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     c12: "npm:3.3.4"
     color-support: "npm:1.1.3"
-  checksum: 10c0/89f6625bb80b7a3b56f878ec3b9423385ba2c949638ea9af6a84cc6ecf7f1da984de9a962baaa3b1dd35ab35927879e88fb12b61b43b0e2f2feb814662d2393a
+  checksum: 10c0/ce2baa62e06ad80351855abeebde2094bbcd63fd15e361b8935dad14aa5195d9f6b59351aa61ea5abf6ef093b998e63b42b795796cf0025252d69d0797642a69
   languageName: node
   linkType: hard
 
-"@hey-api/json-schema-ref-parser@npm:1.4.3":
-  version: 1.4.3
-  resolution: "@hey-api/json-schema-ref-parser@npm:1.4.3"
+"@hey-api/json-schema-ref-parser@npm:1.4.4":
+  version: 1.4.4
+  resolution: "@hey-api/json-schema-ref-parser@npm:1.4.4"
   dependencies:
     "@jsdevtools/ono": "npm:7.1.3"
     "@types/json-schema": "npm:7.0.15"
-    js-yaml: "npm:4.1.1"
-  checksum: 10c0/ec92727967bb988993aa16d4ace8c44e7565bb9f0c03df74a2d834519bc1ab81a86c987653c0b0ecf9b0b3248be99391be400346009f4ec904ada283fcb5648d
+    js-yaml: "npm:4.2.0"
+  checksum: 10c0/8b836bc7196a75b554735141276c9bea395ab3ef017e3c80176ed09e29da666898146ab507e6110d70706e820ab6c170ef9a790ec2f3eace5efde30f992accfa
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:0.98.2":
-  version: 0.98.2
-  resolution: "@hey-api/openapi-ts@npm:0.98.2"
+"@hey-api/openapi-ts@npm:0.99.0":
+  version: 0.99.0
+  resolution: "@hey-api/openapi-ts@npm:0.99.0"
   dependencies:
-    "@hey-api/codegen-core": "npm:0.9.0"
-    "@hey-api/json-schema-ref-parser": "npm:1.4.3"
-    "@hey-api/shared": "npm:0.4.8"
+    "@hey-api/codegen-core": "npm:0.9.1"
+    "@hey-api/json-schema-ref-parser": "npm:1.4.4"
+    "@hey-api/shared": "npm:0.5.0"
     "@hey-api/spec-types": "npm:0.2.0"
     "@hey-api/types": "npm:0.1.4"
     "@lukeed/ms": "npm:2.0.2"
@@ -525,23 +525,23 @@ __metadata:
     typescript: ">=5.5.3 || >=6.0.0 || 6.0.1-rc"
   bin:
     openapi-ts: ./bin/run.js
-  checksum: 10c0/43e0d5cb4db318ed648482117db069fd7ebacea8b9d025994a5dc8c81df4e93bc46ee4f537c86738a6dc9817d808a41666212190444976535f1b6384de3fae20
+  checksum: 10c0/7ef3c56ea2d9973900f0edcca8b9a27927a7005424ab18d96a7be79726afeb2f1cd1abe08aae245f35257ad566a2f6fcb7bdcc1d1d43f8c9a8b72585f4a007ae
   languageName: node
   linkType: hard
 
-"@hey-api/shared@npm:0.4.8":
-  version: 0.4.8
-  resolution: "@hey-api/shared@npm:0.4.8"
+"@hey-api/shared@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@hey-api/shared@npm:0.5.0"
   dependencies:
-    "@hey-api/codegen-core": "npm:0.9.0"
-    "@hey-api/json-schema-ref-parser": "npm:1.4.3"
+    "@hey-api/codegen-core": "npm:0.9.1"
+    "@hey-api/json-schema-ref-parser": "npm:1.4.4"
     "@hey-api/spec-types": "npm:0.2.0"
     "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     cross-spawn: "npm:7.0.6"
     open: "npm:11.0.0"
-    semver: "npm:7.8.2"
-  checksum: 10c0/33844bccb37ebfe67dcd649ccf48d15f532ebd76c15b8495b39fc832f2a486ec11ebadd9164eada17bc4c23b5b7e68b05789d2769002c736a4f7a5f74c4884f7
+    semver: "npm:7.8.4"
+  checksum: 10c0/75536a259cab898bb32a756c3406594f93a7ca375d9a3f21eca22cdf04fa855522d5739627b074f5d33e0fb9615378818b2daf08c9c62cfda77f9c7026f36e59
   languageName: node
   linkType: hard
 
@@ -3765,7 +3765,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:4.1.1, js-yaml@npm:^4.1.1":
+"js-yaml@npm:4.2.0":
+  version: 4.2.0
+  resolution: "js-yaml@npm:4.2.0"
+  dependencies:
+    argparse: "npm:^2.0.1"
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: 10c0/1916456c118746603b067d74bbcbb0445d9a1d5e474ad4ae775e7b20525bed902e01d9d97dd0c81fcd8d4f596162309d0eb057f4aa38f3e9647f14075e9dea45
+  languageName: node
+  linkType: hard
+
+"js-yaml@npm:^4.1.1":
   version: 4.1.1
   resolution: "js-yaml@npm:4.1.1"
   dependencies:
@@ -4975,12 +4986,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.8.2":
-  version: 7.8.2
-  resolution: "semver@npm:7.8.2"
+"semver@npm:7.8.4":
+  version: 7.8.4
+  resolution: "semver@npm:7.8.4"
   bin:
     semver: bin/semver.js
-  checksum: 10c0/8e8c193fa75b938e5b3ccf6707c6447e4b34f73e493e72b03f3185393489f45e049144052f624217c346d6c6e0a301dda8eeab2f14413e337218ecb1cbd2de16
+  checksum: 10c0/81b7c296fd7927b80f67fa516b75fa1017caac8167795320de28e76ccbc6f7f01763c30ecd10d6a0d8fd089708ab0548a5aebb94b0870e99c2a2b4600a46389b
   languageName: node
   linkType: hard
 
