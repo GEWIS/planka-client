@@ -49,7 +49,7 @@
     "@gewis/release-config": "2.4.0",
     "@hey-api/openapi-ts": "0.99.0",
     "@types/node": "26.2.0",
-    "eslint": "9.39.4",
+    "eslint": "10.8.1",
     "husky": "9.1.7",
     "lint-staged": "17.3.0",
     "prettier": "3.9.6",
