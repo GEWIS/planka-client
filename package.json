@@ -59,7 +59,7 @@
     "typescript-eslint": "8.72.2",
     "vite": "8.3.8",
     "vite-plugin-dts": "5.1.2",
-    "vitest": "5.0.5"
+    "vitest": "5.1.0"
   },
   "dependencies": {
     "@hey-api/client-fetch": "0.13.1"
